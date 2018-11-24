@@ -1,26 +1,15 @@
-declare const ROACT_CHILDREN_ID = 0;
-declare const CHILDREN: Symbol;
-
 export =Roact;
 export as namespace Roact;
 
 declare namespace Roact {
-
-
     /** A Roact Element */
-    interface Element {
-        [0]: symbol; // zero is just a hack so it doesn't make any old value work in it's place
-    }
+    interface Element { }
 
     interface IComponent {
         render: (self: any) => void;
     }
 
-    type FunctionComponent = (props: any) => Element;
-
-    interface ComponentInstanceHandle {
-
-    }
+    interface ComponentInstanceHandle { }
 
     /**
 
@@ -53,23 +42,12 @@ declare namespace Roact {
      * 
      * `reconcile` can be used to change the props of a component instance created with `mount` and is useful for putting Roact content into non-Roact applications.
      */
-    function reconcile(handle: ComponentInstanceHandle, component: Element | FunctionComponent): ComponentInstanceHandle;
+    function reconcile(handle: ComponentInstanceHandle, component: Element): ComponentInstanceHandle;
 
     /**
      * Destroys the given `ComponentInstanceHandle` and all of its descendents. Does not operate on a Roblox Instance -- this must be given a handle that was returned by `Roact.mount`
      */
     function unmount(handle: ComponentInstanceHandle): void;
-
-    // /**
-    //  * Roact Component Handler
-    //  */
-    // readonly Component: RoactComponentInterface;
-
-    // /** 
-    //  * Roact PureComponent Handler
-    //  */
-    // readonly PureComponent: RoactPureComponentInterface;
-
     /**
      * This is the key that Roact uses internally to store the children that are attached to a Roact element.
      * 
@@ -358,26 +336,51 @@ declare namespace Roact {
     type dynamic = { [name: string]: any }
 }
 
-declare type RoactRef<T extends Instance> = Roact.Ref<T>
+/**
+ * Arbitrary properties of JSX elements, unrelated to ROBLOX instances
+ */
+interface Rbx_JsxProps
+{
+    /**
+     * The key of the element
+     */
+    Key?: string;
+}
 
+type Rbx_JsxIntrinsic<T extends Rbx_Instance> = Partial<T> & Rbx_JsxProps;
 
 declare global {
-    namespace JSX
-    {
-        interface IntrinsicElements
-        {
-            rbxScreenGui: Partial<Rbx_ScreenGui>;
+    /**
+     * Support for the experimental JSX in roblox-ts
+     */
+    namespace JSX {
+        interface IntrinsicElements {
+            rbxScreenGui: Rbx_JsxIntrinsic<Rbx_ScreenGui>;
+            rbxBillboardGui: Rbx_JsxIntrinsic<Rbx_BillboardGui>;
+            rbxSurfaceGui: Rbx_JsxIntrinsic<Rbx_SurfaceGui>;
 
-            rbxImageLabel: Partial<Rbx_ImageLabel>;
-            rbxImageButton: Partial<Rbx_ImageButton>;
-        
-            rbxTextLabel: Partial<Rbx_TextLabel>;
-            rbxTextButton: Partial<Rbx_TextButton>;
-            rbxTextBox: Partial<Rbx_TextBox>;
+            rbxImageLabel: Rbx_JsxIntrinsic<Rbx_ImageLabel>;
+            rbxImageButton: Rbx_JsxIntrinsic<Rbx_ImageButton>;
 
-            rbxFrame: Partial<Rbx_Frame>;
-            rbxViewportFrame: Partial<Rbx_ViewportFrame>;
-            rbxScrollingFrame: Partial<Rbx_ScrollingFrame>;
+            rbxTextLabel: Rbx_JsxIntrinsic<Rbx_TextLabel>;
+            rbxTextButton: Rbx_JsxIntrinsic<Rbx_TextButton>;
+            rbxTextBox: Rbx_JsxIntrinsic<Rbx_TextBox>;
+
+            rbxFrame: Rbx_JsxIntrinsic<Rbx_Frame>;
+            rbxViewportFrame: Rbx_JsxIntrinsic<Rbx_ViewportFrame>;
+            rbxScrollingFrame: Rbx_JsxIntrinsic<Rbx_ScrollingFrame>;
+
+            rbxUIGridLayout: Rbx_JsxIntrinsic<Rbx_UIGridLayout>;
+            rbxUIListLayout: Rbx_JsxIntrinsic<Rbx_UIListLayout>;
+            rbxUIPageLayout: Rbx_JsxIntrinsic<Rbx_UIPageLayout>;
+            rbxUITableLayout: Rbx_JsxIntrinsic<Rbx_UITableLayout>;
+
+            rbxUIPadding: Rbx_JsxIntrinsic<Rbx_UIPadding>;
+            rbxUIScale: Rbx_JsxIntrinsic<Rbx_UIScale>;
+
+            rbxUIAspectRatioConstraint: Rbx_JsxIntrinsic<Rbx_UIAspectRatioConstraint>;
+            rbxUISizeConstraint: Rbx_JsxIntrinsic<Rbx_UISizeConstraint>;
+            rbxUITextSizeConstraint: Rbx_JsxIntrinsic<Rbx_UISizeConstraint>;
         }
     }
 }
