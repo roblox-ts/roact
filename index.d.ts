@@ -138,30 +138,12 @@ declare namespace Roact {
     function createRef<T extends Instance>(): Ref<T>;
 
 
-    class PureComponent<S ={}, P={}, V={}> extends Component<Readonly<S>, Readonly<P>, V>{
-        /**
-         * Create a new stateful component with the specified name
-         * 
-         * Basic Construction:
-         * 
-         *      const Component = Roact.PureComponent.extend("Component");
-         * 
-         * Type-safe Construction:
-         * 
-         *      interface IComponentState { ... } // self.state.*
-         *      interface IComponentProps { ... } // self.props.*
-         *      interface IComponent { ... } // self.*
-         *      const Component = Roact.PureComponent.extend<IComponentState, IComponentProps, IComponent>("Component");
-         * 
-         * @param name The class name of this component
-         */
-        extend<state = dynamic, props = dynamic, fields = dynamic>(
-            name: string
-        ): PureComponent<state, props & IBaseProps, fields> & fields;
+    class PureExtendedComponent<S ={}, P={}, V={}> extends ExtendedComponent<Readonly<S>, Readonly<P>, V>{
+
     }
 
     type ContainsKeys<S, K extends keyof S> = (Pick<S, K> | S | null);
-    type ComponentRef<S, P, V> = Component<S, P, V> & V;
+    type ComponentRef<S, P, V> = ExtendedComponent<S, P, V> & V;
 
     namespace self {
         /**
@@ -223,30 +205,9 @@ declare namespace Roact {
     }
 
     /**
-     * A Roact Component, created using 
-     * @code Roact.Component.extend<...>(name)
+     * Created through Roact.Component.extend(name)
      */
-    class Component<S = {}, P = {}, V = {}> implements IComponent {
-        /**
-         * Create a new stateful component with the specified name
-         * 
-         * Basic Construction:
-         * 
-         *      const Component = Roact.Component.extend("Component");
-         * 
-         * Type-safe Construction:
-         * 
-         *      interface IComponentState { ... } // self.state.*
-         *      interface IComponentProps { ... } // self.props.*
-         *      interface IComponent { ... } // self.*
-         *      const Component = Roact.Component.extend<IComponentState, IComponentProps, IComponent>("Component");
-         * 
-         * @param name The class name of this component
-         */
-        extend<state = dynamic, props = dynamic, fields = dynamic>(
-            name: string
-        ): Component<state, props & IBaseProps, fields> & fields;
-
+    class ExtendedComponent<S = {}, P = {}, V = {}> implements IComponent {
         /**
          * If `defaultProps` is defined on a stateful component, any props that aren't specified when a component 
          * is created will be taken from there.
@@ -322,6 +283,87 @@ declare namespace Roact {
         getDerivedStateFromProps: <K extends keyof S>(nextProps: P, nextState: S) => ContainsKeys<S, K>;
     }
 
+    abstract class PureComponent<S = {}, P = {}>{
+        /**
+         * Create a new stateful component with the specified name
+         * 
+         * Basic Construction:
+         * 
+         *      const Component = Roact.PureComponent.extend("Component");
+         * 
+         * Type-safe Construction:
+         * 
+         *      interface IComponentState { ... } // self.state.*
+         *      interface IComponentProps { ... } // self.props.*
+         *      interface IComponent { ... } // self.*
+         *      const Component = Roact.PureComponent.extend<IComponentState, IComponentProps, IComponent>("Component");
+         * 
+         * @param name The class name of this component
+         */
+        extend<state = dynamic, props = dynamic, fields = dynamic>(
+            name: string
+        ): PureExtendedComponent<state, props & IBaseProps, fields> & fields;
+    }
+
+    /**
+     * A Roact Component, created using 
+     * @code Roact.Component.extend<...>(name)
+     */
+    abstract class Component<S = {}, P = {}> {
+        constructor(p: P);
+
+        /**
+         * Create a new stateful component with the specified name
+         * 
+         * Basic Construction:
+         * 
+         *      const Component = Roact.Component.extend("Component");
+         * 
+         * Type-safe Construction:
+         * 
+         *      interface IComponentState { ... } // self.state.*
+         *      interface IComponentProps { ... } // self.props.*
+         *      interface IComponent { ... } // self.*
+         *      const Component = Roact.Component.extend<IComponentState, IComponentProps, IComponent>("Component");
+         * 
+         * @param name The class name of this component
+         */
+        static extend<state = dynamic, props = dynamic, fields = dynamic>(
+            name: string
+        ): ExtendedComponent<state, props & IBaseProps, fields> & fields;
+
+        protected props: P & {children: Element[]};
+        protected state: S;
+
+        /**
+         * `setState` requests an update to the component's state. Roact may schedule this update for a later time or resolve it immediately
+         * 
+         *      component.willUpdate = self => {
+         *          self.setState({name: 'value'})
+         *      }
+         * 
+         * 
+         *      component.willUpdate = self => {
+         *          self.setState((state, props) => {
+         *              return {name: state.name + 1};
+         *          })
+         *      }
+         * 
+         * @param state The current state
+         * @returns Any changed state properties
+         */
+        protected setState<K extends keyof S>(
+            state: (
+                (
+                    prevState: Readonly<S>,
+                    props: P
+                )
+                    => ContainsKeys<S, K> | ContainsKeys<S, K>)
+        ): void;
+
+        public abstract render(): Element;
+    }
+
     /**
      * A reference to an instance
      */
@@ -339,8 +381,7 @@ declare namespace Roact {
 /**
  * Arbitrary properties of JSX elements, unrelated to ROBLOX instances
  */
-interface Rbx_JsxProps
-{
+interface Rbx_JsxProps {
     /**
      * The key of the element
      */
