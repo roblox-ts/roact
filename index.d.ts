@@ -409,15 +409,58 @@ type PropertyChangedHandler<T> = {
  */
 interface Rbx_JsxProps<T extends Rbx_Instance> {
     /**
-     * The key of the element
+     * The key of this element
+     * In Roact, this would be the index of the Roact Element as a child of another element.
+     * 
+     * E.g. a key of "Bob" would be equivalent of  doing
+     * ```lua
+Roact.createElement(Parent, {...}, {
+    Bob = Roact.createElement(ThisElement, {...})
+})```
      */
     key?: string;
 
     /**
-     * Event handlers in this instance
+     * The event handlers of this element
+     * 
+     * Example usage:
+     * 
+     *      <rbxTextButton event={{
+     *          MouseButton1Click: rbx => print("Clicked!")
+     *      }}/>
+     * 
+     * In Vanilla Roact, this would be equivalent to
+     * 
+```lua
+Roact.createElement("TextBox", {
+    [Roact.Event.MouseButton1Click] = (function(rbx)
+        print("Clicked!")
+    end) 
+});```
+     *   
      */
     event?: EventHandlers<T>,
 
+    /**
+     * The property changed handlers of this element
+     * Equivalent of "GetPropertyChangedSignal(Name)"
+     * 
+     * Example usage:
+     * 
+     *      <rbxTextBox change={{
+     *          Text: rbx => print("Text changed to:", rbx)
+     *      }}/>
+     * 
+     * In Vanilla Roact, this would be equivalent to
+     * 
+```lua
+Roact.createElement("TextBox", {
+    [Roact.Change.Text] = (function(rbx)
+        print("Text changed to:", rbx)
+    end) 
+});```
+     *     
+     */
     change?: PropertyChangedHandler<T>
 }
 
