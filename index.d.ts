@@ -1,12 +1,24 @@
+import { Element } from "rbx-roact";
+
 export =Roact;
 export as namespace Roact;
 
+
 declare namespace Roact {
     /** A Roact Element */
-    interface Element { }
+    interface Element {
+        type: Symbol,
+        component: string | IExtendedComponent,
+        props: any;
+        source?: string;
+    }
 
-    interface IComponent {
-        render: (self: any) => void;
+    interface IExtendedComponent {
+        render: (self: any) => Element;
+    }
+
+    abstract class IComponent {
+        abstract render(): Element;
     }
 
     interface ComponentInstanceHandle { }
@@ -25,7 +37,8 @@ declare namespace Roact {
      * @param props The properties of this element
      * @param children The children of this element
      */
-    function createElement<T>(component: string | IComponent,
+    function createElement<T>(
+        component: string | IExtendedComponent,
         props?: T | { [name: string]: any },
         children?: Element[] | { [name: string]: Element }
     ): Element
@@ -207,7 +220,7 @@ declare namespace Roact {
     /**
      * Created through Roact.Component.extend(name)
      */
-    class ExtendedComponent<S = {}, P = {}, V = {}> implements IComponent {
+    class ExtendedComponent<S = {}, P = {}, V = {}> implements IExtendedComponent {
         /**
          * If `defaultProps` is defined on a stateful component, any props that aren't specified when a component 
          * is created will be taken from there.
@@ -283,7 +296,7 @@ declare namespace Roact {
         getDerivedStateFromProps: <K extends keyof S>(nextProps: P, nextState: S) => ContainsKeys<S, K>;
     }
 
-    abstract class PureComponent<S = {}, P = {}>{
+    abstract class PureComponent<S = {}, P = {}> extends Component<S, P> {
         /**
          * Create a new stateful component with the specified name
          * 
@@ -309,7 +322,7 @@ declare namespace Roact {
      * A Roact Component, created using 
      * @code Roact.Component.extend<...>(name)
      */
-    abstract class Component<S = {}, P = {}> {
+    abstract class Component<S = {}, P = {}> extends IComponent {
         constructor(p: P);
 
         /**
@@ -332,7 +345,7 @@ declare namespace Roact {
             name: string
         ): ExtendedComponent<state, props & IBaseProps, fields> & fields;
 
-        protected props: P & {children: Element[]};
+        protected props: P & { children: Element[] };
         protected state: S;
 
         /**
@@ -378,17 +391,49 @@ declare namespace Roact {
     type dynamic = { [name: string]: any }
 }
 
+type EventHandlerFunction<T> = (rbx:T)=>void;
+
+type ChangedTypes = string | number | Vector2 | Vector3 | Instance | CFrame | UDim2 | UDim | Rect;
+
+type EventHandlers<T> = {
+    [key in keyof Partial<SubType<T, RBXScriptSignal>>]: EventHandlerFunction<T>
+};
+
+type PropertyChangedHandler<T> = {
+    [key in keyof Partial<SubType<T, ChangedTypes>>]: EventHandlerFunction<T>
+}
+
 /**
  * Arbitrary properties of JSX elements, unrelated to ROBLOX instances
  */
-interface Rbx_JsxProps {
+interface Rbx_JsxProps<T extends Rbx_Instance> {
     /**
      * The key of the element
      */
-    Key?: string;
+    key?: string;
+
+    /**
+     * Event handlers in this instance
+     */
+    event?: EventHandlers<T>,
+
+    change?: PropertyChangedHandler<T>
 }
 
-type Rbx_JsxIntrinsic<T extends Rbx_Instance> = Partial<T> & Rbx_JsxProps;
+
+
+type FilterFlags<Base, Condition> = {
+    [Key in keyof Base]: 
+        Base[Key] extends Condition ? Key : never
+};
+
+type AllowedNames<Base, Condition> = 
+        FilterFlags<Base, Condition>[keyof Base];
+
+type SubType<Base, Condition> = 
+        Pick<Base, AllowedNames<Base, Condition>>;
+
+type Rbx_JsxIntrinsic<T extends Rbx_Instance> = Partial<T> & Rbx_JsxProps<T>;
 
 declare global {
     /**
