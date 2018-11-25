@@ -1,5 +1,3 @@
-import { Element } from "rbx-roact";
-
 export =Roact;
 export as namespace Roact;
 
@@ -389,6 +387,16 @@ declare namespace Roact {
     }
 
     type dynamic = { [name: string]: any }
+
+
+}
+
+type RoactEvents<T> = {
+    [key in keyof Partial<SubType<T, RBXScriptSignal>>]: EventHandlerFunction<T>
+};
+
+type RoactPropertyChanges<T> = {
+    [key in keyof Partial<SubType<T, ChangedTypes>>]: PropertyChangeHandlerFunction<T>
 }
 
 type EventHandlerFunction<T> = (rbx: T, ...args: any[])=>void;
@@ -396,13 +404,7 @@ type PropertyChangeHandlerFunction<T> = (rbx: T)=>void;
 
 type ChangedTypes = string | number | Vector2 | Vector3 | Instance | CFrame | UDim2 | UDim | Rect;
 
-type EventHandlers<T> = {
-    [key in keyof Partial<SubType<T, RBXScriptSignal>>]: EventHandlerFunction<T>
-};
 
-type PropertyChangedHandler<T> = {
-    [key in keyof Partial<SubType<T, ChangedTypes>>]: PropertyChangeHandlerFunction<T>
-}
 
 /**
  * Arbitrary properties of JSX elements, unrelated to ROBLOX instances
@@ -432,14 +434,14 @@ Roact.createElement(Parent, {...}, {
      * In Vanilla Roact, this would be equivalent to
      * 
 ```lua
-Roact.createElement("TextBox", {
+Roact.createElement("TextButton", {
     [Roact.Event.MouseButton1Click] = (function(rbx)
         print("Clicked!")
     end) 
 });```
      *   
      */
-    event?: EventHandlers<T>,
+    event?: RoactEvents<T>,
 
     /**
      * The property changed handlers of this element
@@ -461,7 +463,7 @@ Roact.createElement("TextBox", {
 });```
      *     
      */
-    change?: PropertyChangedHandler<T>
+    change?: RoactPropertyChanges<T>
 }
 
 
