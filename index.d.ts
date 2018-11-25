@@ -391,7 +391,8 @@ declare namespace Roact {
     type dynamic = { [name: string]: any }
 }
 
-type EventHandlerFunction<T> = (rbx:T)=>void;
+type EventHandlerFunction<T> = (rbx: T, ...args: any[])=>void;
+type PropertyChangeHandlerFunction<T> = (rbx: T)=>void;
 
 type ChangedTypes = string | number | Vector2 | Vector3 | Instance | CFrame | UDim2 | UDim | Rect;
 
@@ -400,7 +401,7 @@ type EventHandlers<T> = {
 };
 
 type PropertyChangedHandler<T> = {
-    [key in keyof Partial<SubType<T, ChangedTypes>>]: EventHandlerFunction<T>
+    [key in keyof Partial<SubType<T, ChangedTypes>>]: PropertyChangeHandlerFunction<T>
 }
 
 /**
