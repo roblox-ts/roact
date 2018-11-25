@@ -6,7 +6,7 @@
 </div>
 
 <div align="center">
-	A declarative UI library for TypeScript inspired by <a href="https://reactjs.org">React</a>.
+	A typescript port of a declarative UI library inspired by <a href="https://reactjs.org">React</a>.
 </div>
 
 <div>&nbsp;</div>
