@@ -1,3 +1,5 @@
+import { Element } from "rbx-roact";
+
 export =Roact;
 export as namespace Roact;
 
@@ -369,8 +371,10 @@ declare namespace Roact {
                     prevState: Readonly<S>,
                     props: P
                 )
-                    => ContainsKeys<S, K> | ContainsKeys<S, K>)
+                => ContainsKeys<S, K>)
         ): void;
+
+        protected setState<K extends keyof S>(state: ContainsKeys<S, K>):void;
 
         public abstract render(): Element;
     }
@@ -481,7 +485,13 @@ type SubType<Base, Condition> =
 
 type Rbx_JsxIntrinsic<T extends Rbx_Instance> = Partial<T> & Rbx_JsxProps<T>;
 
+
+
 declare global {
+    interface Function {
+        bind(thisArg: any, ...argArray: any[]): any;
+    }
+
     /**
      * Support for the experimental JSX in roblox-ts
      */
