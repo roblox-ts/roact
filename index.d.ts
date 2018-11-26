@@ -506,32 +506,32 @@ declare global {
      */
     namespace JSX {
         interface IntrinsicElements {
-            rbxScreenGui: Rbx_JsxIntrinsic<Rbx_ScreenGui>;
-            rbxBillboardGui: Rbx_JsxIntrinsic<Rbx_BillboardGui>;
-            rbxSurfaceGui: Rbx_JsxIntrinsic<Rbx_SurfaceGui>;
+            screengui: Rbx_JsxIntrinsic<Rbx_ScreenGui>;
+            billboardgui: Rbx_JsxIntrinsic<Rbx_BillboardGui>;
+            surfacegui: Rbx_JsxIntrinsic<Rbx_SurfaceGui>;
 
-            rbxImageLabel: Rbx_JsxIntrinsic<Rbx_ImageLabel>;
-            rbxImageButton: Rbx_JsxIntrinsic<Rbx_ImageButton>;
+            imagelabel: Rbx_JsxIntrinsic<Rbx_ImageLabel>;
+            imagebutton: Rbx_JsxIntrinsic<Rbx_ImageButton>;
 
-            rbxTextLabel: Rbx_JsxIntrinsic<Rbx_TextLabel>;
-            rbxTextButton: Rbx_JsxIntrinsic<Rbx_TextButton>;
-            rbxTextBox: Rbx_JsxIntrinsic<Rbx_TextBox>;
+            textlabel: Rbx_JsxIntrinsic<Rbx_TextLabel>;
+            textbutton: Rbx_JsxIntrinsic<Rbx_TextButton>;
+            textbox: Rbx_JsxIntrinsic<Rbx_TextBox>;
 
-            rbxFrame: Rbx_JsxIntrinsic<Rbx_Frame>;
-            rbxViewportFrame: Rbx_JsxIntrinsic<Rbx_ViewportFrame>;
-            rbxScrollingFrame: Rbx_JsxIntrinsic<Rbx_ScrollingFrame>;
+            frame: Rbx_JsxIntrinsic<Rbx_Frame>;
+            viewportframe: Rbx_JsxIntrinsic<Rbx_ViewportFrame>;
+            scrollingframe: Rbx_JsxIntrinsic<Rbx_ScrollingFrame>;
 
-            rbxUIGridLayout: Rbx_JsxIntrinsic<Rbx_UIGridLayout>;
-            rbxUIListLayout: Rbx_JsxIntrinsic<Rbx_UIListLayout>;
-            rbxUIPageLayout: Rbx_JsxIntrinsic<Rbx_UIPageLayout>;
-            rbxUITableLayout: Rbx_JsxIntrinsic<Rbx_UITableLayout>;
+            uigridlayout: Rbx_JsxIntrinsic<Rbx_UIGridLayout>;
+            uilistlayout: Rbx_JsxIntrinsic<Rbx_UIListLayout>;
+            uipagelayout: Rbx_JsxIntrinsic<Rbx_UIPageLayout>;
+            uitablelayout: Rbx_JsxIntrinsic<Rbx_UITableLayout>;
 
-            rbxUIPadding: Rbx_JsxIntrinsic<Rbx_UIPadding>;
-            rbxUIScale: Rbx_JsxIntrinsic<Rbx_UIScale>;
+            uipadding: Rbx_JsxIntrinsic<Rbx_UIPadding>;
+            uiscale: Rbx_JsxIntrinsic<Rbx_UIScale>;
 
-            rbxUIAspectRatioConstraint: Rbx_JsxIntrinsic<Rbx_UIAspectRatioConstraint>;
-            rbxUISizeConstraint: Rbx_JsxIntrinsic<Rbx_UISizeConstraint>;
-            rbxUITextSizeConstraint: Rbx_JsxIntrinsic<Rbx_UISizeConstraint>;
+            uiaspectratioconstraint: Rbx_JsxIntrinsic<Rbx_UIAspectRatioConstraint>;
+            uisizeconstraint: Rbx_JsxIntrinsic<Rbx_UISizeConstraint>;
+            uitextsizeconstraint: Rbx_JsxIntrinsic<Rbx_UITextSizeConstraint>;
         }
     }
 }
