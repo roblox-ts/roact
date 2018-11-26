@@ -400,13 +400,13 @@ type RoactEvents<T> = {
 };
 
 type RoactPropertyChanges<T> = {
-    [key in keyof Partial<SubType<T, ChangedTypes>>]: PropertyChangeHandlerFunction<T>
+    [key in keyof Partial<SubType<T, PropertyTypes>>]: PropertyChangeHandlerFunction<T>
 }
 
 type EventHandlerFunction<T> = (rbx: T, ...args: any[])=>void;
 type PropertyChangeHandlerFunction<T> = (rbx: T)=>void;
 
-type ChangedTypes = string | number | 
+type PropertyTypes = string | number | 
     Vector2 | Vector3 | 
     Instance | CFrame | 
     UDim2 | UDim |
@@ -414,7 +414,8 @@ type ChangedTypes = string | number |
     ColorSequence | Vector2int16 |
     Vector3int16 | Region3 |
     Region3int16 | PhysicalProperties |
-    Rect | Color3;
+    Rect | Color3 | 
+    Faces | ReflectionMetadataEnums;
 
 
 
@@ -491,7 +492,7 @@ type AllowedNames<Base, Condition> =
 type SubType<Base, Condition> = 
         Pick<Base, AllowedNames<Base, Condition>>;
 
-type Rbx_JsxIntrinsic<T extends Rbx_Instance> = Partial<T> & Rbx_JsxProps<T>;
+type Rbx_JsxIntrinsic<T extends Rbx_Instance> = Partial<SubType<T, PropertyTypes>> & Rbx_JsxProps<T>;
 
 
 
