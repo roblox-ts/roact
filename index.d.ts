@@ -501,7 +501,7 @@ declare global {
      */
     namespace JSX {
         interface IntrinsicElements {
-			aspectratio: Roact.JsxIntrinsic<Rbx_UIAspectRatioConstraint>;
+			uiaspectratioconstraint: Roact.JsxIntrinsic<Rbx_UIAspectRatioConstraint>;
 
             screengui: Roact.JsxIntrinsic<Rbx_ScreenGui>;
             billboardgui: Roact.JsxIntrinsic<Rbx_BillboardGui>;
@@ -518,31 +518,16 @@ declare global {
             viewportframe: Roact.JsxIntrinsic<Rbx_ViewportFrame>;
             scrollingframe: Roact.JsxIntrinsic<Rbx_ScrollingFrame>;
 
-            gridlayout: Roact.JsxIntrinsic<Rbx_UIGridLayout>;
-            listlayout: Roact.JsxIntrinsic<Rbx_UIListLayout>;
-            pagelayout: Roact.JsxIntrinsic<Rbx_UIPageLayout>;
-            tablelayout: Roact.JsxIntrinsic<Rbx_UITableLayout>;
+            uigridlayout: Roact.JsxIntrinsic<Rbx_UIGridLayout>;
+            uilistlayout: Roact.JsxIntrinsic<Rbx_UIListLayout>;
+            uipagelayout: Roact.JsxIntrinsic<Rbx_UIPageLayout>;
+            uitablelayout: Roact.JsxIntrinsic<Rbx_UITableLayout>;
 
-            padding: Roact.JsxIntrinsic<Rbx_UIPadding>;
-            scale: Roact.JsxIntrinsic<Rbx_UIScale>;
+            uipadding: Roact.JsxIntrinsic<Rbx_UIPadding>;
+            uiscale: Roact.JsxIntrinsic<Rbx_UIScale>;
 
-            sizeconstraint: Roact.JsxIntrinsic<Rbx_UISizeConstraint>;
-			textsizeconstraint: Roact.JsxIntrinsic<Rbx_UITextSizeConstraint>;
-
-			/**
-			 * ## If you're looking for UILayout/UIConstraints
-			 * 
-			 * UIPadding: `padding`
-			 * UIScale: `scale`
-			 * 
-			 * UILayouts:
-			 * `listlayout`, `gridlayout`, `pagelayout`, `tablelayout`
-			 * 
-			 * UIConstraints:
-			 * `aspectratio`, `sizeconstraint`, `textsizeconstraint`
-			 * 
-			 */
-			ui: null;
+            uisizeconstraint: Roact.JsxIntrinsic<Rbx_UISizeConstraint>;
+			uitextsizeconstraint: Roact.JsxIntrinsic<Rbx_UITextSizeConstraint>;
         }
     }
 }
