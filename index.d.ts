@@ -1,4 +1,4 @@
-import { Element } from "rbx-roact";
+import 'rbx-types';
 
 export =Roact;
 export as namespace Roact;
@@ -393,6 +393,8 @@ declare namespace Roact {
     type dynamic = { [name: string]: any }
 
 
+	type JsxIntrinsic<T extends Rbx_Instance> = Partial<SubType<T, PropertyTypes>> & Rbx_JsxProps<T>;
+	type JsxIntrinsicContainer<T extends Rbx_Instance> = Rbx_JsxProps<T>;
 }
 
 type RoactEvents<T> = {
@@ -439,11 +441,11 @@ Roact.createElement(Parent, {...}, {
      * The event handlers of this element
      * 
      * Example usage:
-     * 
-     *      <rbxTextButton event={{
-     *          MouseButton1Click: rbx => print("Clicked!")
-     *      }}/>
-     * 
+```tsx
+	<textbutton event={{
+		MouseButton1Click: rbx => print("Clicked!")
+	}}/>
+```
      * In Vanilla Roact, this would be equivalent to
      * 
 ```lua
@@ -461,17 +463,17 @@ Roact.createElement("TextButton", {
      * Equivalent of "GetPropertyChangedSignal(Name)"
      * 
      * Example usage:
-     * 
-     *      <rbxTextBox change={{
-     *          Text: rbx => print("Text changed to:", rbx)
-     *      }}/>
-     * 
+```tsx
+	<textbox change={{
+		Text: rbx => print("Text changed to:", rbx)
+	}}/>
+```
      * In Vanilla Roact, this would be equivalent to
      * 
 ```lua
 Roact.createElement("TextBox", {
     [Roact.Change.Text] = (function(rbx)
-        print("Text changed to:", rbx)
+        print("Text changed to:", rbx.Text)
     end) 
 });```
      *     
@@ -492,46 +494,55 @@ type AllowedNames<Base, Condition> =
 type SubType<Base, Condition> = 
         Pick<Base, AllowedNames<Base, Condition>>;
 
-type Rbx_JsxIntrinsic<T extends Rbx_Instance> = Partial<SubType<T, PropertyTypes>> & Rbx_JsxProps<T>;
-
-
-
 declare global {
-    interface Function {
-        bind(thisArg: any, ...argArray: any[]): any;
-    }
 
     /**
      * Support for the experimental JSX in roblox-ts
      */
     namespace JSX {
         interface IntrinsicElements {
-            screengui: Rbx_JsxIntrinsic<Rbx_ScreenGui>;
-            billboardgui: Rbx_JsxIntrinsic<Rbx_BillboardGui>;
-            surfacegui: Rbx_JsxIntrinsic<Rbx_SurfaceGui>;
+			aspectratio: Roact.JsxIntrinsic<Rbx_UIAspectRatioConstraint>;
 
-            imagelabel: Rbx_JsxIntrinsic<Rbx_ImageLabel>;
-            imagebutton: Rbx_JsxIntrinsic<Rbx_ImageButton>;
+            screengui: Roact.JsxIntrinsic<Rbx_ScreenGui>;
+            billboardgui: Roact.JsxIntrinsic<Rbx_BillboardGui>;
+            surfacegui: Roact.JsxIntrinsic<Rbx_SurfaceGui>;
 
-            textlabel: Rbx_JsxIntrinsic<Rbx_TextLabel>;
-            textbutton: Rbx_JsxIntrinsic<Rbx_TextButton>;
-            textbox: Rbx_JsxIntrinsic<Rbx_TextBox>;
+            imagelabel: Roact.JsxIntrinsic<Rbx_ImageLabel>;
+            imagebutton: Roact.JsxIntrinsic<Rbx_ImageButton>;
 
-            frame: Rbx_JsxIntrinsic<Rbx_Frame>;
-            viewportframe: Rbx_JsxIntrinsic<Rbx_ViewportFrame>;
-            scrollingframe: Rbx_JsxIntrinsic<Rbx_ScrollingFrame>;
+            textlabel: Roact.JsxIntrinsic<Rbx_TextLabel>;
+            textbutton: Roact.JsxIntrinsic<Rbx_TextButton>;
+            textbox: Roact.JsxIntrinsic<Rbx_TextBox>;
 
-            uigridlayout: Rbx_JsxIntrinsic<Rbx_UIGridLayout>;
-            uilistlayout: Rbx_JsxIntrinsic<Rbx_UIListLayout>;
-            uipagelayout: Rbx_JsxIntrinsic<Rbx_UIPageLayout>;
-            uitablelayout: Rbx_JsxIntrinsic<Rbx_UITableLayout>;
+            frame: Roact.JsxIntrinsic<Rbx_Frame>;
+            viewportframe: Roact.JsxIntrinsic<Rbx_ViewportFrame>;
+            scrollingframe: Roact.JsxIntrinsic<Rbx_ScrollingFrame>;
 
-            uipadding: Rbx_JsxIntrinsic<Rbx_UIPadding>;
-            uiscale: Rbx_JsxIntrinsic<Rbx_UIScale>;
+            gridlayout: Roact.JsxIntrinsic<Rbx_UIGridLayout>;
+            listlayout: Roact.JsxIntrinsic<Rbx_UIListLayout>;
+            pagelayout: Roact.JsxIntrinsic<Rbx_UIPageLayout>;
+            tablelayout: Roact.JsxIntrinsic<Rbx_UITableLayout>;
 
-            uiaspectratioconstraint: Rbx_JsxIntrinsic<Rbx_UIAspectRatioConstraint>;
-            uisizeconstraint: Rbx_JsxIntrinsic<Rbx_UISizeConstraint>;
-            uitextsizeconstraint: Rbx_JsxIntrinsic<Rbx_UITextSizeConstraint>;
+            padding: Roact.JsxIntrinsic<Rbx_UIPadding>;
+            scale: Roact.JsxIntrinsic<Rbx_UIScale>;
+
+            sizeconstraint: Roact.JsxIntrinsic<Rbx_UISizeConstraint>;
+			textsizeconstraint: Roact.JsxIntrinsic<Rbx_UITextSizeConstraint>;
+
+			/**
+			 * ## If you're looking for UILayout/UIConstraints
+			 * 
+			 * UIPadding: `padding`
+			 * UIScale: `scale`
+			 * 
+			 * UILayouts:
+			 * `listlayout`, `gridlayout`, `pagelayout`, `tablelayout`
+			 * 
+			 * UIConstraints:
+			 * `aspectratio`, `sizeconstraint`, `textsizeconstraint`
+			 * 
+			 */
+			ui: null;
         }
     }
 }
