@@ -27,7 +27,10 @@
     "roact/lib/*",
     "*.d.ts"
   ],
-  "dependencies": {
+  "peerDependencies": {
+    "rbx-types": "1.0.80"
+  },
+  "devDependencies": {
     "rbx-types": "1.0.80"
   }
 }
