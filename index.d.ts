@@ -406,7 +406,15 @@ type RoactPropertyChanges<T> = {
 type EventHandlerFunction<T> = (rbx: T, ...args: any[])=>void;
 type PropertyChangeHandlerFunction<T> = (rbx: T)=>void;
 
-type ChangedTypes = string | number | Vector2 | Vector3 | Instance | CFrame | UDim2 | UDim | Rect;
+type ChangedTypes = string | number | 
+    Vector2 | Vector3 | 
+    Instance | CFrame | 
+    UDim2 | UDim |
+    Axes | BrickColor |
+    ColorSequence | Vector2int16 |
+    Vector3int16 | Region3 |
+    Region3int16 | PhysicalProperties |
+    Rect | Color3;
 
 
 
