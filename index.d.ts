@@ -433,7 +433,7 @@ Roact.createElement(Parent, {...}, {
     Bob = Roact.createElement(ThisElement, {...})
 })```
      */
-    key?: string;
+    Key?: string;
 
     /**
      * The event handlers of this element
@@ -454,7 +454,7 @@ Roact.createElement("TextButton", {
 });```
      *   
      */
-    event?: RoactEvents<T>,
+    Event?: RoactEvents<T>,
 
     /**
      * The property changed handlers of this element
@@ -476,7 +476,7 @@ Roact.createElement("TextBox", {
 });```
      *     
      */
-    change?: RoactPropertyChanges<T>
+    Change?: RoactPropertyChanges<T>
 }
 
 
