@@ -44,9 +44,9 @@ import * as Roact from 'rbx-roact';
 const LocalPlayer = game.GetService("Players").LocalPlayer as Player;
 const PlayerGui = LocalPlayer.FindFirstChildOfClass("PlayerGui");
 
-const tree = <rbxScreenGui>
-  <rbxTextLabel key="Label" Text="Hello, World!" Size={new UDim2(1, 0, 1, 0)}/>
-</rbxScreenGui>;
+const tree = <screengui>
+  <textlabel key="Label" Text="Hello, World!" Size={new UDim2(1, 0, 1, 0)}/>
+</screengui>;
 
 Roact.mount(tree, PlayerGui, "HelloWorld");
 ```
