@@ -105,8 +105,67 @@ declare namespace Roact {
     abstract class Component<S = {}, P = {}> extends IComponent {
         constructor(p: P & Rbx_JsxProps);
 
-        public props: P & { children: Element[] };
-        protected state: S;
+		/**
+		 * The properties of this component
+		 */
+        public props: P & { 
+			/**
+			 * The children of your component.
+			 * 
+			 * Make sure to check if they exist first!
+			 */
+			children?: Element[] 
+		};
+
+		/**
+		 * The state of this component.
+		 * 
+		 * **Warning**: Attempting to set this outside of your constructor will cause Roact to error - Use setState instead
+		 */
+		protected state: S;
+		
+		/**
+			`didMount` is fired after the component finishes its initial render. At this point, all associated Roblox Instances have been created, and all components have finished mounting.
+
+			`didMount` is a good place to start initial network communications, attach events to services, or modify the Roblox Instance hierarchy.
+		*/
+		public didMount(): void;
+
+		/** 
+			`willUnmount` is fired right before Roact begins unmounting a component instance's children.
+
+			`willUnmount` acts like a component's destructor, and is a good place to disconnect any manually-connected events.
+		 */
+		public willUnmount(): void;
+
+
+		/**
+			`shouldUpdate` provides a way to override Roact's rerendering heuristics.
+
+			By default, components are re-rendered any time a parent component updates, or when state is updated via `setState`.
+
+			`PureComponent` implements `shouldUpdate` to only trigger a re-render any time the props are different based on shallow equality. In a future Roact update, *all* components may implement this check by default.
+
+		 * @param nextProps The next props
+		 * @param nextState The next state
+		 */
+		public shouldUpdate(nextProps: P, nextState: S): boolean;
+
+		/**
+		 * `willUpdate` is fired after an update is started but before a component's state and props are updated.
+		 * @param nextProps The new props
+		 * @param nextState The new state
+		 */
+		public willUpdate(nextProps: P, nextState: S): void;
+
+		/**
+			`didUpdate` is fired after at the end of an update. At this point, the reconciler has updated the properties of any Roblox Instances and the component instance's props and state are up to date.
+
+			`didUpdate` is a good place to send network requests or dispatch Rodux actions, but make sure to compare `self.props` and `self.state` with `previousProps` and `previousState` to avoid triggering too many updates.
+		 * @param previousProps The previous props
+		 * @param previousState The previous state
+		 */
+		public didUpdate(previousProps: P, previousState: S): void;
 
         /**
          * `setState` requests an update to the component's state. Roact may schedule this update for a later time or resolve it immediately
@@ -136,6 +195,11 @@ declare namespace Roact {
 
         protected setState<K extends keyof S>(state: ContainsKeys<S, K>):void;
 
+		/**
+			`render` describes what a component should display at the current instant in time.
+
+			Roact assumes that `render` act likes a pure function: the result of `render` must depend only on `props` and `state`, and it must not have side-effects.
+		 */
         public abstract render(): Element;
     }
 
