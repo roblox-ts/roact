@@ -147,7 +147,7 @@ declare namespace Roact {
 	}
 	
 
-	type RefPropertyOrFunction = Ref | ((rbx: Instance)=>void);
+	type RefPropertyOrFunction<T extends Instance> = Ref<T> | ((rbx: T)=>void);
 
 	const Ref: "Symbol(Roact.Ref)";
 
@@ -286,7 +286,7 @@ class TestComponent extends Roact.Component {
 }
 ```
 	 */
-	Ref?: Roact.RefPropertyOrFunction,
+	Ref?: Roact.RefPropertyOrFunction<T>,
 }
 
 
