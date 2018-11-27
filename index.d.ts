@@ -142,12 +142,12 @@ declare namespace Roact {
     /**
      * A reference to an instance
      */
-    interface Ref<T extends Instance = Instance> {
+    interface Ref<T extends Rbx_Instance = Instance> {
         readonly current: T | undefined
 	}
 	
 
-	type RefPropertyOrFunction<T extends Instance> = Ref<T> | ((rbx: T)=>void);
+	type RefPropertyOrFunction<T extends Rbx_Instance> = Ref<T> | ((rbx: T)=>void);
 
 	const Ref: "Symbol(Roact.Ref)";
 
@@ -308,6 +308,8 @@ declare global {
      * Support for the experimental JSX in roblox-ts
      */
     namespace JSX {
+		type Element = Roact.Element;
+
         interface IntrinsicElements {
 			uiaspectratioconstraint: Roact.JsxIntrinsic<Rbx_UIAspectRatioConstraint>;
 
