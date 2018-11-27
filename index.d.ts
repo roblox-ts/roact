@@ -146,7 +146,19 @@ declare namespace Roact {
         readonly current: T | undefined
 	}
 	
+
 	type RefPropertyOrFunction = Ref | ((rbx: Instance)=>void);
+
+	const Ref: "Symbol(Roact.Ref)";
+
+	const Event: {
+		[name: string]: "[Symbol(Roact.Event)]"
+	};
+
+	const Change: {
+		[name: string]: "[Symbol(Roact.Change)]"
+	};
+
 
 	type JsxIntrinsic<T extends Rbx_Instance> = Partial<SubType<T, PropertyTypes>> & Rbx_JsxIntrinsicProps<T>;
 	type JsxIntrinsicContainer<T extends Rbx_Instance> = Rbx_JsxIntrinsicProps<T>;
