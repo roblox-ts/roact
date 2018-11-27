@@ -17,6 +17,18 @@ You can install it via `npm i rbx-roact`.
 ## Usage
 For a detailed guide and examples, check out [the official Roact documentation](https://roblox.github.io/roact). The Wiki on this repository will have guides on how to adapt to using typescript instead of Lua.
 
+## Required tsconfig.json settings
+You will need the settings from [roblox-ts](https://github.com/roblox-ts/roblox-ts), as well as:
+```json
+{
+	"compilerOptions": {
+		"jsx": "react",
+		"jsxFactory": "Roact.createElement"
+	},
+}
+```
+
+### Regular TypeScript
 ```typescript
 import * as Roact from 'rbx-roact';
 
@@ -34,10 +46,7 @@ Roact.mount(tree, PlayerGui, "HelloWorld");
 ```
 
 
-## Future
-
-in the future, this will also be acceptable usage
-
+### JSX Typescript (.tsx files)
 ```tsx
 import * as Roact from 'rbx-roact';
 
@@ -45,7 +54,7 @@ const LocalPlayer = game.GetService("Players").LocalPlayer as Player;
 const PlayerGui = LocalPlayer.FindFirstChildOfClass("PlayerGui");
 
 const tree = <screengui>
-  <textlabel key="Label" Text="Hello, World!" Size={new UDim2(1, 0, 1, 0)}/>
+  <textlabel Key="Label" Text="Hello, World!" Size={new UDim2(1, 0, 1, 0)}/>
 </screengui>;
 
 Roact.mount(tree, PlayerGui, "HelloWorld");
