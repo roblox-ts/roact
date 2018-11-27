@@ -57,7 +57,7 @@ declare namespace Roact {
 	 * @param props The properties of the instance
 	 * @param children The children of the element
 	 */
-	function createElement<T extends Instance>(
+	function createElement(
 		instanceName: string,
 		props?: {[name: string]: any},
 		children?: Children
@@ -88,7 +88,7 @@ declare namespace Roact {
      * 
      * If `children` is nil or contains no children, `oneChild` will return nil
      */
-    function oneChild(children: (Component | Element)[]): Roact.Element;
+    function oneChild(children?: Element[]): Roact.Element;
 
     /**
      * Creates a new reference object that can be used with `Roact.Ref`
