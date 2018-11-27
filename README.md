@@ -12,7 +12,7 @@
 <div>&nbsp;</div>
 
 ## Installation
-You can install it via `npm i rbx-roact` - Do note: At the moment it's very experimental.
+You can install it via `npm i rbx-roact`.
 
 ## Usage
 For a detailed guide and examples, check out [the official Roact documentation](https://roblox.github.io/roact). The Wiki on this repository will have guides on how to adapt to using typescript instead of Lua.
