@@ -146,6 +146,9 @@ declare namespace Roact {
         readonly current: T | undefined
 	}
 	
+
+	type RefPropertyOrFunction = Ref | ((rbx: Instance)=>void);
+
 	const Ref: "Symbol(Roact.Ref)";
 
 	const Event: {
@@ -155,6 +158,7 @@ declare namespace Roact {
 	const Change: {
 		[name: string]: "[Symbol(Roact.Change)]"
 	};
+
 
 	type JsxIntrinsic<T extends Rbx_Instance> = Partial<SubType<T, PropertyTypes>> & Rbx_JsxIntrinsicProps<T>;
 	type JsxIntrinsicContainer<T extends Rbx_Instance> = Rbx_JsxIntrinsicProps<T>;
@@ -242,7 +246,47 @@ Roact.createElement("TextBox", {
 });```
      *     
      */
-    Change?: RoactPropertyChanges<T>
+	Change?: RoactPropertyChanges<T>,
+	
+	/**
+	 * ### Ref has two functionalities:
+	 * 
+	 * Create a reference to this instance, which can be used elsewhere
+```tsx
+class TestComponent extends Roact.Component {
+	ref: Ref<Frame>;
+	constructor(props: {})
+	{
+		super(props);
+		ref = Roact.createRef<Frame>();
+	}
+
+	public render(): Roact.Element {
+		return <screengui>
+			<frame Ref={this.ref}/>
+		</screengui>;
+	}
+
+	public didMount() { 
+		print("The frame: ", this.ref.current);
+	}
+}
+```
+	 * A function that is called every time the instance changes
+```tsx
+class TestComponent extends Roact.Component {
+	public onFrameRendered(frame: Frame) {
+		print("Frame rendered!", frame);
+	}
+	public render(): Roact.Element {
+		return <screengui>
+			<frame Ref={this.onFrameRendered}/>
+		</screengui>;
+	}
+}
+```
+	 */
+	Ref?: Roact.RefPropertyOrFunction,
 }
 
 
