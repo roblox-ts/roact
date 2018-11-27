@@ -103,7 +103,7 @@ declare namespace Roact {
     }
 
     abstract class Component<S = {}, P = {}> extends IComponent {
-        constructor(p: P);
+        constructor(p: P & Rbx_JsxProps);
 
         public props: P & { children: Element[] };
         protected state: S;
@@ -146,8 +146,8 @@ declare namespace Roact {
         readonly current: T | undefined
     }
 
-	type JsxIntrinsic<T extends Rbx_Instance> = Partial<SubType<T, PropertyTypes>> & Rbx_JsxProps<T>;
-	type JsxIntrinsicContainer<T extends Rbx_Instance> = Rbx_JsxProps<T>;
+	type JsxIntrinsic<T extends Rbx_Instance> = Partial<SubType<T, PropertyTypes>> & Rbx_JsxIntrinsicProps<T>;
+	type JsxIntrinsicContainer<T extends Rbx_Instance> = Rbx_JsxIntrinsicProps<T>;
 }
 
 type RoactEvents<T> = {
@@ -172,12 +172,7 @@ type PropertyTypes = string | number |
     Rect | Color3 | 
     Faces | ReflectionMetadataEnums;
 
-
-
-/**
- * Arbitrary properties of JSX elements, unrelated to ROBLOX instances
- */
-interface Rbx_JsxProps<T extends Rbx_Instance> {
+interface Rbx_JsxProps {
     /**
      * The key of this element
      * In Roact, this would be the index of the Roact Element as a child of another element.
@@ -189,7 +184,13 @@ Roact.createElement(Parent, {...}, {
 })```
      */
     Key?: string;
+}
 
+
+/**
+ * Arbitrary properties of JSX elements, unrelated to ROBLOX instances
+ */
+interface Rbx_JsxIntrinsicProps<T extends Rbx_Instance> extends Rbx_JsxProps {
     /**
      * The event handlers of this element
      * 
