@@ -2,6 +2,8 @@
 <div align="center">
 	<a href="https://roblox.github.io/roact">
 		<img src="https://img.shields.io/badge/docs-website-green.svg" alt="Documentation"></img>
+	</a>
+	<a href="https://www.npmjs.com/package/rbx-roact">
 		<img src="https://badge.fury.io/js/rbx-roact.svg"></img>
 	</a>
 </div>
