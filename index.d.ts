@@ -3,8 +3,118 @@ import 'rbx-types';
 export =Roact;
 export as namespace Roact;
 
+interface Rbx_JsxProps {
+    /**
+     * The key of this element
+     * In Roact, this would be the index of the Roact Element as a child of another element.
+     * 
+     * E.g. a key of "Bob" would be equivalent of  doing
+     * ```lua
+Roact.createElement(Parent, {...}, {
+    Bob = Roact.createElement(ThisElement, {...})
+})```
+     */
+    Key?: string;
+}
+
+
+/**
+ * Arbitrary properties of JSX elements, unrelated to ROBLOX instances
+ */
+interface Rbx_JsxIntrinsicProps<T extends Rbx_Instance> extends Rbx_JsxProps {
+    /**
+     * The event handlers of this element
+     * 
+     * Example usage:
+```tsx
+	<textbutton event={{
+		MouseButton1Click: rbx => print("Clicked!")
+	}}/>
+```
+     * In Vanilla Roact, this would be equivalent to
+     * 
+```lua
+Roact.createElement("TextButton", {
+    [Roact.Event.MouseButton1Click] = (function(rbx)
+        print("Clicked!")
+    end) 
+});```
+     *   
+     */
+    Event?: RoactEvents<T>,
+
+    /**
+     * The property changed handlers of this element
+     * Equivalent of "GetPropertyChangedSignal(Name)"
+     * 
+     * Example usage:
+```tsx
+	<textbox change={{
+		Text: rbx => print("Text changed to:", rbx)
+	}}/>
+```
+     * In Vanilla Roact, this would be equivalent to
+     * 
+```lua
+Roact.createElement("TextBox", {
+    [Roact.Change.Text] = (function(rbx)
+        print("Text changed to:", rbx.Text)
+    end) 
+});```
+     *     
+     */
+	Change?: RoactPropertyChanges<T>,
+	
+	/**
+	 * ### Ref has two functionalities:
+	 * 
+	 * Create a reference to this instance, which can be used elsewhere
+```tsx
+class TestComponent extends Roact.Component {
+	ref: Ref<Frame>;
+	constructor(props: {})
+	{
+		super(props);
+		ref = Roact.createRef<Frame>();
+	}
+
+	public render(): Roact.Element {
+		return <screengui>
+			<frame Ref={this.ref}/>
+		</screengui>;
+	}
+
+	public didMount() { 
+		print("The frame: ", this.ref.current);
+	}
+}
+```
+	 * A function that is called every time the instance changes
+```tsx
+class TestComponent extends Roact.Component {
+	public onFrameRendered(frame: Frame) {
+		print("Frame rendered!", frame);
+	}
+	public render(): Roact.Element {
+		return <screengui>
+			<frame Ref={this.onFrameRendered}/>
+		</screengui>;
+	}
+}
+```
+	 */
+	Ref?: Roact.RefPropertyOrFunction<T>,
+
+	
+}
+
+interface Rbx_JsxIntrinsicGuiProps<T extends Rbx_GuiObject> extends Rbx_JsxIntrinsicProps<T> {
+	// Template?: Roact.Template<T>,
+}
 
 declare namespace Roact {
+	type Template<T extends Rbx_GuiBase = Rbx_GuiObject> = Partial<SubType<T, PropertyTypes>>;
+
 	interface RenderableClass {
 		new (...args: Array<any>):
 		{
@@ -88,7 +198,7 @@ declare namespace Roact {
      * 
      * If `children` is nil or contains no children, `oneChild` will return nil
      */
-    function oneChild(children?: Element[]): Roact.Element;
+    function oneChild(children: (Component | Element)[]): Roact.Element;
 
     /**
      * Creates a new reference object that can be used with `Roact.Ref`
@@ -223,9 +333,11 @@ declare namespace Roact {
 		[name: string]: "[Symbol(Roact.Change)]"
 	};
 
-
 	type JsxIntrinsic<T extends Rbx_Instance> = Partial<SubType<T, PropertyTypes>> & Rbx_JsxIntrinsicProps<T>;
-	type JsxIntrinsicContainer<T extends Rbx_Instance> = Rbx_JsxIntrinsicProps<T>;
+
+	type JsxLayerCollector<T extends Rbx_LayerCollector> = JsxIntrinsic<T>;
+	type JsxUIComponent<T extends Rbx_UIComponent> = JsxIntrinsic<T>;
+	type JsxGuiObject<T extends Rbx_GuiObject> = Partial<SubType<T, PropertyTypes>> & Rbx_JsxIntrinsicGuiProps<T>;
 }
 
 type RoactEvents<T> = {
@@ -248,112 +360,7 @@ type PropertyTypes = string | number |
     Vector3int16 | Region3 |
     Region3int16 | PhysicalProperties |
     Rect | Color3 | 
-    Faces | ReflectionMetadataEnums;
-
-interface Rbx_JsxProps {
-    /**
-     * The key of this element
-     * In Roact, this would be the index of the Roact Element as a child of another element.
-     * 
-     * E.g. a key of "Bob" would be equivalent of  doing
-     * ```lua
-Roact.createElement(Parent, {...}, {
-    Bob = Roact.createElement(ThisElement, {...})
-})```
-     */
-    Key?: string;
-}
-
-
-/**
- * Arbitrary properties of JSX elements, unrelated to ROBLOX instances
- */
-interface Rbx_JsxIntrinsicProps<T extends Rbx_Instance> extends Rbx_JsxProps {
-    /**
-     * The event handlers of this element
-     * 
-     * Example usage:
-```tsx
-	<textbutton event={{
-		MouseButton1Click: rbx => print("Clicked!")
-	}}/>
-```
-     * In Vanilla Roact, this would be equivalent to
-     * 
-```lua
-Roact.createElement("TextButton", {
-    [Roact.Event.MouseButton1Click] = (function(rbx)
-        print("Clicked!")
-    end) 
-});```
-     *   
-     */
-    Event?: RoactEvents<T>,
-
-    /**
-     * The property changed handlers of this element
-     * Equivalent of "GetPropertyChangedSignal(Name)"
-     * 
-     * Example usage:
-```tsx
-	<textbox change={{
-		Text: rbx => print("Text changed to:", rbx)
-	}}/>
-```
-     * In Vanilla Roact, this would be equivalent to
-     * 
-```lua
-Roact.createElement("TextBox", {
-    [Roact.Change.Text] = (function(rbx)
-        print("Text changed to:", rbx.Text)
-    end) 
-});```
-     *     
-     */
-	Change?: RoactPropertyChanges<T>,
-	
-	/**
-	 * ### Ref has two functionalities:
-	 * 
-	 * Create a reference to this instance, which can be used elsewhere
-```tsx
-class TestComponent extends Roact.Component {
-	ref: Ref<Frame>;
-	constructor(props: {})
-	{
-		super(props);
-		ref = Roact.createRef<Frame>();
-	}
-
-	public render(): Roact.Element {
-		return <screengui>
-			<frame Ref={this.ref}/>
-		</screengui>;
-	}
-
-	public didMount() { 
-		print("The frame: ", this.ref.current);
-	}
-}
-```
-	 * A function that is called every time the instance changes
-```tsx
-class TestComponent extends Roact.Component {
-	public onFrameRendered(frame: Frame) {
-		print("Frame rendered!", frame);
-	}
-	public render(): Roact.Element {
-		return <screengui>
-			<frame Ref={this.onFrameRendered}/>
-		</screengui>;
-	}
-}
-```
-	 */
-	Ref?: Roact.RefPropertyOrFunction<T>,
-}
-
-
+    Faces | ReflectionMetadataEnums | boolean;
 
 type FilterFlags<Base, Condition> = {
     [Key in keyof Base]: 
@@ -375,33 +382,33 @@ declare global {
 		type Element = Roact.Element;
 
         interface IntrinsicElements {
-			uiaspectratioconstraint: Roact.JsxIntrinsic<Rbx_UIAspectRatioConstraint>;
+			uiaspectratioconstraint: Roact.JsxUIComponent<Rbx_UIAspectRatioConstraint>;
 
-            screengui: Roact.JsxIntrinsic<Rbx_ScreenGui>;
-            billboardgui: Roact.JsxIntrinsic<Rbx_BillboardGui>;
-            surfacegui: Roact.JsxIntrinsic<Rbx_SurfaceGui>;
+            screengui: Roact.JsxLayerCollector<Rbx_ScreenGui>;
+            billboardgui: Roact.JsxLayerCollector<Rbx_BillboardGui>;
+            surfacegui: Roact.JsxLayerCollector<Rbx_SurfaceGui>;
 
-            imagelabel: Roact.JsxIntrinsic<Rbx_ImageLabel>;
-            imagebutton: Roact.JsxIntrinsic<Rbx_ImageButton>;
+            imagelabel: Roact.JsxGuiObject<Rbx_ImageLabel>;
+            imagebutton: Roact.JsxGuiObject<Rbx_ImageButton>;
 
-            textlabel: Roact.JsxIntrinsic<Rbx_TextLabel>;
-            textbutton: Roact.JsxIntrinsic<Rbx_TextButton>;
-            textbox: Roact.JsxIntrinsic<Rbx_TextBox>;
+            textlabel: Roact.JsxGuiObject<Rbx_TextLabel>;
+            textbutton: Roact.JsxGuiObject<Rbx_TextButton>;
+            textbox: Roact.JsxGuiObject<Rbx_TextBox>;
 
-            frame: Roact.JsxIntrinsic<Rbx_Frame>;
-            viewportframe: Roact.JsxIntrinsic<Rbx_ViewportFrame>;
-            scrollingframe: Roact.JsxIntrinsic<Rbx_ScrollingFrame>;
+            frame: Roact.JsxGuiObject<Rbx_Frame>;
+            viewportframe: Roact.JsxGuiObject<Rbx_ViewportFrame>;
+            scrollingframe: Roact.JsxGuiObject<Rbx_ScrollingFrame>;
 
-            uigridlayout: Roact.JsxIntrinsic<Rbx_UIGridLayout>;
-            uilistlayout: Roact.JsxIntrinsic<Rbx_UIListLayout>;
-            uipagelayout: Roact.JsxIntrinsic<Rbx_UIPageLayout>;
-            uitablelayout: Roact.JsxIntrinsic<Rbx_UITableLayout>;
+            uigridlayout: Roact.JsxUIComponent<Rbx_UIGridLayout>;
+            uilistlayout: Roact.JsxUIComponent<Rbx_UIListLayout>;
+            uipagelayout: Roact.JsxUIComponent<Rbx_UIPageLayout>;
+            uitablelayout: Roact.JsxUIComponent<Rbx_UITableLayout>;
 
-            uipadding: Roact.JsxIntrinsic<Rbx_UIPadding>;
-            uiscale: Roact.JsxIntrinsic<Rbx_UIScale>;
+            uipadding: Roact.JsxUIComponent<Rbx_UIPadding>;
+            uiscale: Roact.JsxUIComponent<Rbx_UIScale>;
 
-            uisizeconstraint: Roact.JsxIntrinsic<Rbx_UISizeConstraint>;
-			uitextsizeconstraint: Roact.JsxIntrinsic<Rbx_UITextSizeConstraint>;
+            uisizeconstraint: Roact.JsxUIComponent<Rbx_UISizeConstraint>;
+			uitextsizeconstraint: Roact.JsxUIComponent<Rbx_UITextSizeConstraint>;
         }
     }
 }
