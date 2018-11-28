@@ -1,7 +1,8 @@
 <h1 align="center">Roact (TypeScript)</h1>
 <div align="center">
 	<a href="https://roblox.github.io/roact">
-		<img src="https://img.shields.io/badge/docs-website-green.svg" alt="Documentation" />
+		<img src="https://img.shields.io/badge/docs-website-green.svg" alt="Documentation"></img>
+		<img src="https://badge.fury.io/js/rbx-roact.svg"></img>
 	</a>
 </div>
 
