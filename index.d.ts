@@ -193,7 +193,7 @@ declare namespace Roact {
      * 
      * If `children` is nil or contains no children, `oneChild` will return nil
      */
-    function oneChild(children: (Component | Element)[]): Roact.Element;
+    function oneChild(children?: Element[]): Roact.Element;
 
     /**
      * Creates a new reference object that can be used with `Roact.Ref`
