@@ -108,10 +108,6 @@ class TestComponent extends Roact.Component {
 	
 }
 
-interface Rbx_JsxIntrinsicGuiProps<T extends Rbx_GuiObject> extends Rbx_JsxIntrinsicProps<T> {
-	// Template?: Roact.Template<T>,
-}
-
 declare namespace Roact {
 	type Template<T extends Rbx_GuiBase = Rbx_GuiObject> = Partial<SubType<T, PropertyTypes>>;
 
@@ -131,7 +127,6 @@ declare namespace Roact {
 
     /** A Roact Element */
     interface Element {
-        type: Symbol,
         component: string | RenderableClass,
         props: any;
         source?: string;
@@ -333,11 +328,15 @@ declare namespace Roact {
 		[name: string]: "[Symbol(Roact.Change)]"
 	};
 
-	type JsxIntrinsic<T extends Rbx_Instance> = Partial<SubType<T, PropertyTypes>> & Rbx_JsxIntrinsicProps<T>;
+	/**
+	 * Properties of the specified instance
+	 */
+	type Properties<T extends Rbx_Instance> = Partial<SubType<T, PropertyTypes>>;
 
+	type JsxIntrinsic<T extends Rbx_Instance> = Properties<T> & Rbx_JsxIntrinsicProps<T>;
 	type JsxLayerCollector<T extends Rbx_LayerCollector> = JsxIntrinsic<T>;
 	type JsxUIComponent<T extends Rbx_UIComponent> = JsxIntrinsic<T>;
-	type JsxGuiObject<T extends Rbx_GuiObject> = Partial<SubType<T, PropertyTypes>> & Rbx_JsxIntrinsicGuiProps<T>;
+	type JsxGuiObject<T extends Rbx_GuiObject> = Properties<T> & Rbx_JsxIntrinsicProps<T>;
 }
 
 type RoactEvents<T> = {
