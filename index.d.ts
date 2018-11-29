@@ -213,7 +213,7 @@ declare namespace Roact {
 		/**
 		 * The properties of this component
 		 */
-        public props: P & { 
+        protected props: P & { 
 			/**
 			 * The children of your component.
 			 * 
