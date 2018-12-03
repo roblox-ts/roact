@@ -14,7 +14,7 @@ Roact.createElement(Parent, {...}, {
     Bob = Roact.createElement(ThisElement, {...})
 })```
      */
-    Key?: string;
+	Key?: string;
 }
 
 
@@ -41,7 +41,7 @@ Roact.createElement("TextButton", {
 });```
      *   
      */
-    Event?: RoactEvents<T>,
+	Event?: RoactEvents<T>,
 
     /**
      * The property changed handlers of this element
@@ -64,7 +64,7 @@ Roact.createElement("TextBox", {
      *     
      */
 	Change?: RoactPropertyChanges<T>,
-	
+
 	/**
 	 * ### Ref has two functionalities:
 	 * 
@@ -105,44 +105,45 @@ class TestComponent extends Roact.Component {
 	 */
 	Ref?: Roact.RefPropertyOrFunction<T>,
 
-	
+
 }
 
 declare namespace Roact {
 	type Template<T extends Rbx_GuiBase = Rbx_GuiObject> = Partial<SubType<T, PropertyTypes>>;
 
 	interface RenderableClass {
-		new (...args: Array<any>):
-		{
+		new(...args: Array<any>): {
 			render(): Element;
 		}
 	}
 
 	interface RenderablePropsClass<P> {
-		new (props: P): {
+		new(props: P): {
 			render(): Element;
-			props: P;
+			shouldUpdate(nextProps: P, nextState: any): boolean;
+			willUpdate(nextProps: P, nextState: any): void;
+			didUpdate(previousProps: P, previousState: any): void;
 		}
 	}
 
-    /** A Roact Element */
-    interface Element {
-        component: string | RenderableClass,
-        props: any;
-        source?: string;
-    }
+	/** A Roact Element */
+	interface Element {
+		component: string | RenderableClass,
+		props: any;
+		source?: string;
+	}
 
-    abstract class IComponent {
-        abstract render(): Element;
-    }
+	abstract class IComponent {
+		abstract render(): Element;
+	}
 
-    interface ComponentInstanceHandle { 
+	interface ComponentInstanceHandle {
 		_key?: string;
 		_parent?: Instance;
 		_element?: string | RenderableClass;
 	}
 
-	type Children = Element[] | {[name: string]: Element};
+	type Children = Element[] | { [name: string]: Element };
 
 	/**
 	 * Create a new roact element representing a custom roact component
@@ -150,10 +151,10 @@ declare namespace Roact {
 	 * @param props The properties of the component
 	 * @param children The children of this element
 	 */
-    function createElement<T extends Roact.Component<any, P>, P>(
-        component: RenderablePropsClass<P>,
-        props?: Partial<P>,
-        children?: Children
+	function createElement<T extends Roact.Component<any, P>, P>(
+		component: RenderablePropsClass<P>,
+		props?: Partial<P>,
+		children?: Children
 	): Element;
 
 	/**
@@ -164,7 +165,7 @@ declare namespace Roact {
 	 */
 	function createElement(
 		instanceName: string,
-		props?: {[name: string]: any},
+		props?: { [name: string]: any },
 		children?: Children
 	): Element;
 
@@ -173,19 +174,19 @@ declare namespace Roact {
      * 
      * The result is a `ComponentInstanceHandle`, which is an opaque handle that represents this specific instance of the root component. You can pass this to APIs like `Roact.unmount` and the future debug API.
      */
-    function mount(element: Element, parent?: Instance, key?: string): ComponentInstanceHandle;
+	function mount(element: Element, parent?: Instance, key?: string): ComponentInstanceHandle;
 
     /**
      * Updates an existing instance handle with a new element, returning a new handle. This can be used to update a UI created with `Roact.mount` by passing in a new element with new props.
      * 
      * `reconcile` can be used to change the props of a component instance created with `mount` and is useful for putting Roact content into non-Roact applications.
      */
-    function reconcile<T>(handle: ComponentInstanceHandle, component: Element): ComponentInstanceHandle;
+	function reconcile<T>(handle: ComponentInstanceHandle, component: Element): ComponentInstanceHandle;
 
     /**
      * Destroys the given `ComponentInstanceHandle` and all of its descendents. Does not operate on a Roblox Instance -- this must be given a handle that was returned by `Roact.mount`
      */
-    function unmount(handle: ComponentInstanceHandle): void;
+	function unmount(handle: ComponentInstanceHandle): void;
     /**
      * Given a dictionary of children, returns a single child element.
      * 
@@ -193,33 +194,33 @@ declare namespace Roact {
      * 
      * If `children` is nil or contains no children, `oneChild` will return nil
      */
-    function oneChild(children?: Element[]): Roact.Element;
+	function oneChild(children?: Element[]): Roact.Element;
 
     /**
      * Creates a new reference object that can be used with `Roact.Ref`
      * @see Roact.Ref
      */
-    function createRef<T extends Instance>(): Ref<T>;
+	function createRef<T extends Instance>(): Ref<T>;
 
-    type ContainsKeys<S, K extends keyof S> = (Pick<S, K> | S | null);
+	type ContainsKeys<S, K extends keyof S> = (Pick<S, K> | S | null);
 
-    abstract class PureComponent<S = {}, P = {}> extends Component<S, P> {
+	abstract class PureComponent<S = {}, P = {}> extends Component<S, P> {
 
-    }
+	}
 
-    abstract class Component<S = {}, P = {}> extends IComponent {
-        constructor(p: P & Rbx_JsxProps);
+	abstract class Component<S = {}, P = {}> extends IComponent {
+		constructor(p: P & Rbx_JsxProps);
 
 		/**
 		 * The properties of this component
 		 */
-        protected props: P & { 
+		protected props: P & {
 			/**
 			 * The children of your component.
 			 * 
 			 * Make sure to check if they exist first!
 			 */
-			children?: Element[] 
+			children?: Element[]
 		};
 
 		/**
@@ -228,7 +229,7 @@ declare namespace Roact {
 		 * **Warning**: Attempting to set this outside of your constructor will cause Roact to error - Use setState instead
 		 */
 		protected state: S;
-		
+
 		/**
 			`didMount` is fired after the component finishes its initial render. At this point, all associated Roblox Instances have been created, and all components have finished mounting.
 
@@ -289,34 +290,34 @@ declare namespace Roact {
          * @param state The current state
          * @returns Any changed state properties
          */
-        protected setState<K extends keyof S>(
-            state: (
-                (
-                    prevState: Readonly<S>,
-                    props: P
-                )
-                => ContainsKeys<S, K>)
-        ): void;
+		protected setState<K extends keyof S>(
+			state: (
+				(
+					prevState: Readonly<S>,
+					props: P
+				)
+					=> ContainsKeys<S, K>)
+		): void;
 
-        protected setState<K extends keyof S>(state: ContainsKeys<S, K>):void;
+		protected setState<K extends keyof S>(state: ContainsKeys<S, K>): void;
 
 		/**
 			`render` describes what a component should display at the current instant in time.
 
 			Roact assumes that `render` act likes a pure function: the result of `render` must depend only on `props` and `state`, and it must not have side-effects.
 		 */
-        public abstract render(): Element;
-    }
+		public abstract render(): Element;
+	}
 
     /**
      * A reference to an instance
      */
-    interface Ref<T extends Rbx_Instance = Instance> {
-        readonly current: T | undefined
+	interface Ref<T extends Rbx_Instance = Instance> {
+		readonly current: T | undefined
 	}
-	
 
-	type RefPropertyOrFunction<T extends Rbx_Instance> = Ref<T> | ((rbx: T)=>void);
+
+	type RefPropertyOrFunction<T extends Rbx_Instance> = Ref<T> | ((rbx: T) => void);
 
 	const Ref: "Symbol(Roact.Ref)";
 
@@ -340,74 +341,74 @@ declare namespace Roact {
 }
 
 type RoactEvents<T> = {
-    [key in keyof Partial<SubType<T, RBXScriptSignal>>]: EventHandlerFunction<T>
+	[key in keyof Partial<SubType<T, RBXScriptSignal>>]: EventHandlerFunction<T>
 };
 
 type RoactPropertyChanges<T> = {
-    [key in keyof Partial<SubType<T, PropertyTypes>>]: PropertyChangeHandlerFunction<T>
+	[key in keyof Partial<SubType<T, PropertyTypes>>]: PropertyChangeHandlerFunction<T>
 }
 
-type EventHandlerFunction<T> = (rbx: T, ...args: any[])=>void;
-type PropertyChangeHandlerFunction<T> = (rbx: T)=>void;
+type EventHandlerFunction<T> = (rbx: T, ...args: any[]) => void;
+type PropertyChangeHandlerFunction<T> = (rbx: T) => void;
 
-type PropertyTypes = string | number | 
-    Vector2 | Vector3 | 
-    Instance | CFrame | 
-    UDim2 | UDim |
-    Axes | BrickColor |
-    ColorSequence | Vector2int16 |
-    Vector3int16 | Region3 |
-    Region3int16 | PhysicalProperties |
-    Rect | Color3 | 
-    Faces | ReflectionMetadataEnums | boolean;
+type PropertyTypes = string | number |
+	Vector2 | Vector3 |
+	Instance | CFrame |
+	UDim2 | UDim |
+	Axes | BrickColor |
+	ColorSequence | Vector2int16 |
+	Vector3int16 | Region3 |
+	Region3int16 | PhysicalProperties |
+	Rect | Color3 |
+	Faces | ReflectionMetadataEnums | boolean;
 
 type FilterFlags<Base, Condition> = {
-    [Key in keyof Base]: 
-        Base[Key] extends Condition ? Key : never
+	[Key in keyof Base]:
+	Base[Key] extends Condition ? Key : never
 };
 
-type AllowedNames<Base, Condition> = 
-        FilterFlags<Base, Condition>[keyof Base];
+type AllowedNames<Base, Condition> =
+	FilterFlags<Base, Condition>[keyof Base];
 
-type SubType<Base, Condition> = 
-        Pick<Base, AllowedNames<Base, Condition>>;
+type SubType<Base, Condition> =
+	Pick<Base, AllowedNames<Base, Condition>>;
 
 declare global {
 
     /**
      * Support for the experimental JSX in roblox-ts
      */
-    namespace JSX {
+	namespace JSX {
 		type Element = Roact.Element;
 
-        interface IntrinsicElements {
+		interface IntrinsicElements {
 			uiaspectratioconstraint: Roact.JsxUIComponent<Rbx_UIAspectRatioConstraint>;
 
-            screengui: Roact.JsxLayerCollector<Rbx_ScreenGui>;
-            billboardgui: Roact.JsxLayerCollector<Rbx_BillboardGui>;
-            surfacegui: Roact.JsxLayerCollector<Rbx_SurfaceGui>;
+			screengui: Roact.JsxLayerCollector<Rbx_ScreenGui>;
+			billboardgui: Roact.JsxLayerCollector<Rbx_BillboardGui>;
+			surfacegui: Roact.JsxLayerCollector<Rbx_SurfaceGui>;
 
-            imagelabel: Roact.JsxGuiObject<Rbx_ImageLabel>;
-            imagebutton: Roact.JsxGuiObject<Rbx_ImageButton>;
+			imagelabel: Roact.JsxGuiObject<Rbx_ImageLabel>;
+			imagebutton: Roact.JsxGuiObject<Rbx_ImageButton>;
 
-            textlabel: Roact.JsxGuiObject<Rbx_TextLabel>;
-            textbutton: Roact.JsxGuiObject<Rbx_TextButton>;
-            textbox: Roact.JsxGuiObject<Rbx_TextBox>;
+			textlabel: Roact.JsxGuiObject<Rbx_TextLabel>;
+			textbutton: Roact.JsxGuiObject<Rbx_TextButton>;
+			textbox: Roact.JsxGuiObject<Rbx_TextBox>;
 
-            frame: Roact.JsxGuiObject<Rbx_Frame>;
-            viewportframe: Roact.JsxGuiObject<Rbx_ViewportFrame>;
-            scrollingframe: Roact.JsxGuiObject<Rbx_ScrollingFrame>;
+			frame: Roact.JsxGuiObject<Rbx_Frame>;
+			viewportframe: Roact.JsxGuiObject<Rbx_ViewportFrame>;
+			scrollingframe: Roact.JsxGuiObject<Rbx_ScrollingFrame>;
 
-            uigridlayout: Roact.JsxUIComponent<Rbx_UIGridLayout>;
-            uilistlayout: Roact.JsxUIComponent<Rbx_UIListLayout>;
-            uipagelayout: Roact.JsxUIComponent<Rbx_UIPageLayout>;
-            uitablelayout: Roact.JsxUIComponent<Rbx_UITableLayout>;
+			uigridlayout: Roact.JsxUIComponent<Rbx_UIGridLayout>;
+			uilistlayout: Roact.JsxUIComponent<Rbx_UIListLayout>;
+			uipagelayout: Roact.JsxUIComponent<Rbx_UIPageLayout>;
+			uitablelayout: Roact.JsxUIComponent<Rbx_UITableLayout>;
 
-            uipadding: Roact.JsxUIComponent<Rbx_UIPadding>;
-            uiscale: Roact.JsxUIComponent<Rbx_UIScale>;
+			uipadding: Roact.JsxUIComponent<Rbx_UIPadding>;
+			uiscale: Roact.JsxUIComponent<Rbx_UIScale>;
 
-            uisizeconstraint: Roact.JsxUIComponent<Rbx_UISizeConstraint>;
+			uisizeconstraint: Roact.JsxUIComponent<Rbx_UISizeConstraint>;
 			uitextsizeconstraint: Roact.JsxUIComponent<Rbx_UITextSizeConstraint>;
-        }
-    }
+		}
+	}
 }
