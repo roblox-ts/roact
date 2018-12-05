@@ -7,7 +7,7 @@
 		<img src="https://img.shields.io/badge/github-roblox_typescript-red.svg" alt="roblox-ts"></img>		
 	</a>
 	<a href="https://github.com/roblox-ts/rbx-roact/wiki">
-		<img src="https://img.shields.io/badge/docs-github_wiki-blue.svg" alt="Documentation"></img>		
+		<img src="https://img.shields.io/badge/docs-wiki-blue.svg" alt="Documentation"></img>		
 	</a>
 	<a href="https://www.npmjs.com/package/rbx-roact">
 		<img src="https://badge.fury.io/js/rbx-roact.svg"></img>
