@@ -14,7 +14,7 @@ Roact.createElement(Parent, {...}, {
     Bob = Roact.createElement(ThisElement, {...})
 })```
      */
-	Key?: string;
+	Key?: string | number;
 }
 
 
