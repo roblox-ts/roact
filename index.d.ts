@@ -108,8 +108,23 @@ class TestComponent extends Roact.Component {
 
 }
 
+interface PortalProps {
+	target: Instance,
+}
+
 declare namespace Roact {
 	type Template<T extends Rbx_GuiBase = Rbx_GuiObject> = Partial<SubType<T, PropertyTypes>>;
+
+	//const Portal: Roact.Component<{}, PortalProps>;
+
+	/**
+	 * Portals are a special kind of component provided by Roact that enable components to 
+	 * render objects into a separate, non-Roact Instance.
+	 */
+	class Portal extends Roact.Component<{}, PortalProps> {
+		constructor(props: PortalProps);
+		public render(): Roact.Element;
+	}
 
 	interface RenderableClass {
 		new(...args: Array<any>): {
