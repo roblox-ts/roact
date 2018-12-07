@@ -231,11 +231,20 @@ declare namespace Roact {
 		 */
 		protected props: P & {
 			/**
+			 * ## DEPRECATED, WILL BE REMOVED IN LATER UPDATE.
+			 * The children of your component.
+			 * 
+			 * Make sure to check if they exist first!
+			 * @deprecated Use `this.props[Roact.Children]` instead.
+			 */
+			children?: Element[];
+
+			/**
 			 * The children of your component.
 			 * 
 			 * Make sure to check if they exist first!
 			 */
-			children?: Element[]
+			[Roact.Children]?: Element[]
 		};
 
 		/**
@@ -343,6 +352,8 @@ declare namespace Roact {
 	const Change: {
 		[name: string]: "[Symbol(Roact.Change)]"
 	};
+
+	const Children: "[Symbol(Roact.Children)]";
 
 	/**
 	 * Properties of the specified instance
