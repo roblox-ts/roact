@@ -231,20 +231,11 @@ declare namespace Roact {
 		 */
 		protected props: P & {
 			/**
-			 * ## DEPRECATED, WILL BE REMOVED IN LATER UPDATE.
-			 * The children of your component.
-			 * 
-			 * Make sure to check if they exist first!
-			 * @deprecated Use `this.props[Roact.Children]` instead.
-			 */
-			children?: Element[];
-
-			/**
 			 * The children of your component.
 			 * 
 			 * Make sure to check if they exist first!
 			 */
-			[Roact.Children]?: Element[]
+			readonly [Roact.Children]?: Element[]
 		};
 
 		/**
