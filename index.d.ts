@@ -121,7 +121,7 @@ declare namespace Roact {
 	 * Portals are a special kind of component provided by Roact that enable components to 
 	 * render objects into a separate, non-Roact Instance.
 	 */
-	class Portal extends Roact.Component<{}, PortalProps> {
+	class Portal extends Roact.Component<PortalProps, {}> {
 		constructor(props: PortalProps);
 		public render(): Roact.Element;
 	}
@@ -166,7 +166,7 @@ declare namespace Roact {
 	 * @param props The properties of the component
 	 * @param children The children of this element
 	 */
-	function createElement<T extends Roact.Component<any, P>, P>(
+	function createElement<T extends Roact.Component<P>, P>(
 		component: RenderablePropsClass<P>,
 		props?: Partial<P>,
 		children?: Children
@@ -219,11 +219,11 @@ declare namespace Roact {
 
 	type ContainsKeys<S, K extends keyof S> = (Pick<S, K> | S | null);
 
-	abstract class PureComponent<S = {}, P = {}> extends Component<S, P> {
+	abstract class PureComponent<P = {}, S = {}> extends Component<P, S> {
 
 	}
 
-	abstract class Component<S = {}, P = {}> extends IComponent {
+	abstract class Component<P = {}, S = {}> extends IComponent {
 		constructor(p: P & Rbx_JsxProps);
 
 		/**

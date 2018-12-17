@@ -1,6 +1,6 @@
 {
   "name": "rbx-roact",
-  "version": "0.0.23",
+  "version": "0.1.0",
   "description": "TypeScript support for Roact",
   "main": "./roact/lib/init.lua",
   "typings": "index.d.ts",
