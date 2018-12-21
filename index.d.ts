@@ -229,14 +229,7 @@ declare namespace Roact {
 		/**
 		 * The properties of this component
 		 */
-		protected props: P & {
-			/**
-			 * The children of your component.
-			 * 
-			 * Make sure to check if they exist first!
-			 */
-			readonly [Roact.Children]?: Element[]
-		};
+		protected props: P & StatefulComponentProps;
 
 		/**
 		 * The state of this component.
@@ -353,17 +346,13 @@ class MyComponent extends Roact.Component<MyProps> {
 	 */
 	const None: undefined;
 
-	const Ref: "Symbol(Roact.Ref)";
+	const Ref: unique symbol;
 
-	const Event: {
-		[name: string]: "[Symbol(Roact.Event)]"
-	};
+	const Event: RoactEventSymbol;
 
-	const Change: {
-		[name: string]: "[Symbol(Roact.Change)]"
-	};
+	const Change: RoactChangeSymbol;
 
-	const Children: "[Symbol(Roact.Children)]";
+	const Children: unique symbol;
 
 	/**
 	 * Properties of the specified instance
@@ -382,6 +371,23 @@ type RoactEvents<T> = {
 
 type RoactPropertyChanges<T> = {
 	[key in keyof Partial<SubType<T, PropertyTypes>>]: PropertyChangeHandlerFunction<T>
+}
+
+interface RoactEventSymbol {
+	readonly [name: string]: symbol;
+}
+
+interface RoactChangeSymbol {
+	readonly [name: string]: symbol;
+}
+
+interface StatefulComponentProps {
+	/**
+	 * The children of your component.
+	 * 
+	 * Make sure to check if they exist first!
+	 */
+	readonly [Roact.Children]?: Roact.Element[]
 }
 
 type EventHandlerFunction<T> = (rbx: T, ...args: any[]) => void;
