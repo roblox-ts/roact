@@ -2,16 +2,16 @@
 <h1 align="center">Roact-TS</h1>
 <div align="center">
 	<a href="https://roblox.github.io/roact">
-		<img src="https://img.shields.io/badge/docs-lua_website-green.svg" alt="Documentation"></img>
+		<img src="https://img.shields.io/badge/docs-lua-purple.svg" alt="Documentation"></img>
 	</a>
 	<a href="https://github.com/roblox-ts/roblox-ts">
 		<img src="https://img.shields.io/badge/github-roblox_typescript-red.svg" alt="roblox-ts"></img>		
 	</a>
-	<a href="https://github.com/roblox-ts/rbx-roact/wiki">
-		<img src="https://img.shields.io/badge/docs-wiki-blue.svg" alt="Documentation"></img>		
+	<a href="https://roblox-ts.github.io/docs/roact/">
+		<img src="https://img.shields.io/badge/docs-typescript-blue.svg" alt="Documentation"></img>		
 	</a>
 	<a href="https://www.npmjs.com/package/rbx-roact">
-		<img src="https://badge.fury.io/js/rbx-roact.svg"></img>
+		<img src="https://badge.fury.io/js/rbx-roact.svg?v=2"></img>
 	</a>
 </div>
 
