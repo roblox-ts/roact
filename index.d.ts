@@ -180,7 +180,7 @@ declare namespace Roact {
 	 */
 	function createElement(
 		instanceName: string,
-		props?: { [name: string]: any },
+		props?: { [Roact.Ref]?: Roact.Ref } & { [name: string]: any },
 		children?: Children
 	): Element;
 
