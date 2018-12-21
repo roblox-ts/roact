@@ -334,6 +334,25 @@ declare namespace Roact {
 
 	type RefPropertyOrFunction<T extends Rbx_Instance> = Ref<T> | ((rbx: T) => void);
 
+	/**
+	 * A special value that can be used to set a state value to undefined.
+	 * Due to how Lua tables work, you cannot simply set the value to `undefined`, you must use `Roact.None`.
+	 * 
+```ts
+interface MyProps{ fieldToRemove?: string }
+class MyComponent extends Roact.Component<MyProps> {
+	// ...
+	public didMount() {
+		this.setState({
+			fieldToRemove: Roact.None
+		})
+	}
+	// ...
+}
+```
+	 */
+	const None: undefined;
+
 	const Ref: "Symbol(Roact.Ref)";
 
 	const Event: {
