@@ -284,16 +284,21 @@ declare namespace Roact {
         /**
          * `setState` requests an update to the component's state. Roact may schedule this update for a later time or resolve it immediately
          * 
-         *      component.willUpdate = self => {
-         *          self.setState({name: 'value'})
-         *      }
-         * 
-         * 
-         *      component.willUpdate = self => {
-         *          self.setState((state, props) => {
-         *              return {name: state.name + 1};
-         *          })
-         *      }
+```ts
+class MyComponent extends Roact.Component {
+	public willUpdate() {
+		this.setState({key: 'value'});
+	}
+}
+
+class MyComponent extends Roact.Component {
+	public willUpdate() {
+		this.setState((state, props) => {
+			return {name: state.name + 1};
+		})
+	}
+}
+```
          * 
          * @param state The current state
          * @returns Any changed state properties
