@@ -275,7 +275,7 @@ declare namespace Roact {
 		/**
 			`didUpdate` is fired after at the end of an update. At this point, the reconciler has updated the properties of any Roblox Instances and the component instance's props and state are up to date.
 
-			`didUpdate` is a good place to send network requests or dispatch Rodux actions, but make sure to compare `self.props` and `self.state` with `previousProps` and `previousState` to avoid triggering too many updates.
+			`didUpdate` is a good place to send network requests or dispatch Rodux actions, but make sure to compare `this.props` and `this.state` with `previousProps` and `previousState` to avoid triggering too many updates.
 		 * @param previousProps The previous props
 		 * @param previousState The previous state
 		 */
