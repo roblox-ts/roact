@@ -1,2 +1,4 @@
-node_modules
+*
+!index.d.ts
+!roact/lib/*.lua
 *.spec.lua

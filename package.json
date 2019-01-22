@@ -1,6 +1,6 @@
 {
   "name": "rbx-roact",
-  "version": "0.1.3",
+  "version": "0.1.6",
   "description": "TypeScript support for Roact",
   "main": "./roact/lib/init.lua",
   "typings": "index.d.ts",
@@ -23,14 +23,7 @@
       "url": "https://github.com/Roblox/roact/blob/master/LICENSE"
     }
   ],
-  "files": [
-    "roact/lib/*",
-    "*.d.ts"
-  ],
-  "peerDependencies": {
-    "rbx-types": "1.0.80"
-  },
   "devDependencies": {
-    "rbx-types": "1.0.80"
+    "rbx-types": "^1.0.100"
   }
 }
