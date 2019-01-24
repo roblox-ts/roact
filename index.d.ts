@@ -319,7 +319,7 @@ class MyComponent extends Roact.Component {
 
 			Roact assumes that `render` act likes a pure function: the result of `render` must depend only on `props` and `state`, and it must not have side-effects.
 		 */
-		public abstract render(): Element;
+		public abstract render(): Element | undefined;
 	}
 
     /**
