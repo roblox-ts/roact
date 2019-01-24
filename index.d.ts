@@ -128,13 +128,13 @@ declare namespace Roact {
 
 	interface RenderableClass {
 		new(...args: Array<any>): {
-			render(): Element;
+			render(): Element | undefined;
 		}
 	}
 
 	interface RenderablePropsClass<P> {
 		new(props: P): {
-			render(): Element;
+			render(): Element | undefined;
 			shouldUpdate(nextProps: P, nextState: any): boolean;
 			willUpdate(nextProps: P, nextState: any): void;
 			didUpdate(previousProps: P, previousState: any): void;
@@ -149,7 +149,7 @@ declare namespace Roact {
 	}
 
 	abstract class IComponent {
-		abstract render(): Element;
+		abstract render(): Element | undefined;
 	}
 
 	interface ComponentInstanceHandle {
