@@ -1,29 +1,31 @@
 {
-  "name": "rbx-roact",
-  "version": "0.1.8",
-  "description": "TypeScript support for Roact",
-  "main": "./roact/lib/init.lua",
-  "typings": "index.d.ts",
-  "scripts": {},
-  "keywords": [
-    "roblox",
-    "typescript",
-    "roact"
-  ],
-  "contributors": [
-    {
-      "name": "Jonathan Holmes",
-      "url": "https://github.com/Vorlias"
-    }
-  ],
-  "author": "",
-  "licenses": [
-    {
-      "type": "Apache 2.0",
-      "url": "https://github.com/Roblox/roact/blob/master/LICENSE"
-    }
-  ],
-  "devDependencies": {
-    "rbx-types": "^1.0.100"
-  }
+	"name": "rbx-roact",
+	"version": "0.1.8",
+	"description": "TypeScript support for Roact",
+	"main": "./roact/lib/init.lua",
+	"typings": "index.d.ts",
+	"scripts": {
+		"prepublish": "npm version patch -m \"package.json version bump to %s\""
+	},
+	"keywords": [
+		"roblox",
+		"typescript",
+		"roact"
+	],
+	"contributors": [
+		{
+			"name": "Jonathan Holmes",
+			"url": "https://github.com/Vorlias"
+		}
+	],
+	"author": "",
+	"licenses": [
+		{
+			"type": "Apache 2.0",
+			"url": "https://github.com/Roblox/roact/blob/master/LICENSE"
+		}
+	],
+	"devDependencies": {
+		"rbx-types": "^1.0.100"
+	}
 }

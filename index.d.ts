@@ -108,6 +108,11 @@ class TestComponent extends Roact.Component {
 
 }
 
+interface _LuaMap<T> {
+	[name: string]: T;
+	[id: number]: T;
+}
+
 interface PortalProps {
 	target: Instance,
 }
@@ -152,10 +157,12 @@ declare namespace Roact {
 		abstract render(): Element | undefined;
 	}
 
+
 	interface ComponentInstanceHandle {
 		_key?: string;
 		_parent?: Instance;
 		_element?: string | RenderableClass;
+		_children?: _LuaMap<ComponentInstanceHandle | undefined>;
 	}
 
 	type Children = Element[] | { [name: string]: Element };
