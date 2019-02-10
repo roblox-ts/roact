@@ -149,7 +149,7 @@ declare namespace Roact {
 	/** A Roact Element */
 	interface Element {
 		component: string | RenderableClass,
-		props: any;
+		props: unknown;
 		source?: string;
 	}
 
