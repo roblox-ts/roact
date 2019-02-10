@@ -159,10 +159,20 @@ declare namespace Roact {
 
 
 	interface ComponentInstanceHandle {
+		/** @internal You should not mess with a component's instance handle! */
 		_key?: string;
+		/** @internal You should not mess with a component's instance handle! */
+		_context?: unknown;
+		/** @internal You should not mess with a component's instance handle! */
+		_rbx?: Instance;
+		/** @internal You should not mess with a component's instance handle! */
 		_parent?: Instance;
+		/** @internal You should not mess with a component's instance handle! */
 		_element?: string | RenderableClass;
+		/** @internal You should not mess with a component's instance handle! */
 		_children?: _LuaMap<ComponentInstanceHandle | undefined>;
+		/** @internal You should not mess with a component's instance handle! */
+		_child?: ComponentInstanceHandle;
 	}
 
 	type Children = Element[] | { [name: string]: Element };
