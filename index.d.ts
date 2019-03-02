@@ -1,13 +1,11 @@
-import 'rbx-types';
-
-export =Roact;
+export = Roact;
 export as namespace Roact;
 
 interface Rbx_JsxProps {
-    /**
+	/**
      * The key of this element
      * In Roact, this would be the index of the Roact Element as a child of another element.
-     * 
+     *
      * E.g. a key of "Bob" would be equivalent of  doing
      * ```lua
 Roact.createElement(Parent, {...}, {
@@ -17,14 +15,13 @@ Roact.createElement(Parent, {...}, {
 	Key?: string | number;
 }
 
-
 /**
  * Arbitrary properties of JSX elements, unrelated to ROBLOX instances
  */
 interface Rbx_JsxIntrinsicProps<T extends Rbx_Instance> extends Rbx_JsxProps {
-    /**
+	/**
      * The event handlers of this element
-     * 
+     *
      * Example usage:
 ```tsx
 	<textbutton event={{
@@ -32,21 +29,21 @@ interface Rbx_JsxIntrinsicProps<T extends Rbx_Instance> extends Rbx_JsxProps {
 	}}/>
 ```
      * In Vanilla Roact, this would be equivalent to
-     * 
+     *
 ```lua
 Roact.createElement("TextButton", {
     [Roact.Event.MouseButton1Click] = (function(rbx)
         print("Clicked!")
-    end) 
+    end)
 });```
-     *   
+     *
      */
-	Event?: RoactEvents<T>,
+	Event?: RoactEvents<T>;
 
-    /**
+	/**
      * The property changed handlers of this element
      * Equivalent of "GetPropertyChangedSignal(Name)"
-     * 
+     *
      * Example usage:
 ```tsx
 	<textbox change={{
@@ -54,20 +51,20 @@ Roact.createElement("TextButton", {
 	}}/>
 ```
      * In Vanilla Roact, this would be equivalent to
-     * 
+     *
 ```lua
 Roact.createElement("TextBox", {
     [Roact.Change.Text] = (function(rbx)
         print("Text changed to:", rbx.Text)
-    end) 
+    end)
 });```
-     *     
+     *
      */
-	Change?: RoactPropertyChanges<T>,
+	Change?: RoactPropertyChanges<T>;
 
 	/**
 	 * ### Ref has two functionalities:
-	 * 
+	 *
 	 * Create a reference to this instance, which can be used elsewhere
 ```tsx
 class TestComponent extends Roact.Component {
@@ -84,7 +81,7 @@ class TestComponent extends Roact.Component {
 		</screengui>;
 	}
 
-	public didMount() { 
+	public didMount() {
 		print("The frame: ", this.ref.current);
 	}
 }
@@ -103,9 +100,7 @@ class TestComponent extends Roact.Component {
 }
 ```
 	 */
-	Ref?: Roact.RefPropertyOrFunction<T>,
-
-
+	Ref?: Roact.RefPropertyOrFunction<T>;
 }
 
 interface _LuaMap<T> {
@@ -114,7 +109,7 @@ interface _LuaMap<T> {
 }
 
 interface PortalProps {
-	target: Instance,
+	target: Instance;
 }
 
 declare namespace Roact {
@@ -123,7 +118,7 @@ declare namespace Roact {
 	//const Portal: Roact.Component<{}, PortalProps>;
 
 	/**
-	 * Portals are a special kind of component provided by Roact that enable components to 
+	 * Portals are a special kind of component provided by Roact that enable components to
 	 * render objects into a separate, non-Roact Instance.
 	 */
 	class Portal extends Roact.Component<PortalProps, {}> {
@@ -132,23 +127,23 @@ declare namespace Roact {
 	}
 
 	interface RenderableClass {
-		new(...args: Array<any>): {
+		new (...args: Array<any>): {
 			render(): Element | undefined;
-		}
+		};
 	}
 
 	interface RenderablePropsClass<P> {
-		new(props: P): {
+		new (props: P): {
 			render(): Element | undefined;
 			shouldUpdate(nextProps: P, nextState: any): boolean;
 			willUpdate(nextProps: P, nextState: any): void;
 			didUpdate(previousProps: P, previousState: any): void;
-		}
+		};
 	}
 
 	/** A Roact Element */
 	interface Element {
-		component: string | RenderableClass,
+		component: string | RenderableClass;
 		props: unknown;
 		source?: string;
 	}
@@ -156,7 +151,6 @@ declare namespace Roact {
 	abstract class IComponent {
 		abstract render(): Element | undefined;
 	}
-
 
 	interface ComponentInstanceHandle {
 		/** @internal You should not mess with a component's instance handle! */
@@ -201,44 +195,42 @@ declare namespace Roact {
 		children?: Children
 	): Element;
 
-    /**
-     * Creates a Roblox Instance given a Roact `element`, and optionally a `parent` to put it in, and a `key` to use as the instance's Name.
-     * 
-     * The result is a `ComponentInstanceHandle`, which is an opaque handle that represents this specific instance of the root component. You can pass this to APIs like `Roact.unmount` and the future debug API.
-     */
+	/**
+	 * Creates a Roblox Instance given a Roact `element`, and optionally a `parent` to put it in, and a `key` to use as the instance's Name.
+	 *
+	 * The result is a `ComponentInstanceHandle`, which is an opaque handle that represents this specific instance of the root component. You can pass this to APIs like `Roact.unmount` and the future debug API.
+	 */
 	function mount(element: Element, parent?: Instance, key?: string): ComponentInstanceHandle;
 
-    /**
-     * Updates an existing instance handle with a new element, returning a new handle. This can be used to update a UI created with `Roact.mount` by passing in a new element with new props.
-     * 
-     * `reconcile` can be used to change the props of a component instance created with `mount` and is useful for putting Roact content into non-Roact applications.
-     */
+	/**
+	 * Updates an existing instance handle with a new element, returning a new handle. This can be used to update a UI created with `Roact.mount` by passing in a new element with new props.
+	 *
+	 * `reconcile` can be used to change the props of a component instance created with `mount` and is useful for putting Roact content into non-Roact applications.
+	 */
 	function reconcile<T>(handle: ComponentInstanceHandle, component: Element): ComponentInstanceHandle;
 
-    /**
-     * Destroys the given `ComponentInstanceHandle` and all of its descendents. Does not operate on a Roblox Instance -- this must be given a handle that was returned by `Roact.mount`
-     */
+	/**
+	 * Destroys the given `ComponentInstanceHandle` and all of its descendents. Does not operate on a Roblox Instance -- this must be given a handle that was returned by `Roact.mount`
+	 */
 	function unmount(handle: ComponentInstanceHandle): void;
-    /**
-     * Given a dictionary of children, returns a single child element.
-     * 
-     * If `children` contains more than one child, `oneChild` function will throw an error. This is intended to denote an error when using the component using oneChild.
-     * 
-     * If `children` is nil or contains no children, `oneChild` will return nil
-     */
+	/**
+	 * Given a dictionary of children, returns a single child element.
+	 *
+	 * If `children` contains more than one child, `oneChild` function will throw an error. This is intended to denote an error when using the component using oneChild.
+	 *
+	 * If `children` is nil or contains no children, `oneChild` will return nil
+	 */
 	function oneChild(children?: Element[]): Roact.Element;
 
-    /**
-     * Creates a new reference object that can be used with `Roact.Ref`
-     * @see Roact.Ref
-     */
+	/**
+	 * Creates a new reference object that can be used with `Roact.Ref`
+	 * @see Roact.Ref
+	 */
 	function createRef<T extends Instance>(): Ref<T>;
 
-	type ContainsKeys<S, K extends keyof S> = (Pick<S, K> | S | null);
+	type ContainsKeys<S, K extends keyof S> = Pick<S, K> | S | null;
 
-	abstract class PureComponent<P = {}, S = {}> extends Component<P, S> {
-
-	}
+	abstract class PureComponent<P = {}, S = {}> extends Component<P, S> {}
 
 	abstract class Component<P = {}, S = {}> extends IComponent {
 		constructor(p: P & Rbx_JsxProps);
@@ -250,7 +242,7 @@ declare namespace Roact {
 
 		/**
 		 * The state of this component.
-		 * 
+		 *
 		 * **Warning**: Attempting to set this outside of your constructor will cause Roact to error - Use setState instead
 		 */
 		protected state: S;
@@ -262,13 +254,12 @@ declare namespace Roact {
 		*/
 		public didMount(): void;
 
-		/** 
+		/**
 			`willUnmount` is fired right before Roact begins unmounting a component instance's children.
 
 			`willUnmount` acts like a component's destructor, and is a good place to disconnect any manually-connected events.
 		 */
 		public willUnmount(): void;
-
 
 		/**
 			`shouldUpdate` provides a way to override Roact's rerendering heuristics.
@@ -298,9 +289,9 @@ declare namespace Roact {
 		 */
 		public didUpdate(previousProps: P, previousState: S): void;
 
-        /**
+		/**
          * `setState` requests an update to the component's state. Roact may schedule this update for a later time or resolve it immediately
-         * 
+         *
 ```ts
 class MyComponent extends Roact.Component {
 	public willUpdate() {
@@ -316,18 +307,11 @@ class MyComponent extends Roact.Component {
 	}
 }
 ```
-         * 
+         *
          * @param state The current state
          * @returns Any changed state properties
          */
-		protected setState<K extends keyof S>(
-			state: (
-				(
-					prevState: Readonly<S>,
-					props: P
-				)
-					=> ContainsKeys<S, K>)
-		): void;
+		protected setState<K extends keyof S>(state: (prevState: Readonly<S>, props: P) => ContainsKeys<S, K>): void;
 
 		protected setState<K extends keyof S>(state: ContainsKeys<S, K>): void;
 
@@ -339,20 +323,19 @@ class MyComponent extends Roact.Component {
 		public abstract render(): Element | undefined;
 	}
 
-    /**
-     * A reference to an instance
-     */
+	/**
+	 * A reference to an instance
+	 */
 	interface Ref<T extends Rbx_Instance = Instance> {
-		readonly current: T | undefined
+		readonly current: T | undefined;
 	}
-
 
 	type RefPropertyOrFunction<T extends Rbx_Instance> = Ref<T> | ((rbx: T) => void);
 
 	/**
 	 * A special value that can be used to set a state value to undefined.
 	 * Due to how Lua tables work, you cannot simply set the value to `undefined`, you must use `Roact.None`.
-	 * 
+	 *
 ```ts
 interface MyProps{ fieldToRemove?: string }
 class MyComponent extends Roact.Component<MyProps> {
@@ -388,12 +371,12 @@ class MyComponent extends Roact.Component<MyProps> {
 }
 
 type RoactEvents<T> = {
-	[key in keyof Partial<SubType<T, RBXScriptSignal>>]: EventHandlerFunction<T>
+	[K in keyof Partial<SubType<T, RBXScriptSignal>>]: T[K] extends RBXScriptSignal<infer F>
+		? EventHandlerFunction<T, FunctionArguments<F>>
+		: never
 };
 
-type RoactPropertyChanges<T> = {
-	[key in keyof Partial<SubType<T, PropertyTypes>>]: PropertyChangeHandlerFunction<T>
-}
+type RoactPropertyChanges<T> = { [key in keyof Partial<SubType<T, PropertyTypes>>]: PropertyChangeHandlerFunction<T> };
 
 interface RoactEventSymbol {
 	readonly [name: string]: symbol;
@@ -406,42 +389,63 @@ interface RoactChangeSymbol {
 interface StatefulComponentProps {
 	/**
 	 * The children of your component.
-	 * 
+	 *
 	 * Make sure to check if they exist first!
 	 */
-	readonly [Roact.Children]?: Roact.Element[]
+	readonly [Roact.Children]?: Roact.Element[];
 }
 
-type EventHandlerFunction<T> = (rbx: T, ...args: any[]) => void;
+type EventHandlerFunction<T, U extends any[]> = U extends []
+	? (rbx: T) => void
+	: U extends [infer A]
+	? (rbx: T, a: A) => void
+	: U extends [infer A, infer B]
+	? (rbx: T, a: A, b: B) => void
+	: U extends [infer A, infer B, infer C]
+	? (rbx: T, a: A, b: B, c: C) => void
+	: U extends [infer A, infer B, infer C, infer D]
+	? (rbx: T, a: A, b: B, c: C, d: D) => void
+	: U extends [infer A, infer B, infer C, infer D, infer E]
+	? (rbx: T, a: A, b: B, c: C, d: D, e: E) => void
+	: U extends [infer A, infer B, infer C, infer D, infer E, infer F]
+	? (rbx: T, a: A, b: B, c: C, d: D, e: E, f: F) => void
+	: (rbx: T, ...args: unknown[]) => void;
+
 type PropertyChangeHandlerFunction<T> = (rbx: T) => void;
 
-type PropertyTypes = string | number |
-	Vector2 | Vector3 |
-	Instance | CFrame |
-	UDim2 | UDim |
-	Axes | BrickColor |
-	ColorSequence | Vector2int16 |
-	Vector3int16 | Region3 |
-	Region3int16 | PhysicalProperties |
-	Rect | Color3 |
-	Faces | ReflectionMetadataEnums | boolean;
+type PropertyTypes =
+	| string
+	| number
+	| Vector2
+	| Vector3
+	| Instance
+	| CFrame
+	| UDim2
+	| UDim
+	| Axes
+	| BrickColor
+	| ColorSequence
+	| Vector2int16
+	| Vector3int16
+	| Region3
+	| Region3int16
+	| PhysicalProperties
+	| Rect
+	| Color3
+	| Faces
+	| ReflectionMetadataEnums
+	| boolean;
 
-type FilterFlags<Base, Condition> = {
-	[Key in keyof Base]:
-	Base[Key] extends Condition ? Key : never
-};
+type FilterFlags<Base, Condition> = { [Key in keyof Base]: Base[Key] extends Condition ? Key : never };
 
-type AllowedNames<Base, Condition> =
-	FilterFlags<Base, Condition>[keyof Base];
+type AllowedNames<Base, Condition> = FilterFlags<Base, Condition>[keyof Base];
 
-type SubType<Base, Condition> =
-	Pick<Base, AllowedNames<Base, Condition>>;
+type SubType<Base, Condition> = Pick<Base, AllowedNames<Base, Condition>>;
 
 declare global {
-
-    /**
-     * Support for the experimental JSX in roblox-ts
-     */
+	/**
+	 * Support for the experimental JSX in roblox-ts
+	 */
 	namespace JSX {
 		type Element = Roact.Element;
 
