@@ -1,117 +1,6 @@
+/// <reference path="internal.d.ts" />
 export = Roact;
 export as namespace Roact;
-
-interface Rbx_JsxProps {
-	/**
-     * The key of this element
-     * In Roact, this would be the index of the Roact Element as a child of another element.
-     *
-     * E.g. a key of "Bob" would be equivalent of  doing
-     * ```lua
-Roact.createElement(Parent, {...}, {
-    Bob = Roact.createElement(ThisElement, {...})
-})```
-     */
-	Key?: string | number;
-}
-
-/**
- * Arbitrary properties of JSX elements, unrelated to ROBLOX instances
- */
-interface Rbx_JsxIntrinsicProps<T extends Rbx_Instance> extends Rbx_JsxProps {
-	/**
-     * The event handlers of this element
-     *
-     * Example usage:
-```tsx
-	<textbutton event={{
-		MouseButton1Click: rbx => print("Clicked!")
-	}}/>
-```
-     * In Vanilla Roact, this would be equivalent to
-     *
-```lua
-Roact.createElement("TextButton", {
-    [Roact.Event.MouseButton1Click] = (function(rbx)
-        print("Clicked!")
-    end)
-});```
-     *
-     */
-	Event?: RoactEvents<T>;
-
-	/**
-     * The property changed handlers of this element
-     * Equivalent of "GetPropertyChangedSignal(Name)"
-     *
-     * Example usage:
-```tsx
-	<textbox change={{
-		Text: rbx => print("Text changed to:", rbx)
-	}}/>
-```
-     * In Vanilla Roact, this would be equivalent to
-     *
-```lua
-Roact.createElement("TextBox", {
-    [Roact.Change.Text] = (function(rbx)
-        print("Text changed to:", rbx.Text)
-    end)
-});```
-     *
-     */
-	Change?: RoactPropertyChanges<T>;
-
-	/**
-	 * ### Ref has two functionalities:
-	 *
-	 * Create a reference to this instance, which can be used elsewhere
-```tsx
-class TestComponent extends Roact.Component {
-	ref: Ref<Frame>;
-	constructor(props: {})
-	{
-		super(props);
-		ref = Roact.createRef<Frame>();
-	}
-
-	public render(): Roact.Element {
-		return <screengui>
-			<frame Ref={this.ref}/>
-		</screengui>;
-	}
-
-	public didMount() {
-		print("The frame: ", this.ref.current);
-	}
-}
-```
-	 * A function that is called every time the instance changes
-```tsx
-class TestComponent extends Roact.Component {
-	public onFrameRendered(frame: Frame) {
-		print("Frame rendered!", frame);
-	}
-	public render(): Roact.Element {
-		return <screengui>
-			<frame Ref={this.onFrameRendered}/>
-		</screengui>;
-	}
-}
-```
-	 */
-	Ref?: Roact.RefPropertyOrFunction<T>;
-}
-
-interface _LuaMap<T> {
-	[name: string]: T;
-	[id: number]: T;
-}
-
-interface PortalProps {
-	target: Instance;
-}
-
 declare namespace Roact {
 	type Template<T extends Rbx_GuiBase = Rbx_GuiObject> = Partial<SubType<T, PropertyTypes>>;
 
@@ -127,13 +16,13 @@ declare namespace Roact {
 	}
 
 	interface RenderableClass {
-		new (...args: Array<any>): {
+		new(...args: Array<any>): {
 			render(): Element | undefined;
 		};
 	}
 
 	interface RenderablePropsClass<P> {
-		new (props: P): {
+		new(props: P): {
 			render(): Element | undefined;
 			shouldUpdate(nextProps: P, nextState: any): boolean;
 			willUpdate(nextProps: P, nextState: any): void;
@@ -171,29 +60,12 @@ declare namespace Roact {
 
 	type Children = Element[] | { [name: string]: Element };
 
-	/**
-	 * Create a new roact element representing a custom roact component
-	 * @param component The component type to create
-	 * @param props The properties of the component
-	 * @param children The children of this element
-	 */
-	function createElement<T extends Roact.Component<P>, P>(
-		component: RenderablePropsClass<P>,
-		props?: Partial<P>,
-		children?: Children
-	): Element;
 
-	/**
-	 * Create a new roact element representing a ROBLOX instance
-	 * @param instanceName The name of the instance
-	 * @param props The properties of the instance
-	 * @param children The children of the element
-	 */
-	function createElement(
-		instanceName: string,
-		props?: { [Roact.Ref]?: Roact.Ref } & { [name: string]: any },
-		children?: Children
-	): Element;
+	function createElement<T>(component: FunctionalComponent<T>, props?: unknown, children?: Children): Element;
+	function createElement<T extends Roact.RenderablePropsClass<P>, P>(component: StatefulComponent<T, P>, props?: P, children?: Children): Element;
+	function createElement<T extends keyof CreatableInstances>(className: PrimitiveComponent<T>, props?: PrimitiveProperties<T>, children?: Children): Element;
+
+	function __test<T extends keyof Primitives>(k: T): Rbx_Primitive<Primitives[T]>;
 
 	/**
 	 * Creates a Roblox Instance given a Roact `element`, and optionally a `parent` to put it in, and a `key` to use as the instance's Name.
@@ -230,7 +102,7 @@ declare namespace Roact {
 
 	type ContainsKeys<S, K extends keyof S> = Pick<S, K> | S | null;
 
-	abstract class PureComponent<P = {}, S = {}> extends Component<P, S> {}
+	abstract class PureComponent<P = {}, S = {}> extends Component<P, S> { }
 
 	abstract class Component<P = {}, S = {}> extends IComponent {
 		constructor(p: P & Rbx_JsxProps);
@@ -370,77 +242,6 @@ class MyComponent extends Roact.Component<MyProps> {
 	type JsxGuiObject<T extends Rbx_GuiObject> = Properties<T> & Rbx_JsxIntrinsicProps<T>;
 }
 
-type RoactEvents<T> = {
-	[K in keyof Partial<SubType<T, RBXScriptSignal>>]: T[K] extends RBXScriptSignal<infer F>
-		? EventHandlerFunction<T, FunctionArguments<F>>
-		: never
-};
-
-type RoactPropertyChanges<T> = { [key in keyof Partial<SubType<T, PropertyTypes>>]: PropertyChangeHandlerFunction<T> };
-
-interface RoactEventSymbol {
-	readonly [name: string]: symbol;
-}
-
-interface RoactChangeSymbol {
-	readonly [name: string]: symbol;
-}
-
-interface StatefulComponentProps {
-	/**
-	 * The children of your component.
-	 *
-	 * Make sure to check if they exist first!
-	 */
-	readonly [Roact.Children]?: Roact.Element[];
-}
-
-type EventHandlerFunction<T, U extends any[]> = U extends []
-	? (rbx: T) => void
-	: U extends [infer A]
-	? (rbx: T, a: A) => void
-	: U extends [infer A, infer B]
-	? (rbx: T, a: A, b: B) => void
-	: U extends [infer A, infer B, infer C]
-	? (rbx: T, a: A, b: B, c: C) => void
-	: U extends [infer A, infer B, infer C, infer D]
-	? (rbx: T, a: A, b: B, c: C, d: D) => void
-	: U extends [infer A, infer B, infer C, infer D, infer E]
-	? (rbx: T, a: A, b: B, c: C, d: D, e: E) => void
-	: U extends [infer A, infer B, infer C, infer D, infer E, infer F]
-	? (rbx: T, a: A, b: B, c: C, d: D, e: E, f: F) => void
-	: (rbx: T, ...args: unknown[]) => void;
-
-type PropertyChangeHandlerFunction<T> = (rbx: T) => void;
-
-type PropertyTypes =
-	| string
-	| number
-	| Vector2
-	| Vector3
-	| Instance
-	| CFrame
-	| UDim2
-	| UDim
-	| Axes
-	| BrickColor
-	| ColorSequence
-	| Vector2int16
-	| Vector3int16
-	| Region3
-	| Region3int16
-	| PhysicalProperties
-	| Rect
-	| Color3
-	| Faces
-	| ReflectionMetadataEnums
-	| boolean;
-
-type FilterFlags<Base, Condition> = { [Key in keyof Base]: Base[Key] extends Condition ? Key : never };
-
-type AllowedNames<Base, Condition> = FilterFlags<Base, Condition>[keyof Base];
-
-type SubType<Base, Condition> = Pick<Base, AllowedNames<Base, Condition>>;
 
 declare global {
 	/**
