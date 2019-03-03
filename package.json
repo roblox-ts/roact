@@ -5,7 +5,6 @@
 	"main": "./roact/lib/init.lua",
 	"typings": "index.d.ts",
 	"scripts": {
-		"prepublish": "npm version patch -m \"package.json version bump to %s\""
 	},
 	"keywords": [
 		"roblox",
