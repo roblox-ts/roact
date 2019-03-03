@@ -3,7 +3,7 @@ type ValuesOf<T> =
 
 type Writable<T> = Pick<T, { [P in keyof T]-?: (<U>() => U extends { [Q in P]: T[P] } ? 1 : 2) extends (<U>() => U extends { -readonly [Q in P]: T[P] } ? 1 : 2) ? P : never }[keyof T]>;
 type Key = string | number;
-type FunctionalComponent<T> = T extends ((props: unknown) => Roact.Element) ? T : never;
+type FunctionalComponent<T, P> = T extends ((props: P) => Roact.Element) ? T : never;
 type StatefulComponent<T, P = {}> = T extends Roact.RenderablePropsClass<P> ? T : never;
 type PrimitiveComponent<T> = T extends keyof Primitives ? T : never;
 

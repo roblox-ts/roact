@@ -4,8 +4,7 @@
 	"description": "TypeScript support for Roact",
 	"main": "./roact/lib/init.lua",
 	"typings": "index.d.ts",
-	"scripts": {
-	},
+	"scripts": {},
 	"keywords": [
 		"roblox",
 		"typescript",
@@ -25,6 +24,6 @@
 		}
 	],
 	"devDependencies": {
-		"rbx-types": "^1.0.143"
+		"rbx-types": "^1.0.145"
 	}
 }

@@ -1,5 +1,4 @@
 /// <reference path="internal.d.ts" />
-/// <reference lib="rbx-types"/>
 export = Roact;
 export as namespace Roact;
 declare namespace Roact {
@@ -39,6 +38,9 @@ declare namespace Roact {
 		readonly type: RoactSymbol;
 	}
 
+	/**
+	 * An element created using JSX tags, e.g. `<frame/>` or `<MyComponent/>`
+	 */
 	interface JSXElement<P, T extends string> extends Element {
 		component: T;
 		props: P;
@@ -68,11 +70,21 @@ declare namespace Roact {
 	type Children = Element[] | { [name: string]: Element };
 
 
-	function createElement<T>(component: FunctionalComponent<T>, props?: unknown, children?: Children): Element;
-	function createElement<T extends Roact.RenderablePropsClass<P>, P>(component: StatefulComponent<T, P>, props?: P, children?: Children): Element;
-	function createElement<T extends keyof CreatableInstances>(className: PrimitiveComponent<T>, props?: PrimitiveProperties<T>, children?: Children): Element;
-
-	function __test<T extends keyof Primitives>(k: T): Rbx_Primitive<Primitives[T]>;
+	function createElement<T, P>(
+		component: FunctionalComponent<T, P>,
+		props?: P,
+		children?: Children
+	): Element;
+	function createElement<T extends Roact.RenderablePropsClass<P>, P>(
+		component: StatefulComponent<T, P>,
+		props?: P,
+		children?: Children
+	): Element;
+	function createElement<T extends keyof CreatableInstances>(
+		className: PrimitiveComponent<T>,
+		props?: PrimitiveProperties<T>,
+		children?: Children
+	): Element;
 
 	/**
 	 * Creates a Roblox Instance given a Roact `element`, and optionally a `parent` to put it in, and a `key` to use as the instance's Name.
