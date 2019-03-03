@@ -2,7 +2,7 @@ type ValuesOf<T> =
 	T extends Rbx_Instance ? Partial<T> : never;
 
 type Writable<T> = Pick<T, { [P in keyof T]-?: (<U>() => U extends { [Q in P]: T[P] } ? 1 : 2) extends (<U>() => U extends { -readonly [Q in P]: T[P] } ? 1 : 2) ? P : never }[keyof T]>;
-
+type Key = string | number;
 type FunctionalComponent<T> = T extends ((props: unknown) => Roact.Element) ? T : never;
 type StatefulComponent<T, P = {}> = T extends Roact.RenderablePropsClass<P> ? T : never;
 type PrimitiveComponent<T> = T extends keyof Primitives ? T : never;
@@ -10,7 +10,11 @@ type PrimitiveComponent<T> = T extends keyof Primitives ? T : never;
 type WithRef<T extends Rbx_Instance> = { [Roact.Ref]?: Roact.Ref<T> | Roact.Ref | ((ref: T) => void) }
 
 type PrimitiveProperties<T extends keyof Primitives> = Writable<Partial<Rbx_Primitive<Primitives[T]>>> & WithRef<Rbx_Primitive<Primitives[T]>>;
+/// <reference path="index.d.ts" />
 
+interface RoactSymbol {
+
+}
 
 interface Rbx_JsxProps {
 	/**
@@ -23,7 +27,7 @@ Roact.createElement(Parent, {...}, {
     Bob = Roact.createElement(ThisElement, {...})
 })```
      */
-	Key?: string | number;
+	Key?: Key;
 }
 
 type Rbx_Primitive<T extends Instance> = BaseType<T>;

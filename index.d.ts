@@ -1,4 +1,5 @@
 /// <reference path="internal.d.ts" />
+/// <reference lib="rbx-types"/>
 export = Roact;
 export as namespace Roact;
 declare namespace Roact {
@@ -32,9 +33,15 @@ declare namespace Roact {
 
 	/** A Roact Element */
 	interface Element {
-		component: string | RenderableClass;
+		component: unknown;
 		props: unknown;
 		source?: string;
+		readonly type: RoactSymbol;
+	}
+
+	interface JSXElement<P, T extends string> extends Element {
+		component: T;
+		props: P;
 	}
 
 	abstract class IComponent {
@@ -124,14 +131,14 @@ declare namespace Roact {
 
 			`didMount` is a good place to start initial network communications, attach events to services, or modify the Roblox Instance hierarchy.
 		*/
-		public didMount(): void;
+		protected didMount(): void;
 
 		/**
 			`willUnmount` is fired right before Roact begins unmounting a component instance's children.
 
 			`willUnmount` acts like a component's destructor, and is a good place to disconnect any manually-connected events.
 		 */
-		public willUnmount(): void;
+		protected willUnmount(): void;
 
 		/**
 			`shouldUpdate` provides a way to override Roact's rerendering heuristics.
@@ -143,14 +150,14 @@ declare namespace Roact {
 		 * @param nextProps The next props
 		 * @param nextState The next state
 		 */
-		public shouldUpdate(nextProps: P, nextState: S): boolean;
+		protected shouldUpdate(nextProps: P, nextState: S): boolean;
 
 		/**
 		 * `willUpdate` is fired after an update is started but before a component's state and props are updated.
 		 * @param nextProps The new props
 		 * @param nextState The new state
 		 */
-		public willUpdate(nextProps: P, nextState: S): void;
+		protected willUpdate(nextProps: P, nextState: S): void;
 
 		/**
 			`didUpdate` is fired after at the end of an update. At this point, the reconciler has updated the properties of any Roblox Instances and the component instance's props and state are up to date.
@@ -159,7 +166,7 @@ declare namespace Roact {
 		 * @param previousProps The previous props
 		 * @param previousState The previous state
 		 */
-		public didUpdate(previousProps: P, previousState: S): void;
+		protected didUpdate(previousProps: P, previousState: S): void;
 
 		/**
          * `setState` requests an update to the component's state. Roact may schedule this update for a later time or resolve it immediately
@@ -248,7 +255,24 @@ declare global {
 	 * Support for the experimental JSX in roblox-ts
 	 */
 	namespace JSX {
-		type Element = Roact.Element;
+		// JSX.Element
+		type Element = Roact.JSXElement<any, any>;
+
+		// Force the element class type
+		interface ElementClass extends Roact.Component<any> {
+			render(): Roact.Element | undefined;
+		}
+
+		interface ElementAttributesProperty { props: { [Roact.Children]: Roact.Children }; }
+		interface ElementChildrenAttribute { [Roact.Children]: {} }
+
+		// Puts props on JSX global components
+		interface IntrinsicAttributes extends Rbx_JsxProps { }
+
+		// Puts props on JSX Stateful Components
+		interface IntrinsicClassAttributes<T extends Rbx_Instance> extends Rbx_JsxProps {
+
+		}
 
 		interface IntrinsicElements {
 			uiaspectratioconstraint: Roact.JsxUIComponent<Rbx_UIAspectRatioConstraint>;
