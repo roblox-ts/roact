@@ -301,7 +301,7 @@ declare global {
 	 */
 	namespace JSX {
 		// JSX.Element
-		type Element = Roact.JSXElement<any, any>;
+		type Element = Roact.Element;
 
 		// Force the element class type
 		interface ElementClass {
