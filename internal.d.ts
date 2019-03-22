@@ -23,7 +23,7 @@ type RefProps<T extends Rbx_Instance, V extends Rbx_Instance> = ExcludeReadonlyP
 
 type CustomPartial<T, V> = { [P in keyof T]?: T[P] | V; }
 
-type ReadonlyProps = "Parent" | "Name";
+type ReadonlyProps = "Parent" | "Name" | "ClassName";
 type ReadonlyGuiProps = "IsLoaded" | "AbsoluteRotation" | "AbsolutePosition" | "AbsoluteSize" | "TextFits" | "TextBounds";
 
 type ExcludeReadonlyProps<T> = Without<T, ReadonlyProps | ReadonlyGuiProps>;
