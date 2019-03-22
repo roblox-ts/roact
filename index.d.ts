@@ -285,17 +285,18 @@ class MyComponent extends Roact.Component<MyProps> {
 
 	const Children: unique symbol;
 
+
+	type P = Exclude<Instance, "Parent">
 	/**
 	 * Properties of the specified instance
 	 */
-	type Properties<T extends Rbx_Instance> = Partial<SubType<T, PropertyTypes>>;
+	type Properties<T extends Rbx_Instance> = ExcludeReadonlyProps<Partial<SubType<T, PropertyTypes>>>;
 
 	type JsxIntrinsic<T extends Rbx_Instance> = Properties<T> & Rbx_JsxIntrinsicProps<T>;
 	type JsxLayerCollector<T extends Rbx_LayerCollector> = JsxIntrinsic<T>;
 	type JsxUIComponent<T extends Rbx_UIComponent> = JsxIntrinsic<T>;
-	type JsxGuiObject<T extends Rbx_GuiObject> = Properties<T> & Rbx_JsxIntrinsicProps<T>;
+	type JsxGuiObject<T extends Rbx_GuiObject> = Properties<T> & RefProps<T, GuiObject> & Rbx_JsxIntrinsicProps<T>;
 }
-
 
 declare global {
 	/**
