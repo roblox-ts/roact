@@ -16,6 +16,16 @@ interface RoactSymbol {
 
 }
 
+type Without<T, K> = Pick<T, Exclude<keyof T, K>>;
+
+type RefProps<T extends Rbx_Instance, V extends Rbx_Instance> = ExcludeReadonlyProps<CustomPartial<SubType<T, RefablePropertyTypes>, Roact.Ref<V>>>;
+type CustomPartial<T, V> = { [P in keyof T]?: T[P] | V; }
+
+type ReadonlyProps = "Parent" | "Name";
+type ReadonlyGuiProps = "IsLoaded" | "AbsoluteRotation" | "AbsolutePosition" | "AbsoluteSize" | "TextFits" | "TextBounds";
+
+type ExcludeReadonlyProps<T> = Without<T, ReadonlyProps | ReadonlyGuiProps>;
+
 interface Rbx_JsxProps {
 	/**
      * The key of this element
@@ -173,12 +183,13 @@ type EventHandlerFunction<T, U extends any[]> = U extends []
 
 type PropertyChangeHandlerFunction<T> = (rbx: T) => void;
 
+type RefablePropertyTypes = Instance;
+
 type PropertyTypes =
 	| string
 	| number
 	| Vector2
 	| Vector3
-	| Instance
 	| CFrame
 	| UDim2
 	| UDim
