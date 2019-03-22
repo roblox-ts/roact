@@ -24,6 +24,6 @@
 		}
 	],
 	"devDependencies": {
-		"rbx-types": "^1.0.145"
+		"rbx-types": "^1.0.152"
 	}
 }
