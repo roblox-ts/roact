@@ -24,9 +24,6 @@ declare namespace Roact {
 	interface RenderablePropsClass<P> {
 		new(props: P): {
 			render(): Element | undefined;
-			shouldUpdate(nextProps: P, nextState: any): boolean;
-			willUpdate(nextProps: P, nextState: any): void;
-			didUpdate(previousProps: P, previousState: any): void;
 		};
 	}
 
