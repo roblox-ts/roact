@@ -1,4 +1,5 @@
 *
 !*.d.ts
 !roact/lib/*.lua
+!roact/lib/**/*.lua
 *.spec.lua
