@@ -24,9 +24,6 @@ declare namespace Roact {
 	interface RenderablePropsClass<P> {
 		new(props: P): {
 			render(): Element | undefined;
-			shouldUpdate(nextProps: P, nextState: any): boolean;
-			willUpdate(nextProps: P, nextState: any): void;
-			didUpdate(previousProps: P, previousState: any): void;
 		};
 	}
 
@@ -253,14 +250,13 @@ class MyComponent extends Roact.Component<MyProps> {
 	/**
 	 * Properties of the specified instance
 	 */
-	type Properties<T extends Rbx_Instance> = Partial<SubType<T, PropertyTypes>>;
+	type Properties<T extends Rbx_Instance> = ExcludeReadonlyProps<Partial<SubType<T, PropertyTypes>>>;
 
 	type JsxIntrinsic<T extends Rbx_Instance> = Properties<T> & Rbx_JsxIntrinsicProps<T>;
 	type JsxLayerCollector<T extends Rbx_LayerCollector> = JsxIntrinsic<T>;
 	type JsxUIComponent<T extends Rbx_UIComponent> = JsxIntrinsic<T>;
-	type JsxGuiObject<T extends Rbx_GuiObject> = Properties<T> & Rbx_JsxIntrinsicProps<T>;
+	type JsxGuiObject<T extends Rbx_GuiObject> = Properties<T> & RefProps<T, GuiObject> & Rbx_JsxIntrinsicProps<T>;
 }
-
 
 declare global {
 	/**
@@ -268,15 +264,12 @@ declare global {
 	 */
 	namespace JSX {
 		// JSX.Element
-		type Element = Roact.JSXElement<any, any>;
+		type Element = Roact.Element;
 
 		// Force the element class type
-		interface ElementClass extends Roact.Component<any> {
+		interface ElementClass {
 			render(): Roact.Element | undefined;
 		}
-
-		interface ElementAttributesProperty { props: { [Roact.Children]: Roact.Children }; }
-		interface ElementChildrenAttribute { [Roact.Children]: {} }
 
 		// Puts props on JSX global components
 		interface IntrinsicAttributes extends Rbx_JsxProps { }
