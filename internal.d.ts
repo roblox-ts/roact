@@ -18,7 +18,9 @@ interface RoactSymbol {
 
 type Without<T, K> = Pick<T, Exclude<keyof T, K>>;
 
-type RefProps<T extends Rbx_Instance, V extends Rbx_Instance> = ExcludeReadonlyProps<CustomPartial<SubType<T, RefablePropertyTypes>, Roact.Ref<V>>>;
+// type RefProps<T extends Rbx_Instance, V extends Rbx_Instance> = ExcludeReadonlyProps<CustomPartial<SubType<T, RefablePropertyTypes>, Roact.Ref<V>>>;
+type RefProps<T extends Rbx_Instance, V extends Rbx_Instance> = ExcludeReadonlyProps<Partial<SubType<T, RefablePropertyTypes>>>;
+
 type CustomPartial<T, V> = { [P in keyof T]?: T[P] | V; }
 
 type ReadonlyProps = "Parent" | "Name";
