@@ -304,7 +304,7 @@ declare global {
 		type Element = Roact.JSXElement<any, any>;
 
 		// Force the element class type
-		interface ElementClass extends Roact.Component<any> {
+		interface ElementClass {
 			render(): Roact.Element | undefined;
 		}
 
