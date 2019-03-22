@@ -311,9 +311,6 @@ declare global {
 			render(): Roact.Element | undefined;
 		}
 
-		interface ElementAttributesProperty { props: { [Roact.Children]: Roact.Children }; }
-		interface ElementChildrenAttribute { [Roact.Children]: {} }
-
 		// Puts props on JSX global components
 		interface IntrinsicAttributes extends Rbx_JsxProps { }
 
