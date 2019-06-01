@@ -1,13 +1,13 @@
-Roact is a library that is natively supported by `roblox-ts`. 
+Roact is a library that is natively supported by `roblox-ts`.
 
 # Requirements
-Roact requires you have the `rbx-roact` package installed.
+Roact requires you have the `@rbxts/roact` package installed.
 
-This can be acheived by doing `npm i rbx-roact` on your project.
+This can be acheived by doing `npm i @rbxts/roact` on your project.
 
 Roact can then be imported as such:
 ```ts
-import * as Roact from "rbx-roact"; // this is the recommended way of doing it
+import * as Roact from "roact"; // this is the recommended way of doing it
 ```
 
 
@@ -16,7 +16,7 @@ Roact in `roblox-ts` has two ways of being written. There is the traditional typ
 
 ## Vanilla TypeScript
 ```ts
-import * as Roact from "rbx-roact";
+import * as Roact from "roact";
 const Players = game.GetService("Players");
 const LocalPlayer = Players.LocalPlayer!;
 const PlayerGui = LocalPlayer.FindFirstChildOfClass("PlayerGui");
@@ -34,7 +34,7 @@ Roact.mount(helloWorld, PlayerGui, "helloWorldGui");
 ## JSX TypeScript
 Using the JSX version of Roact requires that the file end with `.tsx` instead of `.ts`.
 ```tsx
-import * as Roact from "rbx-roact";
+import * as Roact from "roact";
 const Players = game.GetService("Players");
 const LocalPlayer = Players.LocalPlayer!;
 const PlayerGui = LocalPlayer.FindFirstChildOfClass("PlayerGui");
@@ -51,7 +51,7 @@ Creating a component in `roblox-ts` for Roact is like creating another class in 
 
 ## Vanilla TypeScript
 ```tsx
-import * as Roact from "rbx-roact";
+import * as Roact from "roact";
 const Players = game.GetService("Players");
 const LocalPlayer = Players.LocalPlayer!;
 const PlayerGui = LocalPlayer.FindFirstChildOfClass("PlayerGui");
@@ -76,7 +76,7 @@ Roact.mount(Roact.createElement(HelloWorld, {name: "Roact"}), PlayerGui, "helloW
 
 ## JSX TypeScript
 ```tsx
-import * as Roact from "rbx-roact";
+import * as Roact from "roact";
 const Players = game.GetService("Players");
 const LocalPlayer = Players.LocalPlayer!;
 const PlayerGui = LocalPlayer.FindFirstChildOfClass("PlayerGui");
@@ -103,7 +103,7 @@ Everything in https://roblox.github.io/roact/guide/state-and-lifecycle/ can be a
 ```tsx
 // ... import, PlayerGui, etc.
 
-interface ClockState { 
+interface ClockState {
 	currentTime: number;
 }
 
@@ -125,15 +125,15 @@ class Clock extends Roact.Component<ClockState, ClockProps> {
 		const {currentTime} = this.state;
 // JSX --------------
 		return <screengui>
-			<textlabel Key="TimeLabel" 
-				Size={new UDim2(1, 0, 1, 0)} 
+			<textlabel Key="TimeLabel"
+				Size={new UDim2(1, 0, 1, 0)}
 				Text={`Time Elapsed: ${currentTime}`} />
 		</screengui>;
 // Vanilla ----------
 		return Roact.createElement("ScreenGui", {}, {
 			TimeLabel: Roact.createElement("TextLabel", {
 				Size: new UDim2(1, 0, 1, 0),
-				Text: `Time Elapsed: ${currentTime}`, 
+				Text: `Time Elapsed: ${currentTime}`,
 			}),
 		});
 // ------------------
