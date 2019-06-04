@@ -1,30 +1,45 @@
-type ValuesOf<T> =
-	T extends Rbx_Instance ? Partial<T> : never;
+type ValuesOf<T> = T extends Instance ? Partial<T> : never;
 
-type Writable<T> = Pick<T, { [P in keyof T]-?: (<U>() => U extends { [Q in P]: T[P] } ? 1 : 2) extends (<U>() => U extends { -readonly [Q in P]: T[P] } ? 1 : 2) ? P : never }[keyof T]>;
+type Writable2<T> = Pick<
+	T,
+	{
+		[P in keyof T]-?: (<U>() => U extends { [Q in P]: T[P] } ? 1 : 2) extends (<U>() => U extends {
+			-readonly [Q in P]: T[P]
+		}
+			? 1
+			: 2)
+			? P
+			: never
+	}[keyof T]
+>;
 type Key = string | number;
 type FunctionalComponent<T, P> = T extends ((props: P) => Roact.Element) ? T : never;
 type StatefulComponent<T, P = {}> = T extends Roact.RenderablePropsClass<P> ? T : never;
-type PrimitiveComponent<T> = T extends keyof Primitives ? T : never;
+type PrimitiveComponent<T> = T extends keyof CreatableInstances ? T : never;
 
-type WithRef<T extends Rbx_Instance> = { [Roact.Ref]?: Roact.Ref<T> | Roact.Ref | ((ref: T) => void) }
+type WithRef<T extends Instance> = { [Roact.Ref]?: Roact.Ref<T> | Roact.Ref | ((ref: T) => void) };
 
-type PrimitiveProperties<T extends keyof Primitives> = Writable<Partial<Rbx_Primitive<Primitives[T]>>> & WithRef<Rbx_Primitive<Primitives[T]>>;
+type PrimitiveProperties<T extends keyof CreatableInstances> = Writable2<Partial<CreatableInstances[T]>> &
+	WithRef<CreatableInstances[T]>;
 /// <reference path="index.d.ts" />
 
-interface RoactSymbol {
-
-}
+interface RoactSymbol {}
 
 type Without<T, K> = Pick<T, Exclude<keyof T, K>>;
 
-type RefProps<T extends Rbx_Instance, V extends Rbx_Instance> = ExcludeReadonlyProps<Partial<SubType<T, RefablePropertyTypes>>>;
+// type RefProps<T extends Instance, V extends Instance> = ExcludeReadonlyProps<CustomPartial<SubType<T, RefablePropertyTypes>, Roact.Ref<V>>>;
+type RefProps<T extends Instance, V extends Instance> = ExcludeReadonlyProps<Partial<SubType<T, RefablePropertyTypes>>>;
 
-type CustomPartial<T, V> = { [P in keyof T]?: T[P] | V; }
+type CustomPartial<T, V> = { [P in keyof T]?: T[P] | V };
 
 type ReadonlyProps = "Parent" | "Name" | "ClassName";
-
-type ReadonlyGuiProps = "IsLoaded" | "AbsoluteRotation" | "AbsolutePosition" | "AbsoluteSize" | "TextFits" | "TextBounds";
+type ReadonlyGuiProps =
+	| "IsLoaded"
+	| "AbsoluteRotation"
+	| "AbsolutePosition"
+	| "AbsoluteSize"
+	| "TextFits"
+	| "TextBounds";
 
 type ExcludeReadonlyProps<T> = Without<T, ReadonlyProps | ReadonlyGuiProps>;
 
@@ -42,13 +57,10 @@ Roact.createElement(Parent, {...}, {
 	Key?: Key;
 }
 
-type Rbx_Primitive<T extends Instance> = BaseType<T>;
-type Primitives = CreatableInstances;
-
 /**
  * Arbitrary properties of JSX elements, unrelated to ROBLOX instances
  */
-interface Rbx_JsxIntrinsicProps<T extends Rbx_Instance> extends Rbx_JsxProps {
+interface RbxJsxIntrinsicProps<T extends Instance> extends Rbx_JsxProps {
 	/**
      * The event handlers of this element
      *
@@ -144,8 +156,8 @@ interface PortalProps {
 
 type RoactEvents<T> = {
 	[K in keyof Partial<SubType<T, RBXScriptSignal>>]: T[K] extends RBXScriptSignal<infer F>
-	? EventHandlerFunction<T, FunctionArguments<F>>
-	: never
+		? EventHandlerFunction<T, FunctionArguments<F>>
+		: never
 };
 
 type RoactPropertyChanges<T> = { [key in keyof Partial<SubType<T, PropertyTypes>>]: PropertyChangeHandlerFunction<T> };
