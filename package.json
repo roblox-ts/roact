@@ -27,6 +27,6 @@
 		"@rbxts/types": "^1.0.192"
 	},
 	"devDependencies": {
-		"@rbxts/types": "^1.0.192"
+		"rbx-types": "^1.0.152"
 	}
 }

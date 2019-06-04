@@ -94,8 +94,16 @@ declare namespace Roact {
 	 * Updates an existing instance handle with a new element, returning a new handle. This can be used to update a UI created with `Roact.mount` by passing in a new element with new props.
 	 *
 	 * `reconcile` can be used to change the props of a component instance created with `mount` and is useful for putting Roact content into non-Roact applications.
+	 * @deprecated use `update`
 	 */
 	function reconcile<T>(handle: ComponentInstanceHandle, component: Element): ComponentInstanceHandle;
+
+	/**
+	 * Updates an existing instance handle with a new element, returning a new handle. This can be used to update a UI created with `Roact.mount` by passing in a new element with new props.
+	 *
+	 * `update` can be used to change the props of a component instance created with `mount` and is useful for putting Roact content into non-Roact applications.
+	 */
+	function update(handle: ComponentInstanceHandle, component: Element): ComponentInstanceHandle;
 
 	/**
 	 * Destroys the given `ComponentInstanceHandle` and all of its descendents. Does not operate on a Roblox Instance -- this must be given a handle that was returned by `Roact.mount`
@@ -109,6 +117,33 @@ declare namespace Roact {
 	 * If `children` is nil or contains no children, `oneChild` will return nil
 	 */
 	function oneChild(children?: Element[]): Roact.Element;
+
+
+	interface RoactBinding<T> {
+		map<R>(valueTransform: (value: T) => R): R;
+		getValue(): T;
+	}
+
+	type RoactBindingFunc<T> = (newVal: T) => void;
+
+	/**
+	 * Bindings are special objects that the Roact reconciler automatically unwraps into values. 
+	 * When a binding is updated, Roact will change only the specific properties that are subscribed to it.
+	 * @param value The initial value of the binding
+	 * @see https://github.com/Roblox/roact/blob/new-reconciler/docs/advanced/bindings-and-refs.md
+	 */
+	function createBinding<T>(value: T): [RoactBinding<T>, RoactBindingFunc<T>];
+
+
+	type ElementFragment = Element;
+
+	/**
+	 * Fragments are a tool for avoiding unnecessary nesting when organizing components by 
+	 * allowing components to render collections of elements without wrapping them in a single containing element.
+	 * @param fragments The fragmented elements
+	 * @see https://github.com/Roblox/roact/blob/new-reconciler/docs/advanced/fragments.md
+	 */
+	function createFragment(fragments: { [name: string]: Roact.Element }): Roact.ElementFragment;
 
 	/**
 	 * Creates a new reference object that can be used with `Roact.Ref`
@@ -247,6 +282,8 @@ class MyComponent extends Roact.Component<MyProps> {
 
 	const Children: unique symbol;
 
+
+	type P = Exclude<Instance, "Parent">
 	/**
 	 * Properties of the specified instance
 	 */
