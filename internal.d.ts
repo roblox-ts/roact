@@ -27,8 +27,9 @@ interface RoactSymbol {}
 
 type Without<T, K> = Pick<T, Exclude<keyof T, K>>;
 
-// type RefProps<T extends Instance, V extends Instance> = ExcludeReadonlyProps<CustomPartial<SubType<T, RefablePropertyTypes>, Roact.Ref<V>>>;
-type RefProps<T extends Instance, V extends Instance> = ExcludeReadonlyProps<Partial<SubType<T, RefablePropertyTypes>>>;
+type RefProps<T extends Instance, V extends Instance> = ExcludeReadonlyProps<
+	CustomPartial<SubType<T, RefablePropertyTypes>, Roact.Ref<V>>
+>;
 
 type CustomPartial<T, V> = { [P in keyof T]?: T[P] | V };
 
@@ -43,7 +44,7 @@ type ReadonlyGuiProps =
 
 type ExcludeReadonlyProps<T> = Without<T, ReadonlyProps | ReadonlyGuiProps>;
 
-interface Rbx_JsxProps {
+interface RbxJsxProps {
 	/**
      * The key of this element
      * In Roact, this would be the index of the Roact Element as a child of another element.
@@ -60,7 +61,7 @@ Roact.createElement(Parent, {...}, {
 /**
  * Arbitrary properties of JSX elements, unrelated to ROBLOX instances
  */
-interface RbxJsxIntrinsicProps<T extends Instance> extends Rbx_JsxProps {
+interface RbxJsxIntrinsicProps<T extends Instance> extends RbxJsxProps {
 	/**
      * The event handlers of this element
      *

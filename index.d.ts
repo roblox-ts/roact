@@ -79,13 +79,6 @@ declare namespace Roact {
 	): Element;
 
 	/**
-	 * Creates a new Roact fragment with the provided table of elements. Fragments allow grouping of elements without the need for intermediate containing objects like `Frames`.
-	 *
-	 * Caution: Make sure not to modify `elements` after they're passed into `createFragment`!
-	 */
-	function createFragment(elements: Children): Element;
-
-	/**
 	 * Creates a Roblox Instance given a Roact `element`, and optionally a `parent` to put it in, and a `key` to use as the instance's Name.
 	 *
 	 * The result is a `ComponentInstanceHandle`, which is an opaque handle that represents this specific instance of the root component. You can pass this to APIs like `Roact.unmount` and the future debug API.
@@ -120,7 +113,6 @@ declare namespace Roact {
 	 */
 	function oneChild(children?: Element[]): Roact.Element;
 
-
 	interface RoactBinding<T> {
 		map<R>(valueTransform: (value: T) => R): R;
 		getValue(): T;
@@ -129,18 +121,17 @@ declare namespace Roact {
 	type RoactBindingFunc<T> = (newVal: T) => void;
 
 	/**
-	 * Bindings are special objects that the Roact reconciler automatically unwraps into values. 
+	 * Bindings are special objects that the Roact reconciler automatically unwraps into values.
 	 * When a binding is updated, Roact will change only the specific properties that are subscribed to it.
 	 * @param value The initial value of the binding
 	 * @see https://github.com/Roblox/roact/blob/new-reconciler/docs/advanced/bindings-and-refs.md
 	 */
 	function createBinding<T>(value: T): [RoactBinding<T>, RoactBindingFunc<T>];
 
-
 	type ElementFragment = Element;
 
 	/**
-	 * Fragments are a tool for avoiding unnecessary nesting when organizing components by 
+	 * Fragments are a tool for avoiding unnecessary nesting when organizing components by
 	 * allowing components to render collections of elements without wrapping them in a single containing element.
 	 * @param fragments The fragmented elements
 	 * @see https://github.com/Roblox/roact/blob/new-reconciler/docs/advanced/fragments.md
@@ -158,7 +149,7 @@ declare namespace Roact {
 	abstract class PureComponent<P = {}, S = {}> extends Component<P, S> {}
 
 	abstract class Component<P = {}, S = {}> extends IComponent {
-		constructor(p: P & Rbx_JsxProps);
+		constructor(p: P & RbxJsxProps);
 
 		/**
 		 * The properties of this component
@@ -246,6 +237,20 @@ class MyComponent extends Roact.Component {
 			Roact assumes that `render` act likes a pure function: the result of `render` must depend only on `props` and `state`, and it must not have side-effects.
 		 */
 		public abstract render(): Element | undefined;
+
+		/**
+		 * `validateProps` is an optional method that can be implemented for a component. It provides a mechanism for verifying inputs passed into the component.
+		 *
+		 * Every time props are updated, `validateProps` will be called with the new props before proceeding to `shouldUpdate` or `init`. It should return the same parameters that assert expects: a boolean, true if the props passed validation, false if they did not, plus a message explaining why they failed. If the first return value is true, the second value is ignored.
+		 *
+		 * **For performance reasons, property validation is disabled by default. **
+		 *
+		 * To use this feature, enable `propValidation` via `setGlobalConfig`:
+			```ts
+			Roact.setGlobalConfig({ propValidation: true });
+			```
+		 */
+		protected static validateProps(props: {}): LuaTuple<[false, string]> | LuaTuple<[true]>;
 	}
 
 	/**
@@ -284,8 +289,7 @@ class MyComponent extends Roact.Component<MyProps> {
 
 	const Children: unique symbol;
 
-
-	type P = Exclude<Instance, "Parent">
+	type P = Exclude<Instance, "Parent">;
 	/**
 	 * Properties of the specified instance
 	 */
@@ -311,10 +315,10 @@ declare global {
 		}
 
 		// Puts props on JSX global components
-		interface IntrinsicAttributes extends Rbx_JsxProps {}
+		interface IntrinsicAttributes extends RbxJsxProps {}
 
 		// Puts props on JSX Stateful Components
-		interface IntrinsicClassAttributes<T extends Instance> extends Rbx_JsxProps {}
+		interface IntrinsicClassAttributes<T extends Instance> extends RbxJsxProps {}
 
 		interface IntrinsicElements {
 			uiaspectratioconstraint: Roact.JsxUIComponent<UIAspectRatioConstraint>;
