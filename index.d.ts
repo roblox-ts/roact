@@ -2,7 +2,7 @@
 export = Roact;
 export as namespace Roact;
 declare namespace Roact {
-	type Template<T extends Rbx_GuiBase = Rbx_GuiObject> = Partial<SubType<T, PropertyTypes>>;
+	type Template<T extends GuiBase = GuiObject> = Partial<SubType<T, PropertyTypes>>;
 
 	//const Portal: Roact.Component<{}, PortalProps>;
 
@@ -16,13 +16,13 @@ declare namespace Roact {
 	}
 
 	interface RenderableClass {
-		new(...args: Array<any>): {
+		new (...args: Array<any>): {
 			render(): Element | undefined;
 		};
 	}
 
 	interface RenderablePropsClass<P> {
-		new(props: P): {
+		new (props: P): {
 			render(): Element | undefined;
 		};
 	}
@@ -66,12 +66,7 @@ declare namespace Roact {
 
 	type Children = Element[] | { [name: string]: Element };
 
-
-	function createElement<T, P>(
-		component: FunctionalComponent<T, P>,
-		props?: P,
-		children?: Children
-	): Element;
+	function createElement<T, P>(component: FunctionalComponent<T, P>, props?: P, children?: Children): Element;
 	function createElement<T extends Roact.RenderablePropsClass<P>, P>(
 		component: StatefulComponent<T, P>,
 		props?: P,
@@ -82,6 +77,13 @@ declare namespace Roact {
 		props?: PrimitiveProperties<T>,
 		children?: Children
 	): Element;
+
+	/**
+	 * Creates a new Roact fragment with the provided table of elements. Fragments allow grouping of elements without the need for intermediate containing objects like `Frames`.
+	 *
+	 * Caution: Make sure not to modify `elements` after they're passed into `createFragment`!
+	 */
+	function createFragment(elements: Children): Element;
 
 	/**
 	 * Creates a Roblox Instance given a Roact `element`, and optionally a `parent` to put it in, and a `key` to use as the instance's Name.
@@ -153,7 +155,7 @@ declare namespace Roact {
 
 	type ContainsKeys<S, K extends keyof S> = Pick<S, K> | S | null;
 
-	abstract class PureComponent<P = {}, S = {}> extends Component<P, S> { }
+	abstract class PureComponent<P = {}, S = {}> extends Component<P, S> {}
 
 	abstract class Component<P = {}, S = {}> extends IComponent {
 		constructor(p: P & Rbx_JsxProps);
@@ -249,11 +251,11 @@ class MyComponent extends Roact.Component {
 	/**
 	 * A reference to an instance
 	 */
-	interface Ref<T extends Rbx_Instance = Instance> {
-		readonly current: T | undefined;
+	interface Ref<T extends Instance = Instance> {
+		getValue(): T | undefined;
 	}
 
-	type RefPropertyOrFunction<T extends Rbx_Instance> = Ref<T> | ((rbx: T) => void);
+	type RefPropertyOrFunction<T extends Instance> = Ref<T> | ((rbx: T) => void);
 
 	/**
 	 * A special value that can be used to set a state value to undefined.
@@ -287,12 +289,12 @@ class MyComponent extends Roact.Component<MyProps> {
 	/**
 	 * Properties of the specified instance
 	 */
-	type Properties<T extends Rbx_Instance> = ExcludeReadonlyProps<Partial<SubType<T, PropertyTypes>>>;
+	type Properties<T extends Instance> = ExcludeReadonlyProps<Partial<SubType<T, PropertyTypes>>>;
 
-	type JsxIntrinsic<T extends Rbx_Instance> = Properties<T> & Rbx_JsxIntrinsicProps<T>;
-	type JsxLayerCollector<T extends Rbx_LayerCollector> = JsxIntrinsic<T>;
-	type JsxUIComponent<T extends Rbx_UIComponent> = JsxIntrinsic<T>;
-	type JsxGuiObject<T extends Rbx_GuiObject> = Properties<T> & RefProps<T, GuiObject> & Rbx_JsxIntrinsicProps<T>;
+	type JsxIntrinsic<T extends Instance> = Properties<T> & RbxJsxIntrinsicProps<T>;
+	type JsxLayerCollector<T extends LayerCollector> = JsxIntrinsic<T>;
+	type JsxUIComponent<T extends UIComponent> = JsxIntrinsic<T>;
+	type JsxGuiObject<T extends GuiObject> = Properties<T> & RefProps<T, GuiObject> & RbxJsxIntrinsicProps<T>;
 }
 
 declare global {
@@ -309,41 +311,39 @@ declare global {
 		}
 
 		// Puts props on JSX global components
-		interface IntrinsicAttributes extends Rbx_JsxProps { }
+		interface IntrinsicAttributes extends Rbx_JsxProps {}
 
 		// Puts props on JSX Stateful Components
-		interface IntrinsicClassAttributes<T extends Rbx_Instance> extends Rbx_JsxProps {
-
-		}
+		interface IntrinsicClassAttributes<T extends Instance> extends Rbx_JsxProps {}
 
 		interface IntrinsicElements {
-			uiaspectratioconstraint: Roact.JsxUIComponent<Rbx_UIAspectRatioConstraint>;
+			uiaspectratioconstraint: Roact.JsxUIComponent<UIAspectRatioConstraint>;
 
-			screengui: Roact.JsxLayerCollector<Rbx_ScreenGui>;
-			billboardgui: Roact.JsxLayerCollector<Rbx_BillboardGui>;
-			surfacegui: Roact.JsxLayerCollector<Rbx_SurfaceGui>;
+			screengui: Roact.JsxLayerCollector<ScreenGui>;
+			billboardgui: Roact.JsxLayerCollector<BillboardGui>;
+			surfacegui: Roact.JsxLayerCollector<SurfaceGui>;
 
-			imagelabel: Roact.JsxGuiObject<Rbx_ImageLabel>;
-			imagebutton: Roact.JsxGuiObject<Rbx_ImageButton>;
+			imagelabel: Roact.JsxGuiObject<ImageLabel>;
+			imagebutton: Roact.JsxGuiObject<ImageButton>;
 
-			textlabel: Roact.JsxGuiObject<Rbx_TextLabel>;
-			textbutton: Roact.JsxGuiObject<Rbx_TextButton>;
-			textbox: Roact.JsxGuiObject<Rbx_TextBox>;
+			textlabel: Roact.JsxGuiObject<TextLabel>;
+			textbutton: Roact.JsxGuiObject<TextButton>;
+			textbox: Roact.JsxGuiObject<TextBox>;
 
-			frame: Roact.JsxGuiObject<Rbx_Frame>;
-			viewportframe: Roact.JsxGuiObject<Rbx_ViewportFrame>;
-			scrollingframe: Roact.JsxGuiObject<Rbx_ScrollingFrame>;
+			frame: Roact.JsxGuiObject<Frame>;
+			viewportframe: Roact.JsxGuiObject<ViewportFrame>;
+			scrollingframe: Roact.JsxGuiObject<ScrollingFrame>;
 
-			uigridlayout: Roact.JsxUIComponent<Rbx_UIGridLayout>;
-			uilistlayout: Roact.JsxUIComponent<Rbx_UIListLayout>;
-			uipagelayout: Roact.JsxUIComponent<Rbx_UIPageLayout>;
-			uitablelayout: Roact.JsxUIComponent<Rbx_UITableLayout>;
+			uigridlayout: Roact.JsxUIComponent<UIGridLayout>;
+			uilistlayout: Roact.JsxUIComponent<UIListLayout>;
+			uipagelayout: Roact.JsxUIComponent<UIPageLayout>;
+			uitablelayout: Roact.JsxUIComponent<UITableLayout>;
 
-			uipadding: Roact.JsxUIComponent<Rbx_UIPadding>;
-			uiscale: Roact.JsxUIComponent<Rbx_UIScale>;
+			uipadding: Roact.JsxUIComponent<UIPadding>;
+			uiscale: Roact.JsxUIComponent<UIScale>;
 
-			uisizeconstraint: Roact.JsxUIComponent<Rbx_UISizeConstraint>;
-			uitextsizeconstraint: Roact.JsxUIComponent<Rbx_UITextSizeConstraint>;
+			uisizeconstraint: Roact.JsxUIComponent<UISizeConstraint>;
+			uitextsizeconstraint: Roact.JsxUIComponent<UITextSizeConstraint>;
 		}
 	}
 }
