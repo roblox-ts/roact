@@ -2,7 +2,7 @@
 export = Roact;
 export as namespace Roact;
 declare namespace Roact {
-	type Template<T extends GuiBase = GuiObject> = Partial<SubType<T, PropertyTypes>>;
+	type Template<T extends GuiBase = GuiObject> = GetProperties<T>;
 
 	//const Portal: Roact.Component<{}, PortalProps>;
 
@@ -289,16 +289,8 @@ class MyComponent extends Roact.Component<MyProps> {
 
 	const Children: unique symbol;
 
-	type P = Exclude<Instance, "Parent">;
-	/**
-	 * Properties of the specified instance
-	 */
-	type Properties<T extends Instance> = ExcludeReadonlyProps<Partial<SubType<T, PropertyTypes>>>;
-
-	type JsxIntrinsic<T extends Instance> = Properties<T> & RbxJsxIntrinsicProps<T>;
-	type JsxLayerCollector<T extends LayerCollector> = JsxIntrinsic<T>;
-	type JsxUIComponent<T extends UIComponent> = JsxIntrinsic<T>;
-	type JsxGuiObject<T extends GuiObject> = Properties<T> & RefProps<T, GuiObject> & RbxJsxIntrinsicProps<T>;
+	type JsxObject<T extends Instance> = { [P in Exclude<GetWritableProperties<T>, "Parent" | "Name">]?: T[P] } &
+		RbxJsxIntrinsicProps<T>;
 }
 
 declare global {
@@ -321,33 +313,33 @@ declare global {
 		interface IntrinsicClassAttributes<T extends Instance> extends RbxJsxProps {}
 
 		interface IntrinsicElements {
-			uiaspectratioconstraint: Roact.JsxUIComponent<UIAspectRatioConstraint>;
+			uiaspectratioconstraint: Roact.JsxObject<UIAspectRatioConstraint>;
 
-			screengui: Roact.JsxLayerCollector<ScreenGui>;
-			billboardgui: Roact.JsxLayerCollector<BillboardGui>;
-			surfacegui: Roact.JsxLayerCollector<SurfaceGui>;
+			screengui: Roact.JsxObject<ScreenGui>;
+			billboardgui: Roact.JsxObject<BillboardGui>;
+			surfacegui: Roact.JsxObject<SurfaceGui>;
 
-			imagelabel: Roact.JsxGuiObject<ImageLabel>;
-			imagebutton: Roact.JsxGuiObject<ImageButton>;
+			imagelabel: Roact.JsxObject<ImageLabel>;
+			imagebutton: Roact.JsxObject<ImageButton>;
 
-			textlabel: Roact.JsxGuiObject<TextLabel>;
-			textbutton: Roact.JsxGuiObject<TextButton>;
-			textbox: Roact.JsxGuiObject<TextBox>;
+			textlabel: Roact.JsxObject<TextLabel>;
+			textbutton: Roact.JsxObject<TextButton>;
+			textbox: Roact.JsxObject<TextBox>;
 
-			frame: Roact.JsxGuiObject<Frame>;
-			viewportframe: Roact.JsxGuiObject<ViewportFrame>;
-			scrollingframe: Roact.JsxGuiObject<ScrollingFrame>;
+			frame: Roact.JsxObject<Frame>;
+			viewportframe: Roact.JsxObject<ViewportFrame>;
+			scrollingframe: Roact.JsxObject<ScrollingFrame>;
 
-			uigridlayout: Roact.JsxUIComponent<UIGridLayout>;
-			uilistlayout: Roact.JsxUIComponent<UIListLayout>;
-			uipagelayout: Roact.JsxUIComponent<UIPageLayout>;
-			uitablelayout: Roact.JsxUIComponent<UITableLayout>;
+			uigridlayout: Roact.JsxObject<UIGridLayout>;
+			uilistlayout: Roact.JsxObject<UIListLayout>;
+			uipagelayout: Roact.JsxObject<UIPageLayout>;
+			uitablelayout: Roact.JsxObject<UITableLayout>;
 
-			uipadding: Roact.JsxUIComponent<UIPadding>;
-			uiscale: Roact.JsxUIComponent<UIScale>;
+			uipadding: Roact.JsxObject<UIPadding>;
+			uiscale: Roact.JsxObject<UIScale>;
 
-			uisizeconstraint: Roact.JsxUIComponent<UISizeConstraint>;
-			uitextsizeconstraint: Roact.JsxUIComponent<UITextSizeConstraint>;
+			uisizeconstraint: Roact.JsxObject<UISizeConstraint>;
+			uitextsizeconstraint: Roact.JsxObject<UITextSizeConstraint>;
 		}
 	}
 }
