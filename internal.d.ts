@@ -127,7 +127,7 @@ type RoactEvents<T> = {
 		: never
 };
 
-type RoactPropertyChanges<T extends Instance> = { [key in keyof GetWritableProperties<T>]: (rbx: T) => void };
+type RoactPropertyChanges<T extends Instance> = { [key in GetWritableProperties<T>]?: (rbx: T) => void };
 
 interface RoactEventSymbol {
 	readonly [name: string]: symbol;
