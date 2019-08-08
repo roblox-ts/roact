@@ -2,7 +2,7 @@
 export = Roact;
 export as namespace Roact;
 declare namespace Roact {
-	type Template<T extends GuiBase = GuiObject> = GetProperties<T>;
+	type Template<T extends GuiBase = GuiObject> = Partial<Pick<T, GetProperties<T>>>;
 
 	//const Portal: Roact.Component<{}, PortalProps>;
 
