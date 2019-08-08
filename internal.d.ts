@@ -122,7 +122,7 @@ interface PortalProps {
 }
 
 type RoactEvents<T> = {
-	[K in keyof SubType<T, RBXScriptSignal>]: T[K] extends RBXScriptSignal<infer F>
+	[K in keyof SubType<T, RBXScriptSignal>]?: T[K] extends RBXScriptSignal<infer F>
 		? EventHandlerFunction<T, FunctionArguments<F>>
 		: never
 };
