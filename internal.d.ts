@@ -2,7 +2,7 @@ type FunctionalComponent<T, P> = T extends ((props: P) => Roact.Element) ? T : n
 type StatefulComponent<T, P = {}> = T extends Roact.RenderablePropsClass<P> ? T : never;
 type PrimitiveComponent<T> = T extends keyof CreatableInstances ? T : never;
 
-type PrimitiveProperties<T extends keyof CreatableInstances> = Partial<GetWritableProperties<CreatableInstances[T]>> & {
+type PrimitiveProperties<T extends keyof CreatableInstances> = Partial<Pick<CreatableInstances[T], GetWritableProperties<CreatableInstances[T]>>> & {
 	[Roact.Ref]?: Roact.Ref<CreatableInstances[T]> | Roact.Ref | ((ref: CreatableInstances[T]) => void);
 };
 
