@@ -220,7 +220,8 @@ type PropertyTypes =
 	| Color3
 	| Faces
 	| ReflectionMetadataEnums
-	| boolean;
+	| boolean
+	| Enum.Font;
 
 type FilterFlags<Base, Condition> = { [Key in keyof Base]: Base[Key] extends Condition ? Key : never };
 
