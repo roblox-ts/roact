@@ -1,48 +1,14 @@
-type ValuesOf<T> = T extends Instance ? Partial<T> : never;
-
-type Writable2<T> = Pick<
-	T,
-	{
-		[P in keyof T]-?: (<U>() => U extends { [Q in P]: T[P] } ? 1 : 2) extends (<U>() => U extends {
-			-readonly [Q in P]: T[P]
-		}
-			? 1
-			: 2)
-			? P
-			: never
-	}[keyof T]
->;
-type Key = string | number;
 type FunctionalComponent<T, P> = T extends ((props: P) => Roact.Element) ? T : never;
 type StatefulComponent<T, P = {}> = T extends Roact.RenderablePropsClass<P> ? T : never;
 type PrimitiveComponent<T> = T extends keyof CreatableInstances ? T : never;
 
-type WithRef<T extends Instance> = { [Roact.Ref]?: Roact.Ref<T> | Roact.Ref | ((ref: T) => void) };
+type PrimitiveProperties<T extends keyof CreatableInstances> = Partial<Pick<CreatableInstances[T], GetWritableProperties<CreatableInstances[T]>>> & {
+	[Roact.Ref]?: Roact.Ref<CreatableInstances[T]> | Roact.Ref | ((ref: CreatableInstances[T]) => void);
+};
 
-type PrimitiveProperties<T extends keyof CreatableInstances> = Writable2<Partial<CreatableInstances[T]>> &
-	WithRef<CreatableInstances[T]>;
 /// <reference path="index.d.ts" />
 
 interface RoactSymbol {}
-
-type Without<T, K> = Pick<T, Exclude<keyof T, K>>;
-
-type RefProps<T extends Instance, V extends Instance> = ExcludeReadonlyProps<
-	CustomPartial<SubType<T, RefablePropertyTypes>, Roact.Ref<V>>
->;
-
-type CustomPartial<T, V> = { [P in keyof T]?: T[P] | V };
-
-type ReadonlyProps = "Parent" | "Name" | "ClassName";
-type ReadonlyGuiProps =
-	| "IsLoaded"
-	| "AbsoluteRotation"
-	| "AbsolutePosition"
-	| "AbsoluteSize"
-	| "TextFits"
-	| "TextBounds";
-
-type ExcludeReadonlyProps<T> = Without<T, ReadonlyProps | ReadonlyGuiProps>;
 
 interface RbxJsxProps {
 	/**
@@ -55,7 +21,7 @@ Roact.createElement(Parent, {...}, {
     Bob = Roact.createElement(ThisElement, {...})
 })```
      */
-	Key?: Key;
+	Key?: string | number;
 }
 
 /**
@@ -156,12 +122,12 @@ interface PortalProps {
 }
 
 type RoactEvents<T> = {
-	[K in keyof Partial<SubType<T, RBXScriptSignal>>]: T[K] extends RBXScriptSignal<infer F>
+	[K in keyof SubType<T, RBXScriptSignal>]?: T[K] extends RBXScriptSignal<infer F>
 		? EventHandlerFunction<T, FunctionArguments<F>>
 		: never
 };
 
-type RoactPropertyChanges<T> = { [key in keyof Partial<SubType<T, PropertyTypes>>]: PropertyChangeHandlerFunction<T> };
+type RoactPropertyChanges<T extends Instance> = { [key in GetWritableProperties<T>]?: (rbx: T) => void };
 
 interface RoactEventSymbol {
 	readonly [name: string]: symbol;
@@ -196,34 +162,7 @@ type EventHandlerFunction<T, U extends any[]> = U extends []
 	? (rbx: T, a: A, b: B, c: C, d: D, e: E, f: F) => void
 	: (rbx: T, ...args: unknown[]) => void;
 
-type PropertyChangeHandlerFunction<T> = (rbx: T) => void;
-
-type RefablePropertyTypes = Instance;
-
-type PropertyTypes =
-	| string
-	| number
-	| Vector2
-	| Vector3
-	| CFrame
-	| UDim2
-	| UDim
-	| Axes
-	| BrickColor
-	| ColorSequence
-	| Vector2int16
-	| Vector3int16
-	| Region3
-	| Region3int16
-	| PhysicalProperties
-	| Rect
-	| Color3
-	| Faces
-	| ReflectionMetadataEnums
-	| boolean;
-
-type FilterFlags<Base, Condition> = { [Key in keyof Base]: Base[Key] extends Condition ? Key : never };
-
-type AllowedNames<Base, Condition> = FilterFlags<Base, Condition>[keyof Base];
-
-type SubType<Base, Condition> = Pick<Base, AllowedNames<Base, Condition>>;
+type SubType<Base, Condition> = Pick<
+	Base,
+	{ [Key in keyof Base]: Base[Key] extends Condition ? Key : never }[keyof Base]
+>;
