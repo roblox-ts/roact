@@ -2,7 +2,9 @@
 export = Roact;
 export as namespace Roact;
 declare namespace Roact {
-	type Template<T extends GuiBase = GuiObject> = Partial<Pick<T, GetProperties<T>>>;
+	type Template<T extends GuiBase = GuiObject> = Partial<
+		Pick<T, GetProperties<T>>
+	>;
 
 	//const Portal: Roact.Component<{}, PortalProps>;
 
@@ -66,16 +68,20 @@ declare namespace Roact {
 
 	type Children = Element[] | { [name: string]: Element };
 
-	function createElement<T, P>(component: FunctionalComponent<T, P>, props?: P, children?: Children): Element;
+	function createElement<T, P>(
+		component: FunctionalComponent<T, P>,
+		props?: P,
+		children?: Children,
+	): Element;
 	function createElement<T extends Roact.RenderablePropsClass<P>, P>(
 		component: StatefulComponent<T, P>,
 		props?: P,
-		children?: Children
+		children?: Children,
 	): Element;
 	function createElement<T extends keyof CreatableInstances>(
 		className: PrimitiveComponent<T>,
 		props?: PrimitiveProperties<T>,
-		children?: Children
+		children?: Children,
 	): Element;
 
 	/**
@@ -83,7 +89,11 @@ declare namespace Roact {
 	 *
 	 * The result is a `ComponentInstanceHandle`, which is an opaque handle that represents this specific instance of the root component. You can pass this to APIs like `Roact.unmount` and the future debug API.
 	 */
-	function mount(element: Element, parent?: Instance, key?: string): ComponentInstanceHandle;
+	function mount(
+		element: Element,
+		parent?: Instance,
+		key?: string,
+	): ComponentInstanceHandle;
 
 	/**
 	 * Updates an existing instance handle with a new element, returning a new handle. This can be used to update a UI created with `Roact.mount` by passing in a new element with new props.
@@ -91,14 +101,20 @@ declare namespace Roact {
 	 * `reconcile` can be used to change the props of a component instance created with `mount` and is useful for putting Roact content into non-Roact applications.
 	 * @deprecated use `update`
 	 */
-	function reconcile<T>(handle: ComponentInstanceHandle, component: Element): ComponentInstanceHandle;
+	function reconcile<T>(
+		handle: ComponentInstanceHandle,
+		component: Element,
+	): ComponentInstanceHandle;
 
 	/**
 	 * Updates an existing instance handle with a new element, returning a new handle. This can be used to update a UI created with `Roact.mount` by passing in a new element with new props.
 	 *
 	 * `update` can be used to change the props of a component instance created with `mount` and is useful for putting Roact content into non-Roact applications.
 	 */
-	function update(handle: ComponentInstanceHandle, component: Element): ComponentInstanceHandle;
+	function update(
+		handle: ComponentInstanceHandle,
+		component: Element,
+	): ComponentInstanceHandle;
 
 	/**
 	 * Destroys the given `ComponentInstanceHandle` and all of its descendents. Does not operate on a Roblox Instance -- this must be given a handle that was returned by `Roact.mount`
@@ -118,6 +134,16 @@ declare namespace Roact {
 		getValue(): T;
 	}
 
+	type BindingValueType<T> = T extends RoactBinding<infer A> ? A : never;
+
+	/**
+	 * Combines multiple bindings into a single binding. The new binding's value will have the same keys as the input table of bindings.
+	 * @param bindings The bindings to join
+	 */
+	function joinBindings<T extends { [P in keyof T]: RoactBinding<any> }>(
+		bindings: T,
+	): RoactBinding<{ [P in keyof T]: BindingValueType<T[P]> }>;
+
 	type RoactBindingFunc<T> = (newVal: T) => void;
 
 	/**
@@ -136,7 +162,9 @@ declare namespace Roact {
 	 * @param fragments The fragmented elements
 	 * @see https://github.com/Roblox/roact/blob/new-reconciler/docs/advanced/fragments.md
 	 */
-	function createFragment(fragments: { [name: string]: Roact.Element }): Roact.ElementFragment;
+	function createFragment(fragments: {
+		[name: string]: Roact.Element;
+	}): Roact.ElementFragment;
 
 	/**
 	 * Creates a new reference object that can be used with `Roact.Ref`
@@ -227,7 +255,9 @@ class MyComponent extends Roact.Component {
          * @param state The current state
          * @returns Any changed state properties
          */
-		protected setState<K extends keyof S>(state: (prevState: Readonly<S>, props: P) => ContainsKeys<S, K>): void;
+		protected setState<K extends keyof S>(
+			state: (prevState: Readonly<S>, props: P) => ContainsKeys<S, K>,
+		): void;
 
 		protected setState<K extends keyof S>(state: ContainsKeys<S, K>): void;
 
@@ -250,7 +280,9 @@ class MyComponent extends Roact.Component {
 			Roact.setGlobalConfig({ propValidation: true });
 			```
 		 */
-		protected static validateProps(props: {}): LuaTuple<[false, string]> | LuaTuple<[true]>;
+		protected static validateProps(props: {}):
+			| LuaTuple<[false, string]>
+			| LuaTuple<[true]>;
 	}
 
 	/**
@@ -260,7 +292,9 @@ class MyComponent extends Roact.Component {
 		getValue(): T | undefined;
 	}
 
-	type RefPropertyOrFunction<T extends Instance> = Ref<T> | ((rbx: T) => void);
+	type RefPropertyOrFunction<T extends Instance> =
+		| Ref<T>
+		| ((rbx: T) => void);
 
 	/**
 	 * A special value that can be used to set a state value to undefined.
@@ -289,7 +323,9 @@ class MyComponent extends Roact.Component<MyProps> {
 
 	const Children: unique symbol;
 
-	type JsxObject<T extends Instance> = Partial<Pick<T, Exclude<GetWritableProperties<T>, "Parent" | "Name">>> &
+	type JsxObject<T extends Instance> = Partial<
+		Pick<T, Exclude<GetWritableProperties<T>, "Parent" | "Name">>
+	> &
 		RbxJsxIntrinsicProps<T>;
 }
 
@@ -310,7 +346,8 @@ declare global {
 		interface IntrinsicAttributes extends RbxJsxProps {}
 
 		// Puts props on JSX Stateful Components
-		interface IntrinsicClassAttributes<T extends Instance> extends RbxJsxProps {}
+		interface IntrinsicClassAttributes<T extends Instance>
+			extends RbxJsxProps {}
 
 		interface IntrinsicElements {
 			uiaspectratioconstraint: Roact.JsxObject<UIAspectRatioConstraint>;
