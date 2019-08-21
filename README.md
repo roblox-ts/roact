@@ -10,8 +10,8 @@
 	<a href="https://roblox-ts.github.io/docs/roact/">
 		<img src="https://img.shields.io/badge/docs-typescript-blue.svg" alt="Documentation"></img>
 	</a>
-	<a href="https://www.npmjs.com/package/rbx-roact">
-		<img src="https://badge.fury.io/js/rbx-roact.svg?v=2"></img>
+	<a href="https://www.npmjs.com/package/@rbxts/roact">
+		<img src="https://badge.fury.io/js/%40rbxts%2Froact.svg"></img>
 	</a>
 </div>
 
