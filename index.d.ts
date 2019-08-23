@@ -152,7 +152,7 @@ declare namespace Roact {
 	 * @param value The initial value of the binding
 	 * @see https://github.com/Roblox/roact/blob/new-reconciler/docs/advanced/bindings-and-refs.md
 	 */
-	function createBinding<T>(value: T): [RoactBinding<T>, RoactBindingFunc<T>];
+	function createBinding<T>(value: T): LuaTuple<[RoactBinding<T>, RoactBindingFunc<T>]>;
 
 	type ElementFragment = Element;
 
