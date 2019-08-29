@@ -168,6 +168,10 @@ declare namespace Roact {
 		[name: string]: Roact.Element;
 	}): Roact.ElementFragment;
 
+	function createFragment(
+		fragments: Map<string, Roact.Element> | Map<number, Roact.Element>,
+	): Roact.ElementFragment;
+
 	/**
 	 * Creates a new reference object that can be used with `Roact.Ref`
 	 * @see Roact.Ref
@@ -388,6 +392,8 @@ declare global {
 
 			uisizeconstraint: Roact.JsxObject<UISizeConstraint>;
 			uitextsizeconstraint: Roact.JsxObject<UITextSizeConstraint>;
+
+			camera: Roact.JsxObject<Camera>;
 		}
 	}
 }
