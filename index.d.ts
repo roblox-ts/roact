@@ -152,7 +152,9 @@ declare namespace Roact {
 	 * @param value The initial value of the binding
 	 * @see https://github.com/Roblox/roact/blob/new-reconciler/docs/advanced/bindings-and-refs.md
 	 */
-	function createBinding<T>(value: T): LuaTuple<[RoactBinding<T>, RoactBindingFunc<T>]>;
+	function createBinding<T>(
+		value: T,
+	): LuaTuple<[RoactBinding<T>, RoactBindingFunc<T>]>;
 
 	type ElementFragment = Element;
 
@@ -327,6 +329,15 @@ class MyComponent extends Roact.Component<MyProps> {
 		Pick<T, Exclude<GetWritableProperties<T>, "Parent" | "Name">>
 	> &
 		RbxJsxIntrinsicProps<T>;
+
+	/**
+	 * Requires a build of roblox-ts that supports Roact.Fragment (`vorlias/master`)
+	 */
+	const Fragment: Fragment;
+}
+
+interface Fragment extends Roact.IComponent {
+	new (p: RbxJsxProps): Fragment;
 }
 
 declare global {
