@@ -386,6 +386,7 @@ declare global {
 			uilistlayout: Roact.JsxObject<UIListLayout>;
 			uipagelayout: Roact.JsxObject<UIPageLayout>;
 			uitablelayout: Roact.JsxObject<UITableLayout>;
+			uiinlinelayout: Roact.JsxObject<UIInlineLayout>;
 
 			uipadding: Roact.JsxObject<UIPadding>;
 			uiscale: Roact.JsxObject<UIScale>;
