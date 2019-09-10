@@ -330,7 +330,7 @@ class MyComponent extends Roact.Component<MyProps> {
 	const Children: unique symbol;
 
 	type JsxObject<T extends Instance> = Partial<
-		PickWithBindings<
+		PickWithBindingsAndRefs<
 			T,
 			Exclude<GetWritableProperties<T>, "Parent" | "Name">
 		>

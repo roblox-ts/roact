@@ -121,8 +121,12 @@ interface PortalProps {
 	target: Instance;
 }
 
-type PickWithBindings<T, K extends keyof T> = {
-	[P in K]: T[P] | Roact.RoactBinding<T[P]>;
+type AllowRefs<T> = T extends Instance
+	? Roact.RefPropertyOrFunction<T>
+	: never;
+
+type PickWithBindingsAndRefs<T, K extends keyof T> = {
+	[P in K]: T[P] | Roact.RoactBinding<T[P]> | AllowRefs<T[P]>;
 };
 
 type RoactEvents<T> = {
