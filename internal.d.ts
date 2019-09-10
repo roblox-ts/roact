@@ -121,6 +121,10 @@ interface PortalProps {
 	target: Instance;
 }
 
+type PickWithBindings<T, K extends keyof T> = {
+	[P in K]: T[P] | Roact.RoactBinding<T[P]>;
+};
+
 type RoactEvents<T> = {
 	[K in keyof SubType<T, RBXScriptSignal>]?: T[K] extends RBXScriptSignal<infer F>
 		? EventHandlerFunction<T, FunctionArguments<F>>
