@@ -81,7 +81,7 @@ declare namespace Roact {
 	}
 	
 	interface Consumer<T> {
-		new (props: ConsumerProps<T>): ContextConsumer<T>;
+		new (props: ConsumerProps<T> & {[Roact.Children]?: undefined}): ContextConsumer<T>;
 	}
 
 	interface Context<T> {
@@ -237,12 +237,12 @@ declare namespace Roact {
 	abstract class PureComponent<P = {}, S = {}> extends Component<P, S> {}
 
 	abstract class Component<P = {}, S = {}> extends IComponent {
-		constructor(p: P & RbxJsxProps);
+		constructor(p: RbxJsxProps & P);
 
 		/**
 		 * The properties of this component
 		 */
-		protected props: P & StatefulComponentProps;
+		protected props: StatefulComponentProps & P;
 
 		/**
 		 * The state of this component.
