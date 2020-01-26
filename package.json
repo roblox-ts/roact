@@ -1,6 +1,6 @@
 {
 	"name": "@rbxts/roact",
-	"version": "1.1.5",
+	"version": "1.1.6",
 	"description": "TypeScript support for Roact",
 	"main": "./roact/src/init.lua",
 	"typings": "index.d.ts",
@@ -27,7 +27,7 @@
 		"@rbxts/types": "^1.0.201"
 	},
 	"devDependencies": {
-		"@rbxts/types": "^1.0.254"
+		"@rbxts/types": "^1.0.320"
 	},
 	"dependencies": {}
 }

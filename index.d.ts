@@ -390,6 +390,7 @@ declare global {
 			uipagelayout: Roact.JsxObject<UIPageLayout>;
 			uitablelayout: Roact.JsxObject<UITableLayout>;
 			uiinlinelayout: Roact.JsxObject<UIInlineLayout>;
+			uigradient: Roact.JsxObject<UIGradient>;
 
 			uipadding: Roact.JsxObject<UIPadding>;
 			uiscale: Roact.JsxObject<UIScale>;
