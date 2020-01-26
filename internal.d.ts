@@ -29,7 +29,7 @@ interface ProviderProps<T> {
 	value: T;
 }
 declare class ContextProvider<T> extends Roact.Component<ProviderProps<T>> {
-	render(): Roact.Element<ProviderProps<T>, ContextProvider<T>>;
+	render(): Roact.Element;
 }
 
 interface ConsumerProps<T> {
@@ -37,11 +37,11 @@ interface ConsumerProps<T> {
 	[Roact.Children]: null;
 }
 declare class ContextConsumer<T> extends Roact.Component<ConsumerProps<T>> {
-	render(): Roact.Element<ConsumerProps<T>, ContextConsumer<T>>;
+	render(): Roact.Element;
 }
 
-type RoactChild = Roact.Element | undefined;
-type RoactNode = RoactChild | RoactChild[] | Map<string, Roact.Element>;
+type RoactChild = Roact.Element | Roact.Element[] | Map<string, Roact.Element> | boolean | undefined;
+type RoactNode = RoactChild | RoactChild[];
 
 /**
  * Arbitrary properties of JSX elements, unrelated to ROBLOX instances

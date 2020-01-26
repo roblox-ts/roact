@@ -30,9 +30,9 @@ declare namespace Roact {
 	}
 
 	/** A Roact Element */
-	interface Element<P = unknown, C = unknown> {
-		component: C;
-		props: P;
+	interface Element {
+		component: unknown;
+		props: unknown;
 		source?: string;
 		readonly type: RoactSymbol;
 	}
@@ -409,7 +409,7 @@ declare global {
 	 */
 	namespace JSX {
 		// JSX.Element
-		interface Element extends Roact.Element<unknown, unknown> {}
+		type Element = Roact.Element;
 
 		// Force the element class type
 		interface ElementClass {
