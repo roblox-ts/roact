@@ -22,7 +22,26 @@ Roact.createElement(Parent, {...}, {
 })```
      */
 	Key?: string | number;
+	[Roact.Children]?: RoactNode;
 }
+
+interface ProviderProps<T> {
+	value: T;
+}
+declare class ContextProvider<T> extends Roact.Component<ProviderProps<T>> {
+	render(): Roact.Element<ProviderProps<T>, ContextProvider<T>>;
+}
+
+interface ConsumerProps<T> {
+	render: (value: T) => Roact.Element;
+	[Roact.Children]: null;
+}
+declare class ContextConsumer<T> extends Roact.Component<ConsumerProps<T>> {
+	render(): Roact.Element<ConsumerProps<T>, ContextConsumer<T>>;
+}
+
+type RoactChild = Roact.Element | undefined;
+type RoactNode = RoactChild | RoactChild[] | Map<string, Roact.Element>;
 
 /**
  * Arbitrary properties of JSX elements, unrelated to ROBLOX instances
