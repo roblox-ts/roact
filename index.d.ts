@@ -81,7 +81,7 @@ declare namespace Roact {
 	}
 	
 	interface Consumer<T> {
-		new (props: ConsumerProps<T> & {[Roact.Children]?: undefined}): ContextConsumer<T>;
+		new (props: NoChildren<ConsumerProps<T>>): ContextConsumer<T>;
 	}
 
 	interface Context<T> {
@@ -90,6 +90,8 @@ declare namespace Roact {
 	}
 
 	type Children = Element[] | { [name: string]: Element };
+
+	type NoChildren<T> = T & {[Roact.Children]?: undefined};
 
 	function createElement<T, P>(
 		component: FunctionalComponent<T, P>,
