@@ -1,6 +1,6 @@
 {
 	"name": "@rbxts/roact",
-	"version": "1.2.0-beta.7",
+	"version": "1.2.0-beta.8",
 	"description": "TypeScript support for Roact",
 	"main": "./roact/src/init.lua",
 	"typings": "index.d.ts",
