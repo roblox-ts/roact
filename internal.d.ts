@@ -22,7 +22,26 @@ Roact.createElement(Parent, {...}, {
 })```
      */
 	Key?: string | number;
+	[Roact.Children]?: RoactNode;
 }
+
+interface ProviderProps<T> {
+	value: T;
+}
+declare class ContextProvider<T> extends Roact.Component<ProviderProps<T>> {
+	render(): Roact.Element;
+}
+
+interface ConsumerProps<T> {
+	render: (value: T) => Roact.Element;
+	[Roact.Children]: null;
+}
+declare class ContextConsumer<T> extends Roact.Component<ConsumerProps<T>> {
+	render(): Roact.Element;
+}
+
+type RoactChild = Roact.Element | Roact.Element[] | Map<string, Roact.Element> | boolean | undefined;
+type RoactNode = RoactChild | RoactChild[];
 
 /**
  * Arbitrary properties of JSX elements, unrelated to ROBLOX instances
@@ -121,8 +140,13 @@ interface PortalProps {
 	target: Instance;
 }
 
+type test = Enum.ActionType;
+
+
+type InferEnumNames<T> = T extends {EnumType: Enum.EnumType<infer A> } ? A["Name"] : never;
+
 type PickWithBindings<T, K extends keyof T> = {
-	[P in K]: T[P] | Roact.RoactBinding<T[P]>;
+	[P in K]: T[P] | InferEnumNames<T[P]> | Roact.RoactBinding<T[P]>;
 };
 
 type RoactEvents<T> = {

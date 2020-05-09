@@ -66,7 +66,32 @@ declare namespace Roact {
 		_child?: ComponentInstanceHandle;
 	}
 
+
+	interface ProviderProps<T> {
+		value?: T;
+	}
+
+
+	interface ConsumerProps<T> {
+		render: (value: T) => Roact.Element;
+	}
+
+	interface Provider<T> {
+		new (props: ProviderProps<T>): ContextProvider<T>;
+	}
+	
+	interface Consumer<T> {
+		new (props: NoChildren<ConsumerProps<T>>): ContextConsumer<T>;
+	}
+
+	interface Context<T> {
+		Provider: Provider<T>;
+		Consumer: Consumer<T>;
+	}
+
 	type Children = Element[] | { [name: string]: Element };
+
+	type NoChildren<T> = T & {[Roact.Children]?: undefined};
 
 	function createElement<T, P>(
 		component: FunctionalComponent<T, P>,
@@ -83,6 +108,37 @@ declare namespace Roact {
 		props?: PrimitiveProperties<T>,
 		children?: Children,
 	): Element;
+
+	/**
+	 * Context is useful for a global prop shared between components, like a theme. 
+	 * 
+	 * If you want something for your game's state, please look at [@rbxts/rodux](https://github.com/roblox-ts/rbx-rodux) and [@rbxts/roact-rodux](https://github.com/roblox-ts/rbx-roact-rodux).
+	 * 
+	 * ----
+	 * 
+	 * Creates a context prop which can be shared between components.
+	 * 
+	 * This returns a `Provider` - a top level component that will pass this prop & it's value to the child components (or the overriden value using `value`) -
+	 * 
+	 * and a`Consumer` - A component which takes a `render` prop - of which the value is passed to
+	 * 
+	 * Example:
+	 * 
+	 * ```jsx
+	 * const MyContext = Roact.createContext("Hello");
+	 * 
+	 * const example = <MyContext.Provider value="Overriden Value">
+	 * 	<frame>
+	 * 		<MyContext.Consumer render={value => <textlabel Text={value}/>}/>
+	 * 	</frame>
+	 * </MyContext.Provider>;
+	 * ```
+	 * 
+	 * The above example, the textlabel should say "Overriden value"
+	 * 
+	 * @param value 
+	 */
+	// function createContext<T>(value: T): Context<T>;
 
 	/**
 	 * Creates a Roblox Instance given a Roact `element`, and optionally a `parent` to put it in, and a `key` to use as the instance's Name.
@@ -183,12 +239,12 @@ declare namespace Roact {
 	abstract class PureComponent<P = {}, S = {}> extends Component<P, S> {}
 
 	abstract class Component<P = {}, S = {}> extends IComponent {
-		constructor(p: P & RbxJsxProps);
+		constructor(p: RbxJsxProps & P);
 
 		/**
 		 * The properties of this component
 		 */
-		protected props: P & StatefulComponentProps;
+		protected props: StatefulComponentProps & P;
 
 		/**
 		 * The state of this component.
@@ -359,6 +415,8 @@ declare global {
 		interface ElementClass {
 			render(): Roact.Element | undefined;
 		}
+
+		interface ElementChildrenAttribute { [Roact.Children]: {} }
 
 		// Puts props on JSX global components
 		interface IntrinsicAttributes extends RbxJsxProps {}
