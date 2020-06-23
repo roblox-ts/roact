@@ -40,7 +40,7 @@ You will need the settings from [roblox-ts](https://github.com/roblox-ts/roblox-
 
 ### Regular TypeScript
 ```typescript
-import * as Roact from 'roact';
+import Roact from '@rbxts/roact';
 
 const LocalPlayer = game.GetService("Players").LocalPlayer as Player;
 const PlayerGui = LocalPlayer.FindFirstChildOfClass("PlayerGui");
@@ -58,7 +58,7 @@ Roact.mount(tree, PlayerGui, "HelloWorld");
 
 ### JSX Typescript (.tsx files)
 ```tsx
-import * as Roact from 'roact';
+import Roact from '@rbxts/roact';
 
 const LocalPlayer = game.GetService("Players").LocalPlayer as Player;
 const PlayerGui = LocalPlayer.FindFirstChildOfClass("PlayerGui");
