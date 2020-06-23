@@ -24,10 +24,10 @@
 		}
 	],
 	"peerDependencies": {
-		"@rbxts/types": "^1.0.201"
+		"@rbxts/types": "^1.0.371"
 	},
 	"devDependencies": {
-		"@rbxts/types": "^1.0.320"
+		"@rbxts/types": "^1.0.371"
 	},
 	"dependencies": {}
 }
