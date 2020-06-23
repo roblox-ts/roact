@@ -456,6 +456,8 @@ declare global {
 			uisizeconstraint: Roact.JsxObject<UISizeConstraint>;
 			uitextsizeconstraint: Roact.JsxObject<UITextSizeConstraint>;
 
+			uicorner: Roact.JsxObject<UICorner>;
+
 			camera: Roact.JsxObject<Camera>;
 		}
 	}
