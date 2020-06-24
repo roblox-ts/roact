@@ -145,7 +145,7 @@ type AllowRefs<T> = T extends Instance
 	: never;
 type InferEnumNames<T> = T extends {EnumType: Enum.EnumType<infer A> } ? A["Name"] : never;
 
-type PickWithBindings<T, K extends keyof T> = {
+type PickWithBindingsAndRefs<T extends Instance, K extends keyof T> = {
 	[P in K]: T[P] | InferEnumNames<T[P]> | Roact.RoactBinding<T[P]> | AllowRefs<T[P]>;
 };
 

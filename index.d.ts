@@ -138,7 +138,7 @@ declare namespace Roact {
 	 * 
 	 * @param value 
 	 */
-	// function createContext<T>(value: T): Context<T>;
+	function createContext<T>(value: T): Context<T>;
 
 	/**
 	 * Creates a Roblox Instance given a Roact `element`, and optionally a `parent` to put it in, and a `key` to use as the instance's Name.
