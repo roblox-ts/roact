@@ -141,7 +141,7 @@ interface PortalProps {
 }
 
 type AllowRefs<T> = T extends Instance
-	? Roact.RefPropertyOrFunction<T>
+	? Roact.Ref<T>
 	: never;
 type InferEnumNames<T> = T extends {EnumType: Enum.EnumType<infer A> } ? A["Name"] : never;
 
