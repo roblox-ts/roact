@@ -140,13 +140,13 @@ interface PortalProps {
 	target: Instance;
 }
 
-type test = Enum.ActionType;
-
-
+type AllowRefs<T> = T extends Instance
+	? Roact.RefPropertyOrFunction<T>
+	: never;
 type InferEnumNames<T> = T extends {EnumType: Enum.EnumType<infer A> } ? A["Name"] : never;
 
 type PickWithBindings<T, K extends keyof T> = {
-	[P in K]: T[P] | InferEnumNames<T[P]> | Roact.RoactBinding<T[P]>;
+	[P in K]: T[P] | InferEnumNames<T[P]> | Roact.RoactBinding<T[P]> | AllowRefs<T[P]>;
 };
 
 type RoactEvents<T> = {
