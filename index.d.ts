@@ -186,7 +186,7 @@ declare namespace Roact {
 	function oneChild(children?: Element[]): Roact.Element;
 
 	interface RoactBinding<T> {
-		map<R>(valueTransform: (value: T) => R): R;
+		map<R>(valueTransform: (value: T) => R): RoactBinding<R>;
 		getValue(): T;
 	}
 
