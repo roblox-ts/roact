@@ -31,10 +31,9 @@ declare namespace Roact {
 
 	/** A Roact Element */
 	interface Element {
-		component: unknown;
-		props: unknown;
+		component: defined;
+		props: defined;
 		source?: string;
-		readonly type: RoactSymbol;
 	}
 
 	/**
@@ -50,20 +49,10 @@ declare namespace Roact {
 	}
 
 	interface ComponentInstanceHandle {
-		/** @internal You should not mess with a component's instance handle! */
-		_key?: string;
-		/** @internal You should not mess with a component's instance handle! */
-		_context?: unknown;
-		/** @internal You should not mess with a component's instance handle! */
-		_rbx?: Instance;
-		/** @internal You should not mess with a component's instance handle! */
-		_parent?: Instance;
-		/** @internal You should not mess with a component's instance handle! */
-		_element?: string | RenderableClass;
-		/** @internal You should not mess with a component's instance handle! */
-		_children?: _LuaMap<ComponentInstanceHandle | undefined>;
-		/** @internal You should not mess with a component's instance handle! */
-		_child?: ComponentInstanceHandle;
+		/**
+		 * @internal TS-Only Type Magic
+		 */
+		readonly __HANDLE: never;
 	}
 
 
@@ -89,7 +78,14 @@ declare namespace Roact {
 		Consumer: Consumer<T>;
 	}
 
-	type Children = Element[] | { [name: string]: Element };
+	/**
+	 * The type of Roact's Children. Since it can be mixed, it's both an Array and Map.
+	 * 
+	 * `size()` will use the Array size. If you want Map.size() - use `Roact.ChildrenMap`
+	 */
+	type Children = ChildrenArray & ChildrenMap;
+	type ChildrenMap = Map<string, Roact.Element>;
+	type ChildrenArray = Array<Roact.Element>;
 
 	type NoChildren<T> = T & {[Roact.Children]?: undefined};
 
@@ -154,17 +150,6 @@ declare namespace Roact {
 	/**
 	 * Updates an existing instance handle with a new element, returning a new handle. This can be used to update a UI created with `Roact.mount` by passing in a new element with new props.
 	 *
-	 * `reconcile` can be used to change the props of a component instance created with `mount` and is useful for putting Roact content into non-Roact applications.
-	 * @deprecated use `update`
-	 */
-	function reconcile<T>(
-		handle: ComponentInstanceHandle,
-		component: Element,
-	): ComponentInstanceHandle;
-
-	/**
-	 * Updates an existing instance handle with a new element, returning a new handle. This can be used to update a UI created with `Roact.mount` by passing in a new element with new props.
-	 *
 	 * `update` can be used to change the props of a component instance created with `mount` and is useful for putting Roact content into non-Roact applications.
 	 */
 	function update(
@@ -183,7 +168,7 @@ declare namespace Roact {
 	 *
 	 * If `children` is nil or contains no children, `oneChild` will return nil
 	 */
-	function oneChild(children?: Element[]): Roact.Element;
+	function oneChild(children: Children | undefined): Roact.Element;
 
 	interface RoactBinding<T> {
 		map<R>(valueTransform: (value: T) => R): RoactBinding<R>;

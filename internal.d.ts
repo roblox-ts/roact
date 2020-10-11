@@ -171,7 +171,7 @@ interface StatefulComponentProps {
 	 *
 	 * Make sure to check if they exist first!
 	 */
-	readonly [Roact.Children]?: Roact.Element[];
+	readonly [Roact.Children]?: Roact.Children;
 }
 
 type EventHandlerFunction<T, U extends any[]> = U extends []
