@@ -68,7 +68,7 @@ declare namespace Roact {
 	interface Provider<T> {
 		new (props: ProviderProps<T>): ContextProvider<T>;
 	}
-	
+
 	interface Consumer<T> {
 		new (props: NoChildren<ConsumerProps<T>>): ContextConsumer<T>;
 	}
@@ -80,59 +80,65 @@ declare namespace Roact {
 
 	/**
 	 * The type of Roact's Children. Since it can be mixed, it's both an Array and Map.
-	 * 
+	 *
 	 * `size()` will use the Array size. If you want Map.size() - use `Roact.ChildrenMap`
 	 */
 	type Children = ChildrenArray & ChildrenMap;
 	type ChildrenMap = Map<string, Roact.Element>;
 	type ChildrenArray = Array<Roact.Element>;
+	type ChildrenObject = { [key: string]: Roact.Element };
 
 	type NoChildren<T> = T & {[Roact.Children]?: undefined};
 
-	function createElement<T, P>(
-		component: FunctionalComponent<T, P>,
-		props?: P,
-		children?: Children,
+	// createElement with functional component
+	function createElement<T>(
+		component: (props: T) => Roact.Element,
+		props?: T,
+		children?: ChildrenMap | ChildrenArray | ChildrenObject,
 	): Element;
-	function createElement<T extends Roact.RenderablePropsClass<P>, P>(
-		component: StatefulComponent<T, P>,
-		props?: P,
-		children?: Children,
+
+	// createElement with stateful component
+	function createElement<T>(
+		component: Roact.RenderablePropsClass<T>,
+		props?: T,
+		children?: ChildrenMap | ChildrenArray | ChildrenObject,
 	): Element;
+
+	// createElement with host component
 	function createElement<T extends keyof CreatableInstances>(
-		className: PrimitiveComponent<T>,
+		className: T,
 		props?: PrimitiveProperties<T>,
-		children?: Children,
+		children?: ChildrenMap | ChildrenArray | ChildrenObject,
 	): Element;
 
 	/**
-	 * Context is useful for a global prop shared between components, like a theme. 
-	 * 
+	 * Context is useful for a global prop shared between components, like a theme.
+	 *
 	 * If you want something for your game's state, please look at [@rbxts/rodux](https://github.com/roblox-ts/rbx-rodux) and [@rbxts/roact-rodux](https://github.com/roblox-ts/rbx-roact-rodux).
-	 * 
+	 *
 	 * ----
-	 * 
+	 *
 	 * Creates a context prop which can be shared between components.
-	 * 
+	 *
 	 * This returns a `Provider` - a top level component that will pass this prop & it's value to the child components (or the overriden value using `value`) -
-	 * 
+	 *
 	 * and a`Consumer` - A component which takes a `render` prop - of which the value is passed to
-	 * 
+	 *
 	 * Example:
-	 * 
+	 *
 	 * ```jsx
 	 * const MyContext = Roact.createContext("Hello");
-	 * 
+	 *
 	 * const example = <MyContext.Provider value="Overriden Value">
 	 * 	<frame>
 	 * 		<MyContext.Consumer render={value => <textlabel Text={value}/>}/>
 	 * 	</frame>
 	 * </MyContext.Provider>;
 	 * ```
-	 * 
+	 *
 	 * The above example, the textlabel should say "Overriden value"
-	 * 
-	 * @param value 
+	 *
+	 * @param value
 	 */
 	function createContext<T>(value: T): Context<T>;
 
