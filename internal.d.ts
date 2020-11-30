@@ -1,8 +1,8 @@
+/// <reference path="index.d.ts" />
+
 type PrimitiveProperties<T extends keyof CreatableInstances> = Partial<Pick<CreatableInstances[T], GetWritableProperties<CreatableInstances[T]>>> & {
 	[Roact.Ref]?: Roact.Ref<CreatableInstances[T]> | Roact.Ref | ((ref: CreatableInstances[T]) => void);
 };
-
-/// <reference path="index.d.ts" />
 
 interface RoactSymbol {}
 
