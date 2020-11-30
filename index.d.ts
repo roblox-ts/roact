@@ -90,24 +90,26 @@ declare namespace Roact {
 
 	type NoChildren<T> = T & {[Roact.Children]?: undefined};
 
+	type MapBindings<T> = { [K in keyof T]: T[K] | Roact.RoactBinding<T[K]> };
+
 	// createElement with functional component
 	function createElement<T>(
 		component: (props: T) => Roact.Element,
-		props?: T,
+		props?: MapBindings<T>,
 		children?: ChildrenMap | ChildrenArray | ChildrenObject,
 	): Element;
 
 	// createElement with stateful component
 	function createElement<T>(
 		component: Roact.RenderablePropsClass<T>,
-		props?: T,
+		props?: MapBindings<T>,
 		children?: ChildrenMap | ChildrenArray | ChildrenObject,
 	): Element;
 
 	// createElement with host component
 	function createElement<T extends keyof CreatableInstances>(
 		className: T,
-		props?: PrimitiveProperties<T>,
+		props?: MapBindings<PrimitiveProperties<T>>,
 		children?: ChildrenMap | ChildrenArray | ChildrenObject,
 	): Element;
 
