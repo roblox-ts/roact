@@ -1,6 +1,6 @@
 /// <reference path="index.d.ts" />
 
-type PrimitiveProperties<T extends keyof CreatableInstances> = Partial<Pick<CreatableInstances[T], GetWritableProperties<CreatableInstances[T]>>> & {
+type PrimitiveProperties<T extends keyof CreatableInstances> = Partial<WritableInstanceProperties<CreatableInstances[T]>> & {
 	[Roact.Ref]?: Roact.Ref<CreatableInstances[T]> | Roact.Ref | ((ref: CreatableInstances[T]) => void);
 };
 
@@ -147,11 +147,11 @@ type PickWithBindingsAndRefs<T extends Instance, K extends keyof T> = {
 
 type RoactEvents<T> = {
 	[K in keyof SubType<T, RBXScriptSignal>]?: T[K] extends RBXScriptSignal<infer F>
-		? EventHandlerFunction<T, FunctionArguments<F>>
+		? EventHandlerFunction<T, Parameters<F>>
 		: never
 };
 
-type RoactPropertyChanges<T extends Instance> = { [key in GetProperties<T>]?: (rbx: T) => void };
+type RoactPropertyChanges<T extends Instance> = { [key in InstancePropertyNames<T>]?: (rbx: T) => void };
 
 interface RoactEventSymbol {
 	readonly [name: string]: symbol;
