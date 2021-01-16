@@ -3,7 +3,7 @@ export = Roact;
 export as namespace Roact;
 declare namespace Roact {
 	type Template<T extends GuiBase = GuiObject> = Partial<
-		Pick<T, InstancePropertyNames<T>>
+		Pick<T, InstanceProperties<T>>
 	>;
 
 	//const Portal: Roact.Component<{}, PortalProps>;
@@ -83,11 +83,12 @@ declare namespace Roact {
 	 *
 	 * `size()` will use the Array size. If you want Map.size() - use `Roact.ChildrenMap`
 	 */
-	type Children = ChildrenArray & ChildrenMap;
-	type ChildrenMap = Map<string, Roact.Element>;
+	type Children = ChildrenMap;
+	type ChildrenMap = Map<string | number, Roact.Element>;
 	type ChildrenArray = Array<Roact.Element>;
 	type ChildrenObject = { [key: string]: Roact.Element };
 
+	type PropsWithChildren<P> = P & {[Roact.Children]?: Children}
 	type NoChildren<T> = T & {[Roact.Children]?: undefined};
 
 	type MapBindings<T> = { [K in keyof T]: T[K] | Roact.RoactBinding<T[K]> };
@@ -381,7 +382,7 @@ class MyComponent extends Roact.Component<MyProps> {
 	type JsxObject<T extends Instance> = Partial<
 		PickWithBindingsAndRefs<
 			T,
-			Exclude<keyof WritableInstanceProperties<T>, "Parent" | "Name">
+			Exclude<WritableInstanceProperties<T>, "Parent" | "Name">
 		>
 	> &
 		RbxJsxIntrinsicProps<T>;
