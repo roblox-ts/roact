@@ -3,7 +3,7 @@ export = Roact;
 export as namespace Roact;
 declare namespace Roact {
 	type Template<T extends GuiBase = GuiObject> = Partial<
-		Pick<T, WritableInstanceProperties<T>>
+		Pick<T, WritablePropertyNames<T>>
 	>;
 
 	//const Portal: Roact.Component<{}, PortalProps>;
@@ -382,7 +382,7 @@ class MyComponent extends Roact.Component<MyProps> {
 	type JsxObject<T extends Instance> = Partial<
 		PickWithBindingsAndRefs<
 			T,
-			Exclude<WritableInstanceProperties<T>, "Parent" | "Name">
+			Exclude<WritablePropertyNames<T>, "Parent" | "Name">
 		>
 	> &
 		RbxJsxIntrinsicProps<T>;
