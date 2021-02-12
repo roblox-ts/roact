@@ -204,7 +204,7 @@ declare namespace Roact {
 		 * Enables validation of props via the validateProps method on components. With this flag enabled, any validation written by component authors in a component's validateProps method will be run on every prop change. This is helpful during development for making sure components are being used correctly.
 		 */
 		propValidation?: boolean;
-	};
+	}
 
 	/**
 	 * The entry point for configuring Roact. Roact currently applies this to everything using this instance of Roact, so be careful using this with a project that has multiple consumers of Roact.
