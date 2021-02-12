@@ -179,6 +179,40 @@ declare namespace Roact {
 	 */
 	function oneChild(children: Children | undefined): Roact.Element;
 
+	type GlobalConfig = {
+		/**
+		 * Enables type checks for Roact's public interface. This includes some of the following:
+		 * - Check that the props and children arguments to Roact.createElement are both tables or nil
+		 * - Check that setState is passing self as the first argument (it should be called like self:setState(...))
+		 * - Confirm the Roact.mount's first argument is a Roact element
+		 * - And much more!
+		 */
+		typeChecks?: boolean;
+
+		/**
+		 * Enables type checks for internal functionality of Roact. This is typically only useful when debugging Roact itself. It will run similar type checks to those mentioned above, but only the private portion of the API.
+		 */
+		internalTypeChecks?: boolean;
+
+		/**
+		 * When enabled, Roact will capture a stack trace at the site of each element creation and hold onto it, using it to provide additional details on certain kinds of errors. If you get an error that says "", try enabling this config value to help with debugging.
+		 * Enabling elementTracing also allows the use of the getElementTraceback method on Component, which can also be helpful for debugging.
+		 */
+		elementTracing?: boolean;
+
+		/**
+		 * Enables validation of props via the validateProps method on components. With this flag enabled, any validation written by component authors in a component's validateProps method will be run on every prop change. This is helpful during development for making sure components are being used correctly.
+		 */
+		propValidation?: boolean;
+	};
+
+	/**
+	 * The entry point for configuring Roact. Roact currently applies this to everything using this instance of Roact, so be careful using this with a project that has multiple consumers of Roact.
+	 * Once config values are set, they will apply from then on. This is primarily useful when developing as it can enable features that validate your code more strictly. Most of the settings here incur a performance cost and should typically be disabled in production environments.
+	 * Call this method once at the root of your project (before mounting any Roact elements).
+	 */
+	function setGlobalConfig(globalConfig: GlobalConfig): void;
+
 	interface RoactBinding<T> {
 		map<R>(valueTransform: (value: T) => R): RoactBinding<R>;
 		getValue(): T;
