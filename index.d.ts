@@ -179,7 +179,7 @@ declare namespace Roact {
 	 */
 	function oneChild(children: Children | undefined): Roact.Element;
 
-	interface GlobalConfig = {
+	interface GlobalConfig {
 		/**
 		 * Enables type checks for Roact's public interface. This includes some of the following:
 		 * - Check that the props and children arguments to Roact.createElement are both tables or nil
