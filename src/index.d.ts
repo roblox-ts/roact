@@ -1,3 +1,5 @@
+/// <reference path="./jsx.d.ts" />
+
 import Component from "./Component";
 import createElement from "./createElement";
 import createRef from "./createRef";
@@ -6,9 +8,10 @@ import Change from "./PropMarkers/Change";
 import Children from "./PropMarkers/Children";
 import Event from "./PropMarkers/Event";
 import Ref from "./PropMarkers/Ref";
+import PureComponent from "./PureComponent";
 
 declare namespace Roact {
-	export { Component, createElement, createRef, oneChild, Change, Children, Event, Ref };
+	export { Component, createElement, createRef, oneChild, Change, Children, Event, Ref, PureComponent };
 
 	// Props
 

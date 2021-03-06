@@ -4,7 +4,7 @@ declare abstract class Component<P = {}, S = {}> {
 	constructor(props: Roact.JsxProps<P>);
 
 	protected readonly props: Roact.PropsWithChildren<P>;
-	protected readonly state: Readonly<S>;
+	protected state: Readonly<S>;
 
 	protected setState<K extends keyof S>(stateUpdater: (prevState: Readonly<S>, props: P) => Pick<S, K>): void;
 	protected setState<K extends keyof S>(stateChange: Pick<S, K>): void;

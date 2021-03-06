@@ -24,9 +24,11 @@
 		}
 	],
 	"devDependencies": {
-		"@rbxts/compiler-types": "^1.0.0-beta.13.1",
-		"@rbxts/types": "^1.0.438"
+		"@rbxts/compiler-types": "^1.0.0-types.0",
+		"@rbxts/types": "^1.0.459"
 	},
 	"dependencies": {},
-	"files": ["src"]
+	"files": [
+		"src"
+	]
 }
