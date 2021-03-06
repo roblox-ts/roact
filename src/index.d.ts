@@ -1,5 +1,3 @@
-interface Roact {}
-
-declare const Roact: Roact;
+import * as Roact from "./bundle";
 
 export = Roact;
