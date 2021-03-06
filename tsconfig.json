@@ -11,11 +11,7 @@
 		"typeRoots": [ "node_modules/@rbxts" ],
 
 		// required, configurable
-		"rootDir": ".",
-
-		// optional
-		"baseUrl": "src",
-		"declaration": false,
+		"rootDir": "src",
 
 		// optional, non-configurable
 		"jsx": "react",

@@ -1,14 +1,27 @@
-import Roact from "index";
+import Roact from "./index";
 
-interface Component<P = {}, S = {}> {
-	setState(mapState: Partial<S>): void;
-	render(): Roact.Element | undefined;
+declare abstract class Component<P = {}, S = {}> {
+	constructor(props: Roact.JsxProps<P>);
+
+	protected readonly props: Roact.PropsWithChildren<P>;
+	protected readonly state: Readonly<S>;
+
+	protected setState<K extends keyof S>(stateUpdater: (prevState: Readonly<S>, props: P) => Pick<S, K>): void;
+	protected setState<K extends keyof S>(stateChange: Pick<S, K>): void;
+
+	protected didMount(): void;
+
+	protected willUnmount(): void;
+
+	protected shouldUpdate(nextProps: P, nextState: S): boolean;
+
+	protected willUpdate(nextProps: P, nextState: S): void;
+
+	protected didUpdate(previousProps: P, previousState: S): void;
+
+	public abstract render(): Roact.Element | undefined;
+
+	protected static validateProps(props: unknown): LuaTuple<[boolean, string?]>;
 }
-
-interface ComponentConstructor {
-	extend<P = {}, S = {}>(name: string): Roact.Component<P, S>;
-}
-
-declare const Component: ComponentConstructor;
 
 export = Component;

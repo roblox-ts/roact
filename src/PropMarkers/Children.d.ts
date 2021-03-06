@@ -1,5 +1,7 @@
-import Symbol from "../Symbol";
+import Roact from "../index";
 
-declare const Children: Symbol<"Children">;
+declare const Children: unique symbol;
+
+type Children = Map<string | number, Roact.Element>;
 
 export = Children;

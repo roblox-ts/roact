@@ -1,7 +1,7 @@
-interface Event {}
-
-declare const Event: {
-	[eventName: string]: Event;
+interface Event {
+	readonly [index: string]: symbol;
 }
+
+declare const Event: Event;
 
 export = Event;

@@ -1,5 +1,7 @@
-import Symbol from "../Symbol";
+interface Ref<T extends Instance = Instance> {
+	getValue(): T | undefined;
+}
 
-declare const Ref: Symbol<"Ref">;
+declare const Ref: unique symbol;
 
 export = Ref;
