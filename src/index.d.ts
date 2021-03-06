@@ -15,7 +15,7 @@ declare namespace Roact {
 
 	// Props
 
-	export type PropsWithChildren<P = {}> = P & { [Roact.Children]: Roact.Children };
+	export type PropsWithChildren<P = {}> = P & { [Roact.Children]?: Roact.Children };
 
 	// Components
 
@@ -66,6 +66,9 @@ declare namespace Roact {
 	export function joinBindings<T>(
 		bindings: ReadonlyMap<string | number, Binding<T>>,
 	): Binding<Map<string | number, Binding<T>>>;
+
+	export type BindingFunc<T> = (newVal: T) => void;
+	export type RefPropertyOrFunction<T extends Instance> = Ref<T> | ((rbx: T) => void);
 
 	// Mounting
 
