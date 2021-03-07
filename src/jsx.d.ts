@@ -10,7 +10,14 @@ type Defaultize<P, D> = P extends any
 				Partial<Pick<D, Exclude<keyof D, keyof P>>>
 	: never;
 
-type RoactManagedAttributes<C, P> = C extends { defaultProps: infer D } ? Defaultize<P, D> : P;
+type JsxChild =
+	| boolean
+	| Roact.Element
+	| ReadonlyArray<Roact.Element>
+	| ReadonlyMap<string | number, Roact.Element>
+	| undefined;
+
+type JsxNode = JsxChild | JsxChild[];
 
 declare global {
 	namespace JSX {
@@ -24,38 +31,39 @@ declare global {
 			_jsx_children: {};
 		}
 
-		interface IntrinsicAttributes extends Roact.JsxProps {}
+		interface IntrinsicAttributes extends Roact.PropsWithChildren {
+			Key?: string | number;
+			_jsx_children?: JsxNode;
+		}
 
-		interface IntrinsicClassAttributes<T extends Instance> extends Roact.JsxProps {}
+		interface IntrinsicClassAttributes<T extends Instance> extends Roact.PropsWithChildren {}
 
-		type LibraryManagedAttributes<C, P> = C extends Roact.Component<infer T>
-			? RoactManagedAttributes<T, P>
-			: RoactManagedAttributes<C, P>;
+		type LibraryManagedAttributes<C, P> = C extends { defaultProps: infer D } ? Defaultize<P, D> : P;
 
 		interface IntrinsicElements {
-			billboardgui: Roact.JsxObject<BillboardGui>;
-			camera: Roact.JsxObject<Camera>;
-			frame: Roact.JsxObject<Frame>;
-			imagebutton: Roact.JsxObject<ImageButton>;
-			imagelabel: Roact.JsxObject<ImageLabel>;
-			screengui: Roact.JsxObject<ScreenGui>;
-			scrollingframe: Roact.JsxObject<ScrollingFrame>;
-			surfacegui: Roact.JsxObject<SurfaceGui>;
-			textbox: Roact.JsxObject<TextBox>;
-			textbutton: Roact.JsxObject<TextButton>;
-			textlabel: Roact.JsxObject<TextLabel>;
-			uiaspectratioconstraint: Roact.JsxObject<UIAspectRatioConstraint>;
-			uicorner: Roact.JsxObject<UICorner>;
-			uigradient: Roact.JsxObject<UIGradient>;
-			uigridlayout: Roact.JsxObject<UIGridLayout>;
-			uilistlayout: Roact.JsxObject<UIListLayout>;
-			uipadding: Roact.JsxObject<UIPadding>;
-			uipagelayout: Roact.JsxObject<UIPageLayout>;
-			uiscale: Roact.JsxObject<UIScale>;
-			uisizeconstraint: Roact.JsxObject<UISizeConstraint>;
-			uitablelayout: Roact.JsxObject<UITableLayout>;
-			uitextsizeconstraint: Roact.JsxObject<UITextSizeConstraint>;
-			viewportframe: Roact.JsxObject<ViewportFrame>;
+			billboardgui: Roact.JsxInstanceProps<BillboardGui>;
+			camera: Roact.JsxInstanceProps<Camera>;
+			frame: Roact.JsxInstanceProps<Frame>;
+			imagebutton: Roact.JsxInstanceProps<ImageButton>;
+			imagelabel: Roact.JsxInstanceProps<ImageLabel>;
+			screengui: Roact.JsxInstanceProps<ScreenGui>;
+			scrollingframe: Roact.JsxInstanceProps<ScrollingFrame>;
+			surfacegui: Roact.JsxInstanceProps<SurfaceGui>;
+			textbox: Roact.JsxInstanceProps<TextBox>;
+			textbutton: Roact.JsxInstanceProps<TextButton>;
+			textlabel: Roact.JsxInstanceProps<TextLabel>;
+			uiaspectratioconstraint: Roact.JsxInstanceProps<UIAspectRatioConstraint>;
+			uicorner: Roact.JsxInstanceProps<UICorner>;
+			uigradient: Roact.JsxInstanceProps<UIGradient>;
+			uigridlayout: Roact.JsxInstanceProps<UIGridLayout>;
+			uilistlayout: Roact.JsxInstanceProps<UIListLayout>;
+			uipadding: Roact.JsxInstanceProps<UIPadding>;
+			uipagelayout: Roact.JsxInstanceProps<UIPageLayout>;
+			uiscale: Roact.JsxInstanceProps<UIScale>;
+			uisizeconstraint: Roact.JsxInstanceProps<UISizeConstraint>;
+			uitablelayout: Roact.JsxInstanceProps<UITableLayout>;
+			uitextsizeconstraint: Roact.JsxInstanceProps<UITextSizeConstraint>;
+			viewportframe: Roact.JsxInstanceProps<ViewportFrame>;
 		}
 	}
 }

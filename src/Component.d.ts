@@ -18,7 +18,7 @@ declare abstract class Component<P = {}, S = {}> {
 	 * end
 	 * ```
 	 */
-	constructor(props: Roact.JsxProps<P>);
+	constructor(props: P);
 
 	protected readonly props: Roact.PropsWithChildren<P>;
 

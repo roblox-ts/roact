@@ -31,35 +31,40 @@ declare namespace Roact {
 		PureComponent,
 		Ref,
 	};
+}
 
-	// Props
-
+// Props
+declare namespace Roact {
 	export type PropsWithChildren<P = {}> = P & { [Roact.Children]?: Roact.Children };
+}
 
-	// Component
-
+// Component
+declare namespace Roact {
 	export type HostComponent = keyof CreatableInstances;
-	export type FunctionComponent<P = {}> = (props: PropsWithChildren<P>) => Roact.Element | undefined;
+	export type FunctionComponent<P = {}> = (props: Roact.PropsWithChildren<P>) => Roact.Element | undefined;
 	export type AnyComponent = Roact.Component | Roact.FunctionComponent | Roact.HostComponent;
 	export interface ComponentConstructor<P = {}, S = {}> {
 		new (props: P): Roact.Component<P, S>;
 	}
+}
 
-	// Element
-
+// Element
+declare namespace Roact {
 	export interface Element {
 		component: defined;
 		props: defined;
 		source?: string;
 	}
+}
 
-	// Fragment
-
+// Fragment
+declare namespace Roact {
 	export type Fragment = Roact.Element;
 	export const Fragment: Roact.ComponentConstructor<{}, {}>;
+}
 
-	// Binding
-
+// Binding
+declare namespace Roact {
 	export interface Binding<T> {
 		/**
 		 * Returns the internal value of the binding. This is helpful when updating a binding relative to its current value.
@@ -71,7 +76,7 @@ declare namespace Roact {
 		 * transform an animation progress value like `0.4` into a property that can be consumed by a Roblox Instance like
 		 * `UDim2.new(0.4, 0, 1, 0)`.
 		 */
-		map<U>(predicate: (value: T) => U): Binding<U>;
+		map<U>(predicate: (value: T) => U): Roact.Binding<U>;
 	}
 
 	/**
@@ -84,16 +89,17 @@ declare namespace Roact {
 	 * Combines multiple bindings into a single binding. The new binding's value will have the same keys as the input
 	 * table of bindings.
 	 */
-	export function joinBindings<T extends { [index: string]: Binding<U> }, U>(
+	export function joinBindings<T extends { [index: string]: Roact.Binding<U> }, U>(
 		bindings: T,
-	): Binding<{ [K in keyof T]: T[K] extends Binding<infer V> ? V : never }>;
-	export function joinBindings<T>(bindings: ReadonlyArray<Binding<T>>): Binding<Array<T>>;
+	): Roact.Binding<{ [K in keyof T]: T[K] extends Roact.Binding<infer V> ? V : never }>;
+	export function joinBindings<T>(bindings: ReadonlyArray<Roact.Binding<T>>): Roact.Binding<Array<T>>;
 	export function joinBindings<T>(
-		bindings: ReadonlyMap<string | number, Binding<T>>,
-	): Binding<Map<string | number, Binding<T>>>;
+		bindings: ReadonlyMap<string | number, Roact.Binding<T>>,
+	): Roact.Binding<Map<string | number, Roact.Binding<T>>>;
+}
 
-	// Mounting
-
+// Mounting
+declare namespace Roact {
 	export interface Tree {
 		/** @hidden */
 		readonly _nominal_Tree: unique symbol;
@@ -124,7 +130,10 @@ declare namespace Roact {
 	 * given a handle that was returned by `Roact.mount`.
 	 */
 	export function unmount(tree: Roact.Tree): void;
+}
 
+// GlobalConfig
+declare namespace Roact {
 	export interface GlobalConfig {
 		/**
 		 * Enables type checks for Roact's public interface. This includes some of the following:
@@ -170,37 +179,17 @@ declare namespace Roact {
 	 * Call this method once at the root of your project (before mounting any Roact elements).
 	 */
 	export function setGlobalConfig(globalConfig: Partial<Roact.GlobalConfig>): void;
+}
 
-	// Utility Types
-	export type BindingFunc<T> = (newVal: T) => void;
+// Utility Types
+declare namespace Roact {
+	export type BindingFunction<T> = (newVal: T) => void;
 	export type RefPropertyOrFunction<T extends Instance> = Roact.Ref<T> | ((rbx: T) => void);
-	export interface RenderablePropsClass<P> {
-		new (props: P): {
-			render(): Element | undefined;
-		};
-	}
+	export type RenderablePropsClass<P> = ComponentConstructor<P>;
+}
 
-	// Deprecated
-	export type RoactBinding<T> = Roact.Binding<T>;
-	export type RoactBindingFunc<T> = Roact.BindingFunc<T>;
-
-	// JSX
-
-	export type JsxChild =
-		| boolean
-		| Roact.Element
-		| ReadonlyArray<Roact.Element>
-		| ReadonlyMap<string | number, Roact.Element>
-		| undefined;
-
-	export type JsxNode = Roact.JsxChild | Roact.JsxChild[];
-
-	export type JsxProps<P = {}> = P & {
-		Key?: string | number;
-		[Roact.Children]?: Roact.Children;
-		_jsx_children?: Roact.JsxNode;
-	};
-
+// JSX
+declare namespace Roact {
 	type AllowRefs<T> = T extends Instance ? Roact.Ref<T> : never;
 	type InferEnumNames<T> = T extends { EnumType: Enum.EnumType<infer U> } ? U["Name"] : never;
 	type JsxInstanceProperties<T extends Instance> = {
@@ -211,7 +200,7 @@ declare namespace Roact {
 			| Roact.Binding<T[P]>;
 	};
 
-	type JsxEvents<T extends Instance> = {
+	type JsxInstanceEvents<T extends Instance> = {
 		Event?: {
 			[K in ExtractKeys<T, RBXScriptSignal>]?: T[K] extends RBXScriptSignal<infer F>
 				? (rbx: T, ...args: Parameters<F>) => void
@@ -221,7 +210,19 @@ declare namespace Roact {
 		Ref?: Roact.RefPropertyOrFunction<T>;
 	};
 
-	export type JsxObject<T extends Instance> = Roact.JsxProps & JsxInstanceProperties<T> & JsxEvents<T>;
+	export type JsxInstance<T extends Instance> = Roact.PropsWithChildren &
+		JsxInstanceProperties<T> &
+		JsxInstanceEvents<T>;
+}
+
+// Deprecated
+declare namespace Roact {
+	/** @deprecated Use `Roact.Tree` instead. */
+	export type ComponentInstanceHandle = Roact.Tree;
+	/** @deprecated Use `Roact.Binding<T>` instead. */
+	export type RoactBinding<T> = Roact.Binding<T>;
+	/** @deprecated Use `Roact.BindingFunction<T>` instead. */
+	export type RoactBindingFunc<T> = Roact.BindingFunction<T>;
 }
 
 export = Roact;
