@@ -1,3 +1,5 @@
+/// <reference types="@rbxts/types" />
+
 interface Ref<T extends Instance = Instance> {
 	getValue(): T | undefined;
 }

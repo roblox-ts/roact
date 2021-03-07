@@ -1,3 +1,5 @@
+/// <reference types="@rbxts/types" />
+
 import Component from "./Component";
 
 /**

@@ -1,3 +1,5 @@
+/// <reference types="@rbxts/types" />
+
 import Roact from "./index";
 
 type MapBindings<T> = { [K in keyof T]: T[K] | Roact.Binding<T[K]> };

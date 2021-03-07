@@ -6,6 +6,6 @@
  * the same thing as no value at all. If a field needs to be removed from state, it can be set to `Roact.None` when
  * calling `setState`, which will ensure that the resulting state no longer contains it:
  */
-declare const None: unique symbol;
+declare const None: undefined;
 
 export = None;
