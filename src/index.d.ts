@@ -41,6 +41,9 @@ declare namespace Roact {
 	export type HostComponent = keyof CreatableInstances;
 	export type FunctionComponent<P = {}> = (props: PropsWithChildren<P>) => Roact.Element | undefined;
 	export type AnyComponent = Roact.Component | Roact.FunctionComponent | Roact.HostComponent;
+	export interface ComponentConstructor<P = {}, S = {}> {
+		new (props: P): Roact.Component<P, S>;
+	}
 
 	// Element
 
@@ -52,9 +55,8 @@ declare namespace Roact {
 
 	// Fragment
 
-	export class Fragment<P = {}, S = {}> extends Component<P, S> {
-		render(): Roact.Element | undefined;
-	}
+	export type Fragment = Roact.Element;
+	export const Fragment: Roact.ComponentConstructor<{}, {}>;
 
 	// Binding
 

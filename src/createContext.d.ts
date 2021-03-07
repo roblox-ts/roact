@@ -27,11 +27,11 @@ import Roact from "./index";
 declare function createContext<T>(
 	defaultValue: T,
 ): {
-	Provider: Roact.Component<{
+	Provider: Roact.ComponentConstructor<{
 		value: T;
 	}>;
 
-	Consumer: Roact.Component<{
+	Consumer: Roact.ComponentConstructor<{
 		render: (value: T) => Roact.Element | undefined;
 	}>;
 };

@@ -1,6 +1,7 @@
 /// <reference types="@rbxts/types" />
 
 import Component from "./Component";
+import Roact from "./index";
 
 /**
  * A component that represents a portal to a Roblox Instance. Portals are created using Roact.createElement.
@@ -11,7 +12,8 @@ import Component from "./Component";
  *
  * See the Portals guide for a small tutorial and more details about portals.
  */
-declare const Portal: Component<{ target: Instance }, {}>;
-type Portal = typeof Portal;
+declare class Portal<P = {}, S = {}> extends Component<P, S> {
+	render(): Roact.Element | undefined;
+}
 
 export = Portal;
