@@ -2,6 +2,18 @@ import Roact from "./index";
 
 type MapBindings<T> = { [K in keyof T]: T[K] | Roact.Binding<T[K]> };
 
+/**
+ * Creates a new Roact element representing the given `component`. Elements are lightweight descriptions about what a
+ * Roblox Instance should look like, like a blueprint!
+ *
+ * The `children` argument is shorthand for adding a `Roact.Children` key to `props`. It should be specified as a
+ * dictionary of names to elements.
+ *
+ * `component` can be a string, a function, or a table created by `Component:extend`.
+ *
+ * **Caution: Make sure not to modify `props` or `children` after they're passed into `createElement`!**
+ */
+
 // Class Component
 declare function createElement<P>(
 	component: { new (props: Roact.JsxProps<P>): Roact.Component<P> },
@@ -21,17 +33,17 @@ declare function createElement<P>(
 
 // Functional Component
 declare function createElement<P>(
-	component: Roact.FunctionalComponent<P>,
+	component: Roact.FunctionComponent<P>,
 	props: MapBindings<P>,
 	children?: { [childName: string]: Roact.Element },
 ): Roact.Element;
 declare function createElement<P>(
-	component: Roact.FunctionalComponent<P>,
+	component: Roact.FunctionComponent<P>,
 	props: MapBindings<P>,
 	children?: ReadonlyMap<string | number, Roact.Element>,
 ): Roact.Element;
 declare function createElement<P>(
-	component: Roact.FunctionalComponent<P>,
+	component: Roact.FunctionComponent<P>,
 	props: MapBindings<P>,
 	children?: ReadonlyArray<Roact.Element>,
 ): Roact.Element;

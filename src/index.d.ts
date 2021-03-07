@@ -1,8 +1,11 @@
 /// <reference path="./jsx.d.ts" />
 
 import Component from "./Component";
+import createContext from "./createContext";
 import createElement from "./createElement";
+import createFragment from "./createFragment";
 import createRef from "./createRef";
+import None from "./None";
 import oneChild from "./oneChild";
 import Change from "./PropMarkers/Change";
 import Children from "./PropMarkers/Children";
@@ -11,19 +14,32 @@ import Ref from "./PropMarkers/Ref";
 import PureComponent from "./PureComponent";
 
 declare namespace Roact {
-	export { Component, createElement, createRef, oneChild, Change, Children, Event, Ref, PureComponent };
+	export {
+		Component,
+		createElement,
+		createFragment,
+		oneChild,
+		PureComponent,
+		None,
+		createRef,
+		createContext,
+		Change,
+		Children,
+		Event,
+		Ref,
+	};
 
 	// Props
 
 	export type PropsWithChildren<P = {}> = P & { [Roact.Children]?: Roact.Children };
 
-	// Components
+	// Component
 
 	export type HostComponent = keyof CreatableInstances;
-	export type FunctionalComponent<P = {}> = (props: PropsWithChildren<P>) => Roact.Element | undefined;
-	export type AnyComponent = Roact.Component | Roact.FunctionalComponent | Roact.HostComponent;
+	export type FunctionComponent<P = {}> = (props: PropsWithChildren<P>) => Roact.Element | undefined;
+	export type AnyComponent = Roact.Component | Roact.FunctionComponent | Roact.HostComponent;
 
-	// Elements
+	// Element
 
 	export interface Element {
 		component: defined;
@@ -31,17 +47,17 @@ declare namespace Roact {
 		source?: string;
 	}
 
-	// Fragments
+	// Fragment
 
-	export interface Fragment {}
+	export const Fragment: Roact.Component<{}, {}>;
+	export type Fragment = typeof Roact.Fragment;
 
-	// Portals
+	// Portal
 
-	export class Portal extends Roact.Component<{ target: Instance }, {}> {
-		public render(): Roact.Element;
-	}
+	export const Portal: Roact.Component<{ target: Instance }, {}>;
+	export type Portal = typeof Roact.Portal;
 
-	// Bindings
+	// Binding
 
 	export interface Binding<T> {
 		/**
@@ -57,8 +73,16 @@ declare namespace Roact {
 		map<U>(predicate: (value: T) => U): Binding<U>;
 	}
 
+	/**
+	 * The first value returned is a `Binding` object, which will typically be passed as a prop to a Roact host
+	 * component. The second is a function that can be called with a new value to update the binding.
+	 */
 	export function createBinding<T>(initialValue: T): LuaTuple<[Roact.Binding<T>, (newValue: T) => void]>;
 
+	/**
+	 * Combines multiple bindings into a single binding. The new binding's value will have the same keys as the input
+	 * table of bindings.
+	 */
 	export function joinBindings<T extends { [index: string]: Binding<U> }, U>(
 		bindings: T,
 	): Binding<{ [K in keyof T]: T[K] extends Binding<infer V> ? V : never }>;
@@ -67,9 +91,6 @@ declare namespace Roact {
 		bindings: ReadonlyMap<string | number, Binding<T>>,
 	): Binding<Map<string | number, Binding<T>>>;
 
-	export type BindingFunc<T> = (newVal: T) => void;
-	export type RefPropertyOrFunction<T extends Instance> = Ref<T> | ((rbx: T) => void);
-
 	// Mounting
 
 	export interface Tree {
@@ -77,10 +98,30 @@ declare namespace Roact {
 		readonly _nominal_Tree: unique symbol;
 	}
 
+	/**
+	 * Creates a Roblox Instance given a Roact element, and optionally a `parent` to put it in, and a `key` to use as
+	 * the instance's `Name`.
+	 *
+	 * The result is a `RoactTree`, which is an opaque handle that represents a tree of components owned by Roact. You
+	 * can pass this to APIs like `Roact.unmount`. It'll also be used for future debugging APIs.
+	 */
 	export function mount(element: Roact.Element, parent?: Instance, key?: string): Roact.Tree;
 
+	/**
+	 * Updates an existing instance handle with a new element, returning a new handle. This can be used to update a UI
+	 * created with `Roact.mount` by passing in a new element with new props.
+	 *
+	 * `update` can be used to change the props of a component instance created with `mount` and is useful for putting
+	 * Roact content into non-Roact applications.
+	 *
+	 * As of Roact 1.0, the returned `RoactTree` object will always be the same value as the one passed in.
+	 */
 	export function update(tree: Roact.Tree, element: Roact.Element): Roact.Tree;
 
+	/**
+	 * Destroys the given `RoactTree` and all of its descendants. Does not operate on a Roblox Instance -- this must be
+	 * given a handle that was returned by `Roact.mount`.
+	 */
 	export function unmount(tree: Roact.Tree): void;
 
 	export interface GlobalConfig {
@@ -129,42 +170,48 @@ declare namespace Roact {
 	 */
 	export function setGlobalConfig(globalConfig: Partial<Roact.GlobalConfig>): void;
 
+	// Utility Types
+	export type BindingFunc<T> = (newVal: T) => void;
+	export type RefPropertyOrFunction<T extends Instance> = Roact.Ref<T> | ((rbx: T) => void);
+
 	// JSX
-	export type JsxRoactChild =
+
+	export type JsxChild =
 		| boolean
 		| Roact.Element
 		| ReadonlyArray<Roact.Element>
 		| ReadonlyMap<string | number, Roact.Element>
 		| undefined;
 
-	export type RoactNode = Roact.JsxRoactChild | Roact.JsxRoactChild[];
+	export type JsxNode = Roact.JsxChild | Roact.JsxChild[];
 
 	export type JsxProps<P = {}> = P & {
 		Key?: string | number;
 		[Roact.Children]?: Roact.Children;
-		_jsx_children?: Roact.RoactNode;
+		_jsx_children?: Roact.JsxNode;
 	};
 
 	type AllowRefs<T> = T extends Instance ? Roact.Ref<T> : never;
-
 	type InferEnumNames<T> = T extends { EnumType: Enum.EnumType<infer U> } ? U["Name"] : never;
-
-	type PickWithBindingsAndRefs<T extends Instance, K extends keyof T> = {
-		[P in K]: T[P] | InferEnumNames<T[P]> | Roact.Binding<T[P]> | AllowRefs<T[P]>;
+	type JsxInstanceProperties<T extends Instance> = {
+		[P in Exclude<WritablePropertyNames<T>, "Parent" | "Name">]?:
+			| T[P]
+			| AllowRefs<T[P]>
+			| InferEnumNames<T[P]>
+			| Roact.Binding<T[P]>;
 	};
 
-	export type JsxObject<T extends Instance> = Partial<
-		PickWithBindingsAndRefs<T, Exclude<WritablePropertyNames<T>, "Parent" | "Name">>
-	> &
-		Roact.JsxProps & {
-			Event?: {
-				[K in ExtractKeys<T, RBXScriptSignal>]?: T[K] extends RBXScriptSignal<infer F>
-					? (rbx: T, ...args: Parameters<F>) => void
-					: never;
-			};
-			Change?: { [key in InstancePropertyNames<T>]?: (rbx: T) => void };
-			Ref?: Roact.Ref<T> | ((rbx: T) => void);
+	type JsxEvents<T extends Instance> = {
+		Event?: {
+			[K in ExtractKeys<T, RBXScriptSignal>]?: T[K] extends RBXScriptSignal<infer F>
+				? (rbx: T, ...args: Parameters<F>) => void
+				: never;
 		};
+		Change?: { [key in InstancePropertyNames<T>]?: (rbx: T) => void };
+		Ref?: Roact.RefPropertyOrFunction<T>;
+	};
+
+	export type JsxObject<T extends Instance> = Roact.JsxProps & JsxInstanceProperties<T> & JsxEvents<T>;
 }
 
 export = Roact;
