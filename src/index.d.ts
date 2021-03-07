@@ -7,6 +7,7 @@ import createFragment from "./createFragment";
 import createRef from "./createRef";
 import None from "./None";
 import oneChild from "./oneChild";
+import Portal from "./Portal";
 import Change from "./PropMarkers/Change";
 import Children from "./PropMarkers/Children";
 import Event from "./PropMarkers/Event";
@@ -15,17 +16,18 @@ import PureComponent from "./PureComponent";
 
 declare namespace Roact {
 	export {
-		Component,
-		createElement,
-		createFragment,
-		oneChild,
-		PureComponent,
-		None,
-		createRef,
-		createContext,
 		Change,
 		Children,
+		Component,
+		createContext,
+		createElement,
+		createFragment,
+		createRef,
 		Event,
+		None,
+		oneChild,
+		Portal,
+		PureComponent,
 		Ref,
 	};
 
@@ -51,11 +53,6 @@ declare namespace Roact {
 
 	export const Fragment: Roact.Component<{}, {}>;
 	export type Fragment = typeof Roact.Fragment;
-
-	// Portal
-
-	export const Portal: Roact.Component<{ target: Instance }, {}>;
-	export type Portal = typeof Roact.Portal;
 
 	// Binding
 
@@ -190,28 +187,6 @@ declare namespace Roact {
 		[Roact.Children]?: Roact.Children;
 		_jsx_children?: Roact.JsxNode;
 	};
-
-	type AllowRefs<T> = T extends Instance ? Roact.Ref<T> : never;
-	type InferEnumNames<T> = T extends { EnumType: Enum.EnumType<infer U> } ? U["Name"] : never;
-	type JsxInstanceProperties<T extends Instance> = {
-		[P in Exclude<WritablePropertyNames<T>, "Parent" | "Name">]?:
-			| T[P]
-			| AllowRefs<T[P]>
-			| InferEnumNames<T[P]>
-			| Roact.Binding<T[P]>;
-	};
-
-	type JsxEvents<T extends Instance> = {
-		Event?: {
-			[K in ExtractKeys<T, RBXScriptSignal>]?: T[K] extends RBXScriptSignal<infer F>
-				? (rbx: T, ...args: Parameters<F>) => void
-				: never;
-		};
-		Change?: { [key in InstancePropertyNames<T>]?: (rbx: T) => void };
-		Ref?: Roact.RefPropertyOrFunction<T>;
-	};
-
-	export type JsxObject<T extends Instance> = Roact.JsxProps & JsxInstanceProperties<T> & JsxEvents<T>;
 }
 
 export = Roact;

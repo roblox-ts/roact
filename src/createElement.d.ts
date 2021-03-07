@@ -11,7 +11,7 @@ type MapBindings<T> = { [K in keyof T]: T[K] | Roact.Binding<T[K]> };
  *
  * `component` can be a string, a function, or a table created by `Component:extend`.
  *
- * **Caution: Make sure not to modify `props` or `children` after they're passed into `createElement`!**
+ * **Caution:** Make sure not to modify `props` or `children` after they're passed into `createElement`!
  */
 
 // Class Component
