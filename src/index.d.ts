@@ -39,7 +39,7 @@ declare namespace Roact {
 // Component
 declare namespace Roact {
 	export type HostComponent = keyof CreatableInstances;
-	export type FunctionComponent<P = {}> = (props: Roact.PropsWithChildren<P>) => Roact.Element | undefined;
+	export type FunctionComponent<P = {}> = (props: Roact.PropsWithChildren<P>) => Roact.Element;
 	export type AnyComponent = Roact.Component | Roact.FunctionComponent | Roact.HostComponent;
 	export interface ComponentConstructor<P = {}, S = {}> {
 		new (props: P): Roact.Component<P, S>;
