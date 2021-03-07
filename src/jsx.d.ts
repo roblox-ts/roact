@@ -40,30 +40,32 @@ declare global {
 
 		type LibraryManagedAttributes<C, P> = C extends { defaultProps: infer D } ? Defaultize<P, D> : P;
 
+		type IntrinsicElement<T extends Instance> = Roact.JsxInstance<T> & IntrinsicAttributes;
+
 		interface IntrinsicElements {
-			billboardgui: Roact.JsxInstanceProps<BillboardGui>;
-			camera: Roact.JsxInstanceProps<Camera>;
-			frame: Roact.JsxInstanceProps<Frame>;
-			imagebutton: Roact.JsxInstanceProps<ImageButton>;
-			imagelabel: Roact.JsxInstanceProps<ImageLabel>;
-			screengui: Roact.JsxInstanceProps<ScreenGui>;
-			scrollingframe: Roact.JsxInstanceProps<ScrollingFrame>;
-			surfacegui: Roact.JsxInstanceProps<SurfaceGui>;
-			textbox: Roact.JsxInstanceProps<TextBox>;
-			textbutton: Roact.JsxInstanceProps<TextButton>;
-			textlabel: Roact.JsxInstanceProps<TextLabel>;
-			uiaspectratioconstraint: Roact.JsxInstanceProps<UIAspectRatioConstraint>;
-			uicorner: Roact.JsxInstanceProps<UICorner>;
-			uigradient: Roact.JsxInstanceProps<UIGradient>;
-			uigridlayout: Roact.JsxInstanceProps<UIGridLayout>;
-			uilistlayout: Roact.JsxInstanceProps<UIListLayout>;
-			uipadding: Roact.JsxInstanceProps<UIPadding>;
-			uipagelayout: Roact.JsxInstanceProps<UIPageLayout>;
-			uiscale: Roact.JsxInstanceProps<UIScale>;
-			uisizeconstraint: Roact.JsxInstanceProps<UISizeConstraint>;
-			uitablelayout: Roact.JsxInstanceProps<UITableLayout>;
-			uitextsizeconstraint: Roact.JsxInstanceProps<UITextSizeConstraint>;
-			viewportframe: Roact.JsxInstanceProps<ViewportFrame>;
+			billboardgui: IntrinsicElement<BillboardGui>;
+			camera: IntrinsicElement<Camera>;
+			frame: IntrinsicElement<Frame>;
+			imagebutton: IntrinsicElement<ImageButton>;
+			imagelabel: IntrinsicElement<ImageLabel>;
+			screengui: IntrinsicElement<ScreenGui>;
+			scrollingframe: IntrinsicElement<ScrollingFrame>;
+			surfacegui: IntrinsicElement<SurfaceGui>;
+			textbox: IntrinsicElement<TextBox>;
+			textbutton: IntrinsicElement<TextButton>;
+			textlabel: IntrinsicElement<TextLabel>;
+			uiaspectratioconstraint: IntrinsicElement<UIAspectRatioConstraint>;
+			uicorner: IntrinsicElement<UICorner>;
+			uigradient: IntrinsicElement<UIGradient>;
+			uigridlayout: IntrinsicElement<UIGridLayout>;
+			uilistlayout: IntrinsicElement<UIListLayout>;
+			uipadding: IntrinsicElement<UIPadding>;
+			uipagelayout: IntrinsicElement<UIPageLayout>;
+			uiscale: IntrinsicElement<UIScale>;
+			uisizeconstraint: IntrinsicElement<UISizeConstraint>;
+			uitablelayout: IntrinsicElement<UITableLayout>;
+			uitextsizeconstraint: IntrinsicElement<UITextSizeConstraint>;
+			viewportframe: IntrinsicElement<ViewportFrame>;
 		}
 	}
 }

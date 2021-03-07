@@ -18,17 +18,17 @@ type MapBindings<T> = { [K in keyof T]: T[K] | Roact.Binding<T[K]> };
 
 // Class Component
 declare function createElement<P>(
-	component: { new (props: Roact.JsxProps<P>): Roact.Component<P> },
+	component: Roact.ComponentConstructor<P>,
 	props?: MapBindings<P>,
 	children?: { [childName: string]: Roact.Element },
 ): Roact.Element;
 declare function createElement<P>(
-	component: { new (props: Roact.JsxProps<P>): Roact.Component<P> },
+	component: Roact.ComponentConstructor<P>,
 	props?: MapBindings<P>,
 	children?: ReadonlyMap<string | number, Roact.Element>,
 ): Roact.Element;
 declare function createElement<P>(
-	component: { new (props: Roact.JsxProps<P>): Roact.Component<P> },
+	component: Roact.ComponentConstructor<P>,
 	props?: MapBindings<P>,
 	children?: ReadonlyArray<Roact.Element>,
 ): Roact.Element;

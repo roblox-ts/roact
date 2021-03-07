@@ -8,7 +8,6 @@ import createFragment from "./createFragment";
 import createRef from "./createRef";
 import None from "./None";
 import oneChild from "./oneChild";
-import Portal from "./Portal";
 import Change from "./PropMarkers/Change";
 import Children from "./PropMarkers/Children";
 import Event from "./PropMarkers/Event";
@@ -17,19 +16,18 @@ import PureComponent from "./PureComponent";
 
 declare namespace Roact {
 	export {
-		Change,
-		Children,
 		Component,
 		createContext,
 		createElement,
 		createFragment,
 		createRef,
-		Event,
 		None,
 		oneChild,
-		Portal,
-		PureComponent,
+		Change,
+		Children,
+		Event,
 		Ref,
+		PureComponent,
 	};
 }
 
@@ -61,6 +59,21 @@ declare namespace Roact {
 declare namespace Roact {
 	export type Fragment = Roact.Element;
 	export const Fragment: Roact.ComponentConstructor<{}, {}>;
+}
+
+// Portal
+declare namespace Roact {
+	/**
+	 * A component that represents a portal to a Roblox Instance. Portals are created using Roact.createElement.
+	 *
+	 * Any children of a portal are put inside the Roblox Instance specified by the required target prop. That Roblox Instance should not be one created by Roact.
+	 *
+	 * Portals are useful for creating dialogs managed by deeply-nested UI components, and enable Roact to represent and manage multiple disjoint trees at once.
+	 *
+	 * See the Portals guide for a small tutorial and more details about portals.
+	 */
+	export const Portal: Roact.ComponentConstructor<{ target: Instance }>;
+	export type Portal = typeof Portal;
 }
 
 // Binding
@@ -185,7 +198,11 @@ declare namespace Roact {
 declare namespace Roact {
 	export type BindingFunction<T> = (newVal: T) => void;
 	export type RefPropertyOrFunction<T extends Instance> = Roact.Ref<T> | ((rbx: T) => void);
-	export type RenderablePropsClass<P> = ComponentConstructor<P>;
+	export interface RenderablePropsClass<P> {
+		new (props: P): {
+			render(): Element | undefined;
+		};
+	}
 }
 
 // JSX
@@ -223,6 +240,8 @@ declare namespace Roact {
 	export type RoactBinding<T> = Roact.Binding<T>;
 	/** @deprecated Use `Roact.BindingFunction<T>` instead. */
 	export type RoactBindingFunc<T> = Roact.BindingFunction<T>;
+	/** @deprecated Use `Roact.JsxInstance<T>` instead. */
+	export type JsxObject<T extends Instance> = Roact.JsxInstance<T>;
 }
 
 export = Roact;
