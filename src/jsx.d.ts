@@ -63,6 +63,7 @@ declare global {
 			uipagelayout: IntrinsicElement<UIPageLayout>;
 			uiscale: IntrinsicElement<UIScale>;
 			uisizeconstraint: IntrinsicElement<UISizeConstraint>;
+			uistroke: IntrinsicElement<UIStroke>;
 			uitablelayout: IntrinsicElement<UITableLayout>;
 			uitextsizeconstraint: IntrinsicElement<UITextSizeConstraint>;
 			viewportframe: IntrinsicElement<ViewportFrame>;
