@@ -1,9 +1,9 @@
 {
 	"name": "@rbxts/roact",
-	"version": "1.3.0-ts.10",
+	"version": "1.3.0-ts.12",
 	"description": "TypeScript support for Roact",
-	"main": "./roact/src/init.lua",
-	"typings": "index.d.ts",
+	"main": "src/init.lua",
+	"typings": "src/index.d.ts",
 	"scripts": {},
 	"keywords": [
 		"roblox",
@@ -24,8 +24,11 @@
 		}
 	],
 	"devDependencies": {
-		"@rbxts/compiler-types": "^1.0.0-beta.13.1",
-		"@rbxts/types": "^1.0.438"
+		"@rbxts/compiler-types": "^1.0.0-types.0",
+		"@rbxts/types": "^1.0.459"
 	},
-	"dependencies": {}
+	"dependencies": {},
+	"files": [
+		"src"
+	]
 }
