@@ -29,6 +29,7 @@
 	},
 	"dependencies": {},
 	"files": [
-		"src"
+		"src",
+		"!src/test.tsx"
 	]
 }
