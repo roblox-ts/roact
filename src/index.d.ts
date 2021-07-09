@@ -6,6 +6,7 @@ import createContext from "./createContext";
 import createElement from "./createElement";
 import createFragment from "./createFragment";
 import createRef from "./createRef";
+import forwardRef from "./forwardRef";
 import None from "./None";
 import oneChild from "./oneChild";
 import Change from "./PropMarkers/Change";
@@ -21,6 +22,7 @@ declare namespace Roact {
 		createElement,
 		createFragment,
 		createRef,
+		forwardRef,
 		None,
 		oneChild,
 		Change,
