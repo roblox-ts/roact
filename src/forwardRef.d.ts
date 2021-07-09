@@ -7,6 +7,8 @@ import Roact from "./index";
    allowing a ref to be forwarded to an underlying host component
    via [Roact.Ref](https://roblox.github.io/roact/api-reference/#roactref).
  */
-declare function forwardRef<P = {}>(render: (props: P, ref: Roact.Ref) => Roact.Element): Roact.Component<P & { ref: Roact.Ref }>;
+declare function forwardRef<P = {}, I extends Instance = Instance>(
+        render: (props: P, ref: Roact.Ref<I>) => Roact.Element
+): Roact.Component<P & { ref: Roact.Ref<I> }>;
 
 export = forwardRef;
