@@ -209,7 +209,8 @@ declare namespace Roact {
 declare namespace Roact {
 	type AllowRefs<T> = T extends Instance ? Roact.Ref<T> : never;
 	type InferEnumNames<T> = T extends { EnumType: Enum.EnumType<infer U> } ? U["Name"] : never;
-	type JsxInstanceProperties<T extends Instance> = {
+
+	export type JsxInstanceProperties<T extends Instance> = {
 		[P in Exclude<WritablePropertyNames<T>, "Parent" | "Name">]?:
 			| T[P]
 			| AllowRefs<T[P]>
@@ -217,19 +218,20 @@ declare namespace Roact {
 			| Roact.Binding<T[P]>;
 	};
 
-	type JsxInstanceEvents<T extends Instance> = {
-		Event?: {
-			[K in ExtractKeys<T, RBXScriptSignal>]?: T[K] extends RBXScriptSignal<infer F>
-				? (rbx: T, ...args: Parameters<F>) => void
-				: never;
-		};
-		Change?: { [key in InstancePropertyNames<T>]?: (rbx: T) => void };
-		Ref?: Roact.RefPropertyOrFunction<T>;
+	export type JsxInstanceEvents<T extends Instance> = {
+		[K in ExtractKeys<T, RBXScriptSignal>]?: T[K] extends RBXScriptSignal<infer F>
+			? (rbx: T, ...args: Parameters<F>) => void
+			: never;
 	};
 
+	export type JsxInstanceChangeEvents<T extends Instance> = { [key in InstancePropertyNames<T>]?: (rbx: T) => void };
+
 	export type JsxInstance<T extends Instance> = Roact.PropsWithChildren &
-		JsxInstanceProperties<T> &
-		JsxInstanceEvents<T>;
+		JsxInstanceProperties<T> & {
+			Event?: Roact.JsxInstanceEvents<T>;
+			Change?: Roact.JsxInstanceChangeEvents<T>;
+			Ref?: Roact.RefPropertyOrFunction<T>;
+		};
 }
 
 // Deprecated
