@@ -8,7 +8,7 @@ import Roact from "./index";
    via [Roact.Ref](https://roblox.github.io/roact/api-reference/#roactref).
  */
 declare function forwardRef<P = {}, I extends Instance = Instance>(
-        render: (props: P, ref: Roact.Ref<I>) => Roact.Element
-): Roact.Component<P & { forwardedRef: Roact.Ref<I> }>;
+	render: (props: P, ref: Roact.Ref<I>) => Roact.Element,
+): Roact.Component<P>;
 
 export = forwardRef;
