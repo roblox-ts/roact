@@ -6,8 +6,8 @@ import Roact from "./index";
  *
  * **Caution:** Make sure not to modify `elements` after they're passed into `createFragment`!
  */
-declare function createFragment(elements: { [elementName: string]: Roact.Element }): Roact.Fragment;
-declare function createFragment(elements: ReadonlyMap<string | number, Roact.Element>): Roact.Fragment;
-declare function createFragment(elements: ReadonlyArray<Roact.Element>): Roact.Fragment;
+declare function createFragment(elements?: { [elementName: string]: Roact.Element }): Roact.Fragment;
+declare function createFragment(elements?: ReadonlyMap<string | number, Roact.Element>): Roact.Fragment;
+declare function createFragment(elements?: ReadonlyArray<Roact.Element>): Roact.Fragment;
 
 export = createFragment;
