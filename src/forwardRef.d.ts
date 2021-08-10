@@ -9,6 +9,6 @@ import Roact from "./index";
  */
 declare function forwardRef<P = {}, I extends Instance = Instance>(
 	render: (props: P, ref: Roact.Ref<I>) => Roact.Element,
-): Roact.Component<P>;
+): Roact.ComponentConstructor<P>;
 
 export = forwardRef;
