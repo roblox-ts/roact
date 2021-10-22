@@ -2,7 +2,6 @@
 	Centralized place to handle logging. Lets us:
 	- Unit test log output via `Logging.capture`
 	- Disable verbose log messages when not debugging Roact
-
 	This should be broken out into a separate library with the addition of
 	scoping and logging configuration.
 ]]
@@ -48,7 +47,7 @@ local logInfoMetatable = {}
 	more easily.
 ]]
 function logInfoMetatable:__tostring()
-	local outputBuffer = {"LogInfo {"}
+	local outputBuffer = { "LogInfo {" }
 
 	local errorCount = #self.errors
 	local warningCount = #self.warnings
@@ -97,7 +96,6 @@ local Logging = {}
 
 --[[
 	Invokes `callback`, capturing all output that happens during its execution.
-
 	Output will not go to stdout or stderr and will instead be put into a
 	LogInfo object that is returned. If `callback` throws, the error will be
 	bubbled up to the caller of `Logging.capture`.
@@ -140,7 +138,6 @@ end
 
 --[[
 	Issues a warning like `Logging.warn`, but only outputs once per call site.
-
 	This is useful for marking deprecated functions that might be called a lot;
 	using `warnOnce` instead of `warn` will reduce output noise while still
 	correctly marking all call sites.

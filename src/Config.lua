@@ -1,12 +1,9 @@
 --[[
 	Exposes an interface to set global configuration values for Roact.
-
 	Configuration can only occur once, and should only be done by an application
 	using Roact, not a library.
-
 	Any keys that aren't recognized will cause errors. Configuration is only
 	intended for configuring Roact itself, not extensions or libraries.
-
 	Configuration is expected to be set immediately after loading Roact. Setting
 	configuration values after an application starts may produce unpredictable
 	behavior.
@@ -41,15 +38,13 @@ function Config.new()
 
 	self._currentConfig = setmetatable({}, {
 		__index = function(_, key)
-			local message = (
-				"Invalid global configuration key %q. Valid configuration keys are: %s"
-			):format(
+			local message = ("Invalid global configuration key %q. Valid configuration keys are: %s"):format(
 				tostring(key),
 				table.concat(defaultConfigKeys, ", ")
 			)
 
 			error(message, 3)
-		end
+		end,
 	})
 
 	-- We manually bind these methods here so that the Config's methods can be
@@ -77,9 +72,7 @@ function Config:set(configValues)
 	-- We only want to apply this configuration if it's valid!
 	for key, value in pairs(configValues) do
 		if defaultConfig[key] == nil then
-			local message = (
-				"Invalid global configuration key %q (type %s). Valid configuration keys are: %s"
-			):format(
+			local message = ("Invalid global configuration key %q (type %s). Valid configuration keys are: %s"):format(
 				tostring(key),
 				typeof(key),
 				table.concat(defaultConfigKeys, ", ")
@@ -92,11 +85,7 @@ function Config:set(configValues)
 		if typeof(value) ~= "boolean" then
 			local message = (
 				"Invalid value %q (type %s) for global configuration key %q. Valid values are: true, false"
-			):format(
-				tostring(value),
-				typeof(value),
-				tostring(key)
-			)
+			):format(tostring(value), typeof(value), tostring(key))
 
 			error(message, 3)
 		end

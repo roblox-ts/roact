@@ -1,14 +1,10 @@
 --[[
 	This is a simple signal implementation that has a dead-simple API.
-
 		local signal = createSignal()
-
 		local disconnect = signal:subscribe(function(foo)
 			print("Cool foo:", foo)
 		end)
-
 		signal:fire("something")
-
 		disconnect()
 ]]
 
@@ -17,7 +13,7 @@ local function createSignal()
 	local suspendedConnections = {}
 	local firing = false
 
-	local function subscribe(self, callback)
+	local function subscribe(_self, callback)
 		assert(typeof(callback) == "function", "Can only subscribe to signals with a function.")
 
 		local connection = {
@@ -44,7 +40,7 @@ local function createSignal()
 		return disconnect
 	end
 
-	local function fire(self, ...)
+	local function fire(_self, ...)
 		firing = true
 		for callback, connection in pairs(connections) do
 			if not connection.disconnected and not suspendedConnections[callback] then

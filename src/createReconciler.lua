@@ -1,3 +1,4 @@
+--!nonstrict
 local Type = require(script.Parent.Type)
 local ElementKind = require(script.Parent.ElementKind)
 local ElementUtils = require(script.Parent.ElementUtils)
@@ -12,11 +13,9 @@ local InternalData = Symbol.named("InternalData")
 --[[
 	The reconciler is the mechanism in Roact that constructs the virtual tree
 	that later gets turned into concrete objects by the renderer.
-
 	Roact's reconciler is constructed with the renderer as an argument, which
 	enables switching to different renderers for different platforms or
 	scenarios.
-
 	When testing the reconciler itself, it's common to use `NoopRenderer` with
 	spies replacing some methods. The default (and only) reconciler interface
 	exposed by Roact right now uses `RobloxRenderer`.
@@ -30,7 +29,6 @@ local function createReconciler(renderer)
 	--[[
 		Unmount the given virtualNode, replacing it with a new node described by
 		the given element.
-
 		Preserves host properties, depth, and legacyContext from parent.
 	]]
 	local function replaceVirtualNode(virtualNode, newElement)
@@ -45,7 +43,16 @@ local function createReconciler(renderer)
 		local context = virtualNode.originalContext or virtualNode.context
 		local parentLegacyContext = virtualNode.parentLegacyContext
 
-		unmountVirtualNode(virtualNode)
+		if config.tempFixUpdateChildrenReEntrancy then
+			-- If updating this node has caused a component higher up the tree to re-render
+			-- and updateChildren to be re-entered then this node could already have been
+			-- unmounted in the previous updateChildren pass.
+			if not virtualNode.wasUnmounted then
+				unmountVirtualNode(virtualNode)
+			end
+		else
+			unmountVirtualNode(virtualNode)
+		end
 		local newNode = mountVirtualNode(newElement, hostParent, hostKey, context, parentLegacyContext)
 
 		-- mountVirtualNode can return nil if the element is a boolean
@@ -66,12 +73,28 @@ local function createReconciler(renderer)
 			internalAssert(Type.of(virtualNode) == Type.VirtualNode, "Expected arg #1 to be of type VirtualNode")
 		end
 
+		virtualNode.updateChildrenCount = virtualNode.updateChildrenCount + 1
+
+		local currentUpdateChildrenCount = virtualNode.updateChildrenCount
+
 		local removeKeys = {}
 
 		-- Changed or removed children
 		for childKey, childNode in pairs(virtualNode.children) do
 			local newElement = ElementUtils.getElementByKey(newChildElements, childKey)
 			local newNode = updateVirtualNode(childNode, newElement)
+
+			-- If updating this node has caused a component higher up the tree to re-render
+			-- and updateChildren to be re-entered for this virtualNode then
+			-- this result is invalid and needs to be disgarded.
+			if config.tempFixUpdateChildrenReEntrancy then
+				if virtualNode.updateChildrenCount ~= currentUpdateChildrenCount then
+					if newNode and newNode ~= virtualNode.children[childKey] then
+						unmountVirtualNode(newNode)
+					end
+					return
+				end
+			end
 
 			if newNode ~= nil then
 				virtualNode.children[childKey] = newNode
@@ -100,6 +123,18 @@ local function createReconciler(renderer)
 					virtualNode.legacyContext
 				)
 
+				-- If updating this node has caused a component higher up the tree to re-render
+				-- and updateChildren to be re-entered for this virtualNode then
+				-- this result is invalid and needs to be discarded.
+				if config.tempFixUpdateChildrenReEntrancy then
+					if virtualNode.updateChildrenCount ~= currentUpdateChildrenCount then
+						if childNode then
+							unmountVirtualNode(childNode)
+						end
+						return
+					end
+				end
+
 				-- mountVirtualNode can return nil if the element is a boolean
 				if childNode ~= nil then
 					childNode.depth = virtualNode.depth + 1
@@ -115,16 +150,16 @@ local function createReconciler(renderer)
 	end
 
 	local function updateVirtualNodeWithRenderResult(virtualNode, hostParent, renderResult)
-		if Type.of(renderResult) == Type.Element
-			or renderResult == nil
-			or typeof(renderResult) == "boolean"
-		then
+		if Type.of(renderResult) == Type.Element or renderResult == nil or typeof(renderResult) == "boolean" then
 			updateChildren(virtualNode, hostParent, renderResult)
 		else
-			error(("%s\n%s"):format(
-				"Component returned invalid children:",
-				virtualNode.currentElement.source or "<enable element tracebacks>"
-			), 0)
+			error(
+				("%s\n%s"):format(
+					"Component returned invalid children:",
+					virtualNode.currentElement.source or "<enable element tracebacks>"
+				),
+				0
+			)
 		end
 	end
 
@@ -136,8 +171,11 @@ local function createReconciler(renderer)
 			internalAssert(Type.of(virtualNode) == Type.VirtualNode, "Expected arg #1 to be of type VirtualNode")
 		end
 
+		virtualNode.wasUnmounted = true
+
 		local kind = ElementKind.of(virtualNode.currentElement)
 
+		-- selene: allow(if_same_then_else)
 		if kind == ElementKind.Host then
 			renderer.unmountHostNode(reconciler, virtualNode)
 		elseif kind == ElementKind.Function then
@@ -195,11 +233,9 @@ local function createReconciler(renderer)
 	--[[
 		Update the given virtual node using a new element describing what it
 		should transform into.
-
 		`updateVirtualNode` will return a new virtual node that should replace
 		the passed in virtual node. This is because a virtual node can be
 		updated with an element referencing a different component!
-
 		In that case, `updateVirtualNode` will unmount the input virtual node,
 		mount a new virtual node, and return it in this case, while also issuing
 		a warning to the user.
@@ -263,7 +299,10 @@ local function createReconciler(renderer)
 	]]
 	local function createVirtualNode(element, hostParent, hostKey, context, legacyContext)
 		if config.internalTypeChecks then
-			internalAssert(renderer.isHostObject(hostParent) or hostParent == nil, "Expected arg #2 to be a host object")
+			internalAssert(
+				renderer.isHostObject(hostParent) or hostParent == nil,
+				"Expected arg #2 to be a host object"
+			)
 			internalAssert(typeof(context) == "table" or context == nil, "Expected arg #4 to be of type table or nil")
 			internalAssert(
 				typeof(legacyContext) == "table" or legacyContext == nil,
@@ -286,6 +325,8 @@ local function createReconciler(renderer)
 			children = {},
 			hostParent = hostParent,
 			hostKey = hostKey,
+			updateChildrenCount = 0,
+			wasUnmounted = false,
 
 			-- Legacy Context API
 			-- A table of context values inherited from the parent node
@@ -336,7 +377,10 @@ local function createReconciler(renderer)
 	]]
 	function mountVirtualNode(element, hostParent, hostKey, context, legacyContext)
 		if config.internalTypeChecks then
-			internalAssert(renderer.isHostObject(hostParent) or hostParent == nil, "Expected arg #2 to be a host object")
+			internalAssert(
+				renderer.isHostObject(hostParent) or hostParent == nil,
+				"Expected arg #2 to be a host object"
+			)
 			internalAssert(
 				typeof(legacyContext) == "table" or legacyContext == nil,
 				"Expected arg #5 to be of type table or nil"
@@ -407,7 +451,6 @@ local function createReconciler(renderer)
 
 	--[[
 		Unmounts the virtual tree, freeing all of its resources.
-
 		No further operations should be done on the tree after it's been
 		unmounted, as indicated by its the `mounted` field.
 	]]
@@ -441,28 +484,6 @@ local function createReconciler(renderer)
 		return tree
 	end
 
-	local function suspendParentEvents(virtualNode)
-		local parentNode = virtualNode.parent
-		while parentNode do
-			if parentNode.eventManager ~= nil then
-				parentNode.eventManager:suspend()
-			end
-
-			parentNode = parentNode.parent
-		end
-	end
-
-	local function resumeParentEvents(virtualNode)
-		local parentNode = virtualNode.parent
-		while parentNode do
-			if parentNode.eventManager ~= nil then
-				parentNode.eventManager:resume()
-			end
-
-			parentNode = parentNode.parent
-		end
-	end
-
 	reconciler = {
 		mountVirtualTree = mountVirtualTree,
 		unmountVirtualTree = unmountVirtualTree,
@@ -474,9 +495,6 @@ local function createReconciler(renderer)
 		updateVirtualNode = updateVirtualNode,
 		updateVirtualNodeWithChildren = updateVirtualNodeWithChildren,
 		updateVirtualNodeWithRenderResult = updateVirtualNodeWithRenderResult,
-
-		suspendParentEvents = suspendParentEvents,
-		resumeParentEvents = resumeParentEvents,
 	}
 
 	return reconciler
