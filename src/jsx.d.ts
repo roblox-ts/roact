@@ -45,6 +45,7 @@ declare global {
 		interface IntrinsicElements {
 			billboardgui: IntrinsicElement<BillboardGui>;
 			camera: IntrinsicElement<Camera>;
+			canvasgroup: IntrinsicElement<CanvasGroup>;
 			frame: IntrinsicElement<Frame>;
 			imagebutton: IntrinsicElement<ImageButton>;
 			imagelabel: IntrinsicElement<ImageLabel>;
