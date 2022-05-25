@@ -1,5 +1,5 @@
 <div align="center"><img src="https://australis.dev/roact-tsx.png?v=3"/></div>
-<h1 align="center">Roact-TS</h1>
+<h1 align="center">@rbxts/roact</h1>
 <div align="center">
 	<a href="https://roblox.github.io/roact">
 		<img src="https://img.shields.io/badge/docs-lua-purple.svg" alt="Documentation"></img>
