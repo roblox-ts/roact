@@ -210,7 +210,7 @@ declare namespace Roact {
 // JSX
 declare namespace Roact {
 	type AllowRefs<T> = T extends Instance ? Roact.Ref<T> : never;
-	type InferEnumNames<T> = T extends { EnumType: Enum.EnumType<infer U> } ? U["Name"] : never;
+	type InferEnumNames<T> = T extends EnumItem ? T["Name"] : never;
 
 	export type JsxInstanceProperties<T extends Instance> = {
 		[P in Exclude<WritablePropertyNames<T>, "Parent" | "Name">]?:
