@@ -88,8 +88,11 @@ declare abstract class Component<P = {}, S = {}> {
 	 * Setting a field in the state to `Roact.None` will clear it from the state. This is the only way to remove a field
 	 * from a component's state!
 	 */
-	protected setState<K extends keyof S>(stateUpdater: (prevState: Readonly<S>, props: P) => Pick<S, K>): void;
-	protected setState<K extends keyof S>(stateChange: Pick<S, K>): void;
+	// 💀 abandon all hope ye who enter here, this type is super cursed 💀
+	// see: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/95475aa1500fc36a142b999898c3093617f37776/types/react/index.d.ts#L479-L485
+	protected setState<K extends keyof S>(
+		stateChange: ((prevState: Readonly<S>, props: Readonly<P>) => Pick<S, K> | S) | Pick<S, K> | S,
+	): void;
 
 	/**
 	 * `shouldUpdate` provides a way to override Roact's rerendering heuristics.
