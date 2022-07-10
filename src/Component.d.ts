@@ -1,5 +1,8 @@
 import Roact from "./index";
 
+type InferNone<T> = T extends undefined ? typeof Roact.None : never;
+type MapToNone<T> = { [K in keyof T]-?: NonNullable<T[K]> | InferNone<T[K]> };
+
 /**
  * The base component instance that can be extended to make stateful components.
  */
@@ -91,7 +94,10 @@ declare abstract class Component<P = {}, S = {}> {
 	// 💀 abandon all hope ye who enter here, this type is super cursed 💀
 	// see: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/95475aa1500fc36a142b999898c3093617f37776/types/react/index.d.ts#L479-L485
 	protected setState<K extends keyof S>(
-		stateChange: ((prevState: Readonly<S>, props: Readonly<P>) => Pick<S, K> | S) | Pick<S, K> | S,
+		stateChange:
+			| ((prevState: Readonly<S>, props: Readonly<P>) => Pick<MapToNone<S>, K> | MapToNone<S>)
+			| Pick<MapToNone<S>, K>
+			| MapToNone<S>,
 	): void;
 
 	/**
