@@ -16,7 +16,7 @@ import Ref from "./PropMarkers/Ref";
 import PureComponent from "./PureComponent";
 
 declare namespace Roact {
-	export function Componentify<T extends Roact.ComponentConstructor<any, any>>(ctor: T): T;
+	export function ClassComponent<T extends Roact.ComponentConstructor<any, any>>(ctor: T): T;
 
 	export {
 		Component,

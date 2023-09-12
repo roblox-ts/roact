@@ -16,7 +16,7 @@ setmetatable(Roact, nil)
 -- allow super(), but do nothing
 Roact.Component.constructor = function() end
 
-function Roact.Componentify(class)
+function Roact.ClassComponent(class)
 	local componentClass = Roact.Component:extend(tostring(class))
 	setmetatable(class, nil)
 
