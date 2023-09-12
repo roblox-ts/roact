@@ -7,6 +7,7 @@ local Event = require(script.Parent.PropMarkers.Event)
 local Ref = require(script.Parent.PropMarkers.Ref)
 
 local Symbol = require(script.Parent.Symbol)
+local Type = require(script.Parent.Type)
 
 -- unlock
 local metatable = getmetatable(Roact)
@@ -36,7 +37,41 @@ end
 
 Roact.Fragment = Symbol.named("Roact.Fragment")
 
+local HOST_COMPONENT_NAME_MAPPING = {
+	billboardgui = "BillboardGui",
+	camera = "Camera",
+	canvasgroup = "CanvasGroup",
+	frame = "Frame",
+	imagebutton = "ImageButton",
+	imagelabel = "ImageLabel",
+	screengui = "ScreenGui",
+	scrollingframe = "ScrollingFrame",
+	surfacegui = "SurfaceGui",
+	textbox = "TextBox",
+	textbutton = "TextButton",
+	textlabel = "TextLabel",
+	uiaspectratioconstraint = "UIAspectRatioConstraint",
+	uicorner = "UICorner",
+	uigradient = "UIGradient",
+	uigridlayout = "UIGridLayout",
+	uilistlayout = "UIListLayout",
+	uipadding = "UIPadding",
+	uipagelayout = "UIPageLayout",
+	uiscale = "UIScale",
+	uisizeconstraint = "UISizeConstraint",
+	uistroke = "UIStroke",
+	uitablelayout = "UITableLayout",
+	uitextsizeconstraint = "UITextSizeConstraint",
+	viewportframe = "ViewportFrame",
+}
+
 function Roact.jsx(component, props, children)
+	if component == Roact.Fragment then
+		return Roact.createFragment(children)
+	end
+
+	component = HOST_COMPONENT_NAME_MAPPING[component] or component
+
 	if props ~= nil then
 		if props.Change ~= nil then
 			for key, value in props.Change do
@@ -58,11 +93,25 @@ function Roact.jsx(component, props, children)
 		end
 	end
 
-	if component == Roact.Fragment then
-		return Roact.createFragment(children)
-	else
-		return Roact.createElement(component, props, children)
+	local newChildren = {}
+	if children then
+		local i = 1
+		for _, child in children do
+			local key = child.props.Key
+			if key then
+				child.props.Key = nil
+				newChildren[key] = child
+			else
+				newChildren[i] = child
+				i += 1
+			end
+		end
 	end
+
+	-- TODO: we don't know if this is a top-level component with Key?
+	-- return Roact.createFragment({ [props.Key] = Roact.createElement(component, props, newChildren) })
+
+	return Roact.createElement(component, props, newChildren)
 end
 
 -- relock
