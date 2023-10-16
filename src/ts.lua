@@ -66,8 +66,23 @@ local HOST_COMPONENT_NAME_MAPPING = {
 }
 
 function Roact.jsx(component, props, children)
+	local newChildren = {}
+	if children then
+		local i = 1
+		for _, child in children do
+			local key = child.props.Key
+			if key then
+				child.props.Key = nil
+				newChildren[key] = child
+			else
+				newChildren[i] = child
+				i += 1
+			end
+		end
+	end
+
 	if component == Roact.Fragment then
-		return Roact.createFragment(children)
+		return Roact.createFragment(newChildren)
 	end
 
 	component = HOST_COMPONENT_NAME_MAPPING[component] or component
@@ -90,21 +105,6 @@ function Roact.jsx(component, props, children)
 		if props.Ref ~= nil then
 			props[Ref] = props.Ref
 			props.Ref = nil
-		end
-	end
-
-	local newChildren = {}
-	if children then
-		local i = 1
-		for _, child in children do
-			local key = child.props.Key
-			if key then
-				child.props.Key = nil
-				newChildren[key] = child
-			else
-				newChildren[i] = child
-				i += 1
-			end
 		end
 	end
 
