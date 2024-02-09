@@ -108,7 +108,7 @@ function Roact.jsx(component, props, ...)
 		end
 	end
 
-	return Roact.createElement(component, props, newChildren)
+	return Roact.createElement(component, props, children)
 end
 
 -- relock
