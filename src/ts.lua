@@ -69,15 +69,28 @@ function Roact.jsx(component, props, ...)
 	local children = {}
 	local childrenArraySize = 0
 
-	for i = 1, select("#", ...) do
-		local child = select(i, ...)
-		local key = child.props.Key
+	local function addChild(key, child)
 		if key then
 			child.props.Key = nil
 			children[key] = child
 		else
 			childrenArraySize += 1
 			children[childrenArraySize] = child
+		end
+	end
+
+	for i = 1, select("#", ...) do
+		local child = select(i, ...)
+		if Type.of(child) == Type.Element then
+			addChild(child.props.Key, child)
+		else
+			for key, value in child do
+				if type(key) == "number" then
+					addChild(nil, value)
+				else
+					addChild(key, value)
+				end
+			end
 		end
 	end
 
