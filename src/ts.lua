@@ -65,24 +65,24 @@ local HOST_COMPONENT_NAME_MAPPING = {
 	viewportframe = "ViewportFrame",
 }
 
-function Roact.jsx(component, props, children)
-	local newChildren = {}
-	if children then
-		local i = 1
-		for _, child in children do
-			local key = child.props.Key
-			if key then
-				child.props.Key = nil
-				newChildren[key] = child
-			else
-				newChildren[i] = child
-				i += 1
-			end
+function Roact.jsx(component, props, ...)
+	local children = {}
+	local childrenArraySize = 0
+
+	for i = 1, select("#", ...) do
+		local child = select(i, ...)
+		local key = child.props.Key
+		if key then
+			child.props.Key = nil
+			children[key] = child
+		else
+			childrenArraySize += 1
+			children[childrenArraySize] = child
 		end
 	end
 
 	if component == Roact.Fragment then
-		return Roact.createFragment(newChildren)
+		return Roact.createFragment(children)
 	end
 
 	component = HOST_COMPONENT_NAME_MAPPING[component] or component
@@ -107,9 +107,6 @@ function Roact.jsx(component, props, children)
 			props.Ref = nil
 		end
 	end
-
-	-- TODO: we don't know if this is a top-level component with Key?
-	-- return Roact.createFragment({ [props.Key] = Roact.createElement(component, props, newChildren) })
 
 	return Roact.createElement(component, props, newChildren)
 end

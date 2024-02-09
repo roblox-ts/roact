@@ -11,6 +11,7 @@ type Defaultize<P, D> = P extends any
 	: never;
 
 type JsxChild =
+	| string
 	| boolean
 	| Roact.Element
 	| ReadonlyArray<Roact.Element>
