@@ -81,14 +81,17 @@ function Roact.jsx(component, props, ...)
 
 	for i = 1, select("#", ...) do
 		local child = select(i, ...)
-		if Type.of(child) == Type.Element then
-			addChild(child.props.Key, child)
-		else
-			for key, value in child do
-				if type(key) == "number" then
-					addChild(nil, value)
-				else
-					addChild(key, value)
+		-- JS truthiness checks
+		if child ~= 0 and child == child and child ~= "" and child then
+			if Type.of(child) == Type.Element then
+				addChild(child.props.Key, child)
+			else
+				for key, value in child do
+					if type(key) == "number" then
+						addChild(nil, value)
+					else
+						addChild(key, value)
+					end
 				end
 			end
 		end
