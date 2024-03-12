@@ -102,7 +102,7 @@ function Roact.jsx(component, props, ...)
 
 	component = HOST_COMPONENT_NAME_MAPPING[component] or component
 
-	if props ~= nil then
+	if props ~= nil and type(component) == "string" then
 		if props.Change ~= nil then
 			for key, value in props.Change do
 				props[Change[key]] = value
