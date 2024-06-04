@@ -71,4 +71,4 @@ Roact.mount(tree, PlayerGui, "HelloWorld");
 ```
 
 ## License
-The original Roact library's License can be found here: [Roact License](https://github.com/Roblox/roact/blob/master/LICENSE)
+The original Roact library's License can be found here: [Roact License](https://github.com/Roblox/roact/blob/520f8e685ab174654c8b3a99c3f243cadadc1c7d/LICENSE.txt)
