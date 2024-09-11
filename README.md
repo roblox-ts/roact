@@ -33,7 +33,8 @@ You will need the settings from [roblox-ts](https://github.com/roblox-ts/roblox-
 {
 	"compilerOptions": {
 		"jsx": "react",
-		"jsxFactory": "Roact.createElement"
+		"jsxFactory": "Roact.jsx",
+		"jsxFragmentFactory": "Roact.Fragment",
 	},
 }
 ```
