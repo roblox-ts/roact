@@ -15,6 +15,7 @@
 
 		// optional, non-configurable
 		"jsx": "react",
-		"jsxFactory": "Roact.createElement"
+		"jsxFactory": "Roact.jsx",
+		"jsxFragmentFactory": "Roact.Fragment",
 	}
 }
