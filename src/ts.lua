@@ -66,10 +66,13 @@ local HOST_COMPONENT_NAME_MAPPING = {
 }
 
 function Roact.jsx(component, props, ...)
-	local children = {}
+	local children = nil
 	local childrenArraySize = 0
 
 	local function addChild(key, child)
+		if children == nil then
+			children = {}
+		end
 		if key then
 			child.props.Key = nil
 			children[key] = child
